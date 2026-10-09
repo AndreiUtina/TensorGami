@@ -68,11 +68,12 @@ def mark() -> str:
     return "\n".join(parts)
 
 
-def wordmark(x: float, y: float, size: float) -> str:
-    """'TensorGami': one regular weight; the capital G and the blue mark the two halves."""
+def wordmark(x: float, y: float, size: float, tensor_color: str) -> str:
+    """'TensorGami' in one regular weight: "Tensor" in ``tensor_color``, "Gami" in blue."""
     return (
         f'<text x="{x}" y="{y}" font-family="{WORDMARK_FONT}" font-size="{size}" '
-        f'font-weight="500" fill="{INK}">Tensor<tspan fill="{BLUE_700}">Gami</tspan></text>'
+        f'font-weight="500" fill="{tensor_color}">Tensor<tspan fill="{BLUE_700}">Gami</tspan>'
+        f"</text>"
     )
 
 
@@ -87,9 +88,15 @@ def svg(width: float, height: float, body: str, title: str) -> str:
 def main(out_dir: Path = OUT_DIR) -> list[Path]:
     icon = mark()
     placed_icon = f'<g transform="translate(8 8) scale({112 / 256:.4f})">\n{icon}\n</g>'
-    lockup = placed_icon + "\n" + wordmark(132, 80, 46)
     files = {
-        "logo.svg": svg(470, 128, lockup, "TensorGami"),
+        # main logo, for dark backgrounds: white "Tensor"
+        "logo.svg": svg(
+            470, 128, placed_icon + "\n" + wordmark(132, 80, 46, "#ffffff"), "TensorGami"
+        ),
+        # for light backgrounds, where white would vanish: dark "Tensor"
+        "logo-light.svg": svg(
+            470, 128, placed_icon + "\n" + wordmark(132, 80, 46, INK), "TensorGami"
+        ),
         "logo-mark.svg": svg(256, 256, icon, "TensorGami"),
     }
     out_dir.mkdir(parents=True, exist_ok=True)

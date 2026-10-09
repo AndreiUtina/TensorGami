@@ -54,5 +54,5 @@
 <circle cx="222" cy="124.7" r="8.5" fill="#fb923c" stroke="#0f172a" stroke-width="3.5"/>
 <circle cx="222" cy="171.3" r="8.5" fill="#fb923c" stroke="#0f172a" stroke-width="3.5"/>
 </g>
-<text x="132" y="80" font-family="'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="46" font-weight="500" fill="#0f172a">Tensor<tspan fill="#1d4ed8">Gami</tspan></text>
+<text x="132" y="80" font-family="'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="46" font-weight="500" fill="#ffffff">Tensor<tspan fill="#1d4ed8">Gami</tspan></text>
 </svg>

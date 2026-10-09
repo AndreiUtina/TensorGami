@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470" height="128" viewBox="0 0 470 128" role="img">
+<title>TensorGami</title>
+<g transform="translate(8 8) scale(0.4375)">
+<polygon points="34,46 96,78 96,218 34,186" fill="#dbeafe" stroke="#1d4ed8" stroke-width="3.5" stroke-linejoin="round"/>
+<polygon points="96,78 160,46 160,186 96,218" fill="#93c5fd" stroke="#1d4ed8" stroke-width="3.5" stroke-linejoin="round"/>
+<polygon points="160,46 222,78 222,218 160,186" fill="#dbeafe" stroke="#1d4ed8" stroke-width="3.5" stroke-linejoin="round"/>
+<line x1="34" y1="81" x2="96" y2="106" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="34" y1="81" x2="96" y2="134" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="34" y1="81" x2="96" y2="162" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="34" y1="81" x2="96" y2="190" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="34" y1="116" x2="96" y2="106" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="34" y1="116" x2="96" y2="134" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="34" y1="116" x2="96" y2="162" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="34" y1="116" x2="96" y2="190" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="34" y1="151" x2="96" y2="106" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="34" y1="151" x2="96" y2="134" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="34" y1="151" x2="96" y2="162" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="34" y1="151" x2="96" y2="190" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="106" x2="160" y2="74" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="106" x2="160" y2="102" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="106" x2="160" y2="130" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="106" x2="160" y2="158" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="134" x2="160" y2="74" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="134" x2="160" y2="102" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="134" x2="160" y2="130" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="134" x2="160" y2="158" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="162" x2="160" y2="74" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="162" x2="160" y2="102" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="162" x2="160" y2="130" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="162" x2="160" y2="158" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="190" x2="160" y2="74" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="190" x2="160" y2="102" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="190" x2="160" y2="130" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="96" y1="190" x2="160" y2="158" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="160" y1="74" x2="222" y2="124.7" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="160" y1="74" x2="222" y2="171.3" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="160" y1="102" x2="222" y2="124.7" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="160" y1="102" x2="222" y2="171.3" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="160" y1="130" x2="222" y2="124.7" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="160" y1="130" x2="222" y2="171.3" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="160" y1="158" x2="222" y2="124.7" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<line x1="160" y1="158" x2="222" y2="171.3" stroke="#1e3a8a" stroke-width="2.4" stroke-opacity="0.55" stroke-linecap="round"/>
+<circle cx="34" cy="81" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+<circle cx="34" cy="116" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+<circle cx="34" cy="151" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+<circle cx="96" cy="106" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+<circle cx="96" cy="134" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+<circle cx="96" cy="162" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+<circle cx="96" cy="190" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+<circle cx="160" cy="74" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+<circle cx="160" cy="102" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+<circle cx="160" cy="130" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+<circle cx="160" cy="158" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+<circle cx="222" cy="124.7" r="8.5" fill="#fb923c" stroke="#0f172a" stroke-width="3.5"/>
+<circle cx="222" cy="171.3" r="8.5" fill="#fb923c" stroke="#0f172a" stroke-width="3.5"/>
+</g>
+<text x="132" y="80" font-family="'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="46" font-weight="500" fill="#0f172a">Tensor<tspan fill="#1d4ed8">Gami</tspan></text>
+</svg>
