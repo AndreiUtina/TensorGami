@@ -38,20 +38,24 @@ Covers CNNs, VAE, RNN, LSTM, ConvLSTM, Transformers, GAN, U-Net and general DL.
   visualkeras, Net2Vis, Treescope…), empirical guidelines (Net2Vis, Marshall et al. 2025),
   and the design requirements R1–R10 that Tensorgami derives from them.
 
-### 2) Create a drawing style baseline ⬜
-Planned deliverables:
-- Style guide: `docs/style/style-baseline.md`
-- Style as code: `src/tensorgami/style/` (colours, op categories, glyphs, typography, edges,
-  theme loader) with the data in a TOML theme file (`baseline.toml`).
-- Minimal scene + SVG rendering layer used to prove the style: `src/tensorgami/scene.py`,
-  `src/tensorgami/render/`.
-- Reference specimens (vocabulary sheet, CNN flat + volume view, VAE, RNN folded/unrolled,
-  LSTM cell, ConvLSTM, Transformer block): `docs/style/specimens/*.svg`.
-- Tests: `uv run pytest` (colour maths & contrast, theme loading/validation, glyph painters,
-  SVG canvas, scene rendering, specimen smoke test).
+### 2) Create a drawing style baseline ✅ (draft, awaiting review)
+- Style guide: [`docs/style/style-baseline.md`](docs/style/style-baseline.md) — 10 principles,
+  17 colour-coded categories, shapes, 5 edge kinds, typography, layout rules, levels of detail
+  L0–L4, views, and the open style questions (§10).
+- Style as code: `src/tensorgami/vocabulary.py` (`OpCategory`, `EdgeKind`),
+  `src/tensorgami/style/` (colour maths, style records, theme loader, validation rules) with
+  the data in `src/tensorgami/style/themes/baseline.toml`.
+- Scene + SVG rendering layer used to prove the style: `src/tensorgami/scene.py`,
+  `src/tensorgami/render/` (painter per shape, orthogonal edge router, groups, auto legend,
+  SVG canvas).
+- Reference specimens (vocabulary sheet, CNN block + volume view, VAE, RNN folded/unrolled,
+  LSTM cell, ConvLSTM, Transformer encoder): `docs/style/specimens/*.svg`,
+  rebuilt with `uv run python docs/style/build_specimens.py`.
+- Tests: `uv run pytest` — 85 tests (colour maths & WCAG contrast, theme parsing/validation,
+  scene invariants, routing, painters, SVG output, legend, specimens as golden files).
 
 ### 3) Interview the user if needed at any step 🔶
-Steps 0–1 were executed with documented default assumptions. Before Phase B starts the
+Steps 0–2 were executed with documented default assumptions. Before Phase B starts the
 following answers are needed (they change scope, not the work already done):
 1. **Frameworks**: which frameworks are your local models written in? (assumed: PyTorch first,
    then ONNX as a framework-neutral path, Keras later)
