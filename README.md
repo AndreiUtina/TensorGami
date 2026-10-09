@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/brand/logo.svg" alt="TensorGami" width="420"></p>
+
 # Tensorgami
 
 Draw the architecture and information flow of deep-learning / machine-learning models,
