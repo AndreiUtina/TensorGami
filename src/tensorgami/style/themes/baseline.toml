@@ -1,0 +1,226 @@
+# Tensorgami baseline theme.
+#
+# Every value here is a design decision documented in docs/style/style-baseline.md.
+# Rules enforced by tensorgami.style.validation (run on load):
+#   * node text vs. node fill          >= 4.5 : 1  (WCAG AA)
+#   * strokes and edge colours vs. bg  >= 3   : 1  (WCAG non-text contrast)
+#   * chromatic categories pairwise    fill ΔE76 >= 10, stroke ΔE76 >= 15
+#   * every edge kind has a unique (colour, dash, arrow) signature
+
+[theme]
+name = "baseline"
+description = "Light, print-friendly baseline: semantic colour per operation category."
+background = "#ffffff"
+
+[fonts.families]
+sans = ["Inter", "Helvetica Neue", "Helvetica", "Arial", "DejaVu Sans", "sans-serif"]
+mono = ["JetBrains Mono", "SF Mono", "Menlo", "Consolas", "DejaVu Sans Mono", "monospace"]
+
+[fonts.label]         # node name
+family = "sans"
+size = 12
+weight = 600
+color = "#0f172a"
+
+[fonts.detail]        # node hyper-parameters: "3×3, 64, s2"
+family = "sans"
+size = 10
+color = "#334155"
+
+[fonts.symbol]        # merge symbols: + × ‖
+family = "sans"
+size = 14
+weight = 600
+color = "#0f172a"
+
+[fonts.annotation]    # tensor shapes on edges: "64×56×56"
+family = "mono"
+size = 9.5
+color = "#475569"
+
+[fonts.group-title]
+family = "sans"
+size = 11
+weight = 600
+color = "#334155"
+
+[fonts.badge]         # repeat badge: "×6"
+family = "sans"
+size = 10.5
+weight = 700
+color = "#334155"
+
+[fonts.note]          # axis labels, in-figure remarks
+family = "sans"
+size = 10.5
+italic = true
+color = "#475569"
+
+[fonts.legend]
+family = "sans"
+size = 10.5
+color = "#0f172a"
+
+[metrics]
+grid = 8
+corner_radius = 6
+node_stroke = 1.25
+arrow_length = 8
+arrow_width = 7
+label_halo = 2.5
+delay_marker = 7
+cuboid_angle = 35
+trapezoid_ratio = 0.45
+line_gap = 3
+
+[group]
+fill = "#f8fafc"
+stroke = "#64748b"
+width = 1.0
+dash = [4, 3]
+corner_radius = 10
+padding = 14
+badge_fill = "#ffffff"
+
+# ----------------------------------------------------------------- data and structure
+
+[categories.io]
+name = "Input / output"
+shape = "pill"
+fill = "#e2e8f0"
+stroke = "#475569"
+
+[categories.tensor]
+name = "Tensor / state"
+shape = "pill"
+fill = "#ffffff"
+stroke = "#475569"
+
+[categories.module]
+name = "Composite block"
+shape = "rect"
+fill = "#f1f5f9"
+stroke = "#475569"
+
+[categories.merge]
+name = "Merge (add, concat, multiply)"
+shape = "circle"
+fill = "#ffffff"
+stroke = "#334155"
+
+[categories.reshape]
+name = "Reshape / flatten"
+shape = "rect"
+fill = "#e5e7eb"
+stroke = "#6b7280"
+
+[categories.regularization]
+name = "Regularisation (dropout)"
+shape = "rect"
+fill = "#f3f4f6"
+stroke = "#6b7280"
+dash = [4, 3]
+
+[categories.other]
+name = "Other operation"
+shape = "rect"
+fill = "#f8fafc"
+stroke = "#64748b"
+
+# ----------------------------------------------------------------- operations (one hue each)
+
+[categories.conv]
+name = "Convolution"
+shape = "rect"
+fill = "#bfdbfe"
+stroke = "#1d4ed8"
+
+[categories.linear]
+name = "Linear / dense"
+shape = "rect"
+fill = "#ddd6fe"
+stroke = "#6d28d9"
+
+[categories.recurrent]
+name = "Recurrent cell"
+shape = "rect"
+fill = "#bbf7d0"
+stroke = "#15803d"
+
+[categories.attention]
+name = "Attention"
+shape = "rect"
+fill = "#fed7aa"
+stroke = "#c2410c"
+
+[categories.norm]
+name = "Normalisation"
+shape = "rect"
+fill = "#fef08a"
+stroke = "#a16207"
+
+[categories.activation]
+name = "Activation"
+shape = "rect"
+fill = "#fbcfe8"
+stroke = "#be185d"
+
+[categories.resample]
+name = "Pooling / resampling"
+shape = "rect"
+fill = "#99f6e4"
+stroke = "#0f766e"
+
+[categories.embedding]
+name = "Embedding"
+shape = "rect"
+fill = "#e7d3bd"
+stroke = "#7c4a1e"
+
+[categories.stochastic]
+name = "Sampling / noise"
+shape = "pill"
+fill = "#f5d0fe"
+stroke = "#a21caf"
+dash = [4, 2]
+
+[categories.loss]
+name = "Loss / objective"
+shape = "rect"
+fill = "#fecaca"
+stroke = "#b91c1c"
+
+# ----------------------------------------------------------------- edges
+
+[edges.data]
+name = "Data flow"
+color = "#334155"
+width = 1.25
+arrow = "filled"
+
+[edges.state]
+name = "Recurrent state"
+color = "#15803d"
+width = 1.5
+arrow = "filled"
+
+[edges.stochastic]
+name = "Sampling / noise"
+color = "#a21caf"
+width = 1.25
+arrow = "filled"
+dash = [2, 3]
+
+[edges.training]
+name = "Training signal (loss, gradient)"
+color = "#b91c1c"
+width = 1.25
+arrow = "open"
+dash = [6, 4]
+
+[edges.tied]
+name = "Shared weights"
+color = "#64748b"
+width = 1.0
+arrow = "none"
+dash = [2, 3]
