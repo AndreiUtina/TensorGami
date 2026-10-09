@@ -16,8 +16,9 @@ Conventions derived from the rules (and from the sibling `Bayesball` project):
   added by *registering* a new class or data file, not by editing existing code (O); all
   renderers and importers are interchangeable behind small `Protocol`s (L, I); high-level code
   depends on those protocols, never on a concrete backend (D).
-- Core package has **zero runtime dependencies**; framework importers (PyTorch, ONNX, Keras)
-  are optional extras.
+- Runtime dependency: **matplotlib** only (figures, PNG, Jupyter display). PyTorch is used but
+  not installed by Tensorgami (optional extra `tensorgami[torch]`), so it never replaces the
+  user's own CUDA/CPU build of torch.
 
 Status legend: ✅ done · 🔶 waiting on user · ⬜ not started
 
@@ -54,91 +55,124 @@ Covers CNNs, VAE, RNN, LSTM, ConvLSTM, Transformers, GAN, U-Net and general DL.
 - Tests: `uv run pytest` — 85 tests (colour maths & WCAG contrast, theme parsing/validation,
   scene invariants, routing, painters, SVG output, legend, specimens as golden files).
 
-### 3) Interview the user if needed at any step 🔶
-Steps 0–2 were executed with documented default assumptions. Before Phase B starts the
-following answers are needed (they change scope, not the work already done):
-1. **Frameworks**: which frameworks are your local models written in? (assumed: PyTorch first,
-   then ONNX as a framework-neutral path, Keras later)
-2. **Primary purpose**: paper/thesis figures, personal understanding/debugging, or teaching?
-   (assumed: publication-quality figures *and* exploration of local models)
-3. **Input mode**: automatic extraction from model objects, a hand-written spec (YAML/Python),
-   or both? (assumed: both, sharing one intermediate representation)
-4. **Outputs**: SVG only, or also PDF/PNG, TikZ for LaTeX, interactive HTML viewer?
-   (assumed: SVG first, PDF/PNG second, HTML viewer optional)
-5. **Style**: review `docs/style/style-baseline.md` — palette, left→right flow, flat vs. 3-D
-   volume default for CNNs, level of detail defaults.
-6. **Acceptance models**: which 3–5 of *your* models should be the acceptance tests?
-7. **Distribution**: private local install (`uv tool install` from git) or a public PyPI package?
+### 3) Interview the user if needed at any step ✅ (style review still open)
+Answers (2026-10-09):
+1. **Frameworks:** PyTorch only for now; other backends move to the backlog (step 16).
+2. **Purpose:** figures for scientific reports and presentations. Later, *dynamic* figures that
+   show how information flows through the architecture (step 14).
+3. **Workflow:** define and load a model in a Python script or notebook, then call
+   TensorGami on it to plot the architecture.
+4. **Output:** a figure object that displays inline in Jupyter (or a window from a script);
+   saving is optional and explicit, primarily as **PNG**.
+5. **Style:** 🔶 still open. The defaults in `docs/style/style-baseline.md` §10 apply until
+   reviewed.
+6. **Models to support first:** CNNs, LSTMs, cGANs, VAEs, ConvLSTMs, Transformers (and others).
+7. **Distribution:** private install from GitHub first; public PyPI package later (step 15).
+
+Target usage that drives Phases B–D:
+
+```python
+import tensorgami as tg
+
+model = MyConvLSTM(...)                        # any torch.nn.Module, already loaded
+fig = tg.draw(model, torch.randn(1, 10, 1, 64, 64), level=2)
+fig                                            # shows inline in Jupyter
+fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
+```
 
 ---
 
-## Phase B — Core architecture (suggested)
+## Phase B — From a PyTorch model to a figure
 
 ### 4) Requirements & architecture decision records ⬜
-- Turn survey requirements R1–R10 + interview answers into a short requirements list.
-- Write ADRs in `docs/adr/` (IR format, layout engine choice, renderer strategy, dependency
-  policy). Draw the package diagram with Tensorgami itself as soon as possible (dog-fooding).
+- Turn survey requirements R1–R10 + the interview answers into a short requirements list.
+- ADRs in `docs/adr/`: IR format, PyTorch capture strategy (fx tracing vs. hooks), layout
+  engine, matplotlib as the figure backend, dependency policy, public API.
 
 ### 5) Intermediate representation (IR) ⬜
 - `tensorgami.ir`: `Graph`, `Node` (op category, op type, params, tensor shapes),
-  `Edge` (tensor flow + shape + kind), `Group` (hierarchy / module tree), `Repeat` (×N).
-- JSON serialisation (versioned schema) so graphs can be cached, diffed and hand-edited.
+  `Edge` (tensor flow + shape + kind), `Group` (module hierarchy), `Repeat` (×N).
 - Validation (acyclic except declared recurrent edges, dangling ports, shape consistency).
+- JSON serialisation (versioned) for caching and test fixtures.
 - Tests: construction, validation errors, round-trip serialisation.
 
-### 6) Declarative model spec (no framework needed) ⬜
-- YAML/TOML spec + fluent Python builder → IR (`tg.Sequential(...)`, `tg.block(...)`).
-- Enables drawing paper architectures and models you cannot import.
-- Tests: spec parsing, error messages with line numbers, builder ↔ YAML equivalence.
+### 6) PyTorch importer ⬜
+- Capture the graph by running the user's example input: `torch.fx` symbolic tracing with
+  module-hierarchy capture; forward-hook fallback for models with Python control flow (LSTM
+  loops, custom ConvLSTM cells) that fx cannot trace.
+- Record tensor shapes per edge; map `torch.nn` modules and functional ops to `OpCategory`.
+- User-defined modules (e.g. a `ConvLSTMCell`) become groups; their category can be given
+  explicitly (`categories={"ConvLSTMCell": "recurrent"}`) or guessed from their contents.
+- Tests with small reference models (no GPU needed, `meta`/CPU tensors).
 
 ### 7) Graph transforms (levels of detail) ⬜
 - Collapse module hierarchy to a target level (L0 system … L4 cell/operator).
 - Detect repeated sub-graphs → `×N` groups; fold activation/norm into the previous layer
-  label; hide trivial ops (reshape, dropout, identity); merge parallel branches.
+  label; hide trivial ops (reshape, dropout, identity).
 - Each transform is a `GraphTransform` object; pipelines are composed (open/closed).
 - Tests per transform with tiny graphs.
 
 ### 8) Layout engine ⬜
 - Pure-Python layered (Sugiyama) layout: rank assignment, crossing minimisation, coordinate
   assignment, orthogonal edge routing — no Graphviz system dependency.
-- Specialised layouts behind the same `LayoutEngine` protocol: linear chain, U-shape
-  (encoder/decoder with skips), unrolled-in-time grid, stacked block (Transformer).
-- Output is a `Scene` (already defined in step 2), so styling/rendering is reused unchanged.
-- Tests: no overlaps, edge monotonicity, determinism (same input → same SVG).
+- Specialised layouts behind the same `LayoutEngine` protocol: linear chain (with row
+  wrapping), U-shape (encoder/decoder with skips), unrolled-in-time grid, vertical stack.
+- Output is a `Scene` (defined in step 2), so styling is reused unchanged.
+- Tests: no overlaps, edge monotonicity, determinism.
 
-## Phase C — Inputs & outputs (suggested)
+### 9) Matplotlib figure backend ⬜
+- `MatplotlibCanvas` implementing the existing `Canvas` protocol (the SVG canvas stays for
+  vector output).
+- `tg.Figure`: inline display in Jupyter (`_repr_png_`), `.show()` from scripts,
+  `.save("net.png", dpi=300)` (PNG first; SVG/PDF also possible), and `.figure`/`.ax` to
+  reach the underlying matplotlib objects (e.g. to place a diagram in a multi-panel figure).
+- Tests: image-level checks with tolerance plus scene-level assertions.
 
-### 9) Renderers ⬜
-- SVG (exists), PDF/PNG (optional extra: cairosvg or matplotlib backend), TikZ export.
-- Golden-file snapshot tests for every renderer.
+### 10) Public API ⬜
+- `tg.draw(model, example_input, level=2, view="block", theme="baseline", **options)`.
+- Sensible defaults, clear errors (e.g. "model could not be traced, falling back to hooks").
+- Tests: end-to-end from a `torch.nn.Module` to a PNG.
 
-### 10) Framework importers ⬜
-- PyTorch: `torch.fx` / `torch.export` tracing with module-hierarchy capture, forward-hook
-  fallback for untraceable models; shape inference with a sample input or `meta` device.
-- ONNX: read graph + `onnx.shape_inference`.
-- Keras: `model.layers` / functional graph.
-- Each importer implements `ModelImporter` → IR; installed as optional extras
-  (`tensorgami[torch]`, `tensorgami[onnx]`, `tensorgami[keras]`).
+## Phase C — Your model families
 
-### 11) Alternative views ⬜
-- Flat block view (default), tensor-volume (3-D cuboid) view for CNNs, cell view (LSTM/GRU
-  gates), unrolled-time view (RNN/ConvLSTM), neuron view for tiny MLPs.
+### 11) Views ⬜
+- Block view (default), tensor-volume view for CNNs, cell view (LSTM/GRU gates), unrolled
+  time view (RNN, LSTM, ConvLSTM).
+- Generative models: VAE (sampling node, μ/σ, loss terms) and cGAN (generator +
+  discriminator in one figure, condition inputs, adversarial loop). Losses and the GAN loop
+  are not part of `nn.Module`, so the API accepts annotations and several models per figure.
 - Views are `View` strategies selecting transforms + layout + glyph mapping.
 
-### 12) CLI & Python API ⬜
-- `tensorgami draw model.py:build_model --input 1x3x224x224 --level 2 --view flat -o net.svg`
-- `tensorgami draw spec.yaml`, `tensorgami themes`, `tensorgami legend`.
-- Python: `tensorgami.draw(model, example_input, level=2).save("net.svg")`.
+### 12) Acceptance gallery ⬜
+- Reference PyTorch implementations of CNN, LSTM, cGAN, VAE, ConvLSTM and Transformer in
+  `tests/models/`, rendered to `docs/gallery/*.png` and snapshot-tested.
+- Add the user's own models when available.
 
-## Phase D — Quality & release (suggested)
+## Phase D — Reports, presentations and release
 
-### 13) Reference gallery & acceptance tests ⬜
-- LeNet, VGG, ResNet block, U-Net, VAE, GAN, RNN/LSTM/GRU, ConvLSTM, Transformer,
-  plus the user's own models (interview Q6). Snapshot-tested and published in `docs/gallery/`.
+### 13) Presentation output ⬜
+- Slide theme (16:9 sizing, larger fonts), dark theme, print/greyscale theme.
+- Export for LaTeX reports (PDF/SVG at exact column widths).
 
-### 14) Interactive HTML viewer (optional) ⬜
-- Single self-contained HTML: collapse/expand groups, hover for shapes/params, export.
+### 14) Dynamic information flow ⬜
+- Animate how information flows through the architecture: layers light up in execution
+  order, tensor shapes evolve along the edges, recurrent steps unfold over time.
+- Outputs: GIF/MP4 for presentations (`matplotlib.animation`) and interactive playback in
+  Jupyter; optionally show real activations (feature maps) from the example input.
 
 ### 15) Packaging, docs & CI ⬜
-- `uv tool install`-able CLI, README with gallery, GitHub Actions (ruff + pytest + coverage).
-- Theme authoring guide (custom TOML themes, dark theme, print/greyscale theme).
+- Private install from GitHub first:
+  `uv add git+https://github.com/AndreiUtina/Tensorgami` (or `pip install git+…`).
+- GitHub Actions (ruff + pytest), version tags, changelog, README with the gallery.
+- Later: public PyPI release (name check, trusted publishing).
+
+## Phase E — Backlog
+
+### 16) Other backends ⬜
+- ONNX, Keras/TensorFlow, JAX importers behind the same `ModelImporter` protocol.
+
+### 17) Declarative model spec ⬜
+- YAML / Python builder for drawing architectures without code (e.g. from a paper).
+
+### 18) Extras ⬜
+- Interactive HTML viewer (collapse/expand, hover), TikZ export, command-line interface.
