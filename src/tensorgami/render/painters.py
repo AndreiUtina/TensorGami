@@ -42,7 +42,7 @@ def draw_text_block(canvas: Canvas, node: Node, theme: Theme, center: Point) -> 
         return
     gap = theme.metrics.line_gap
     heights = [font.size * 1.15 for _, font in lines]
-    y = center.y - (sum(heights) + gap * (len(lines) - 1)) / 2
+    y = center.y - (math.fsum(heights) + gap * (len(lines) - 1)) / 2
     for (text, font), h in zip(lines, heights, strict=True):
         canvas.text(Point(center.x, y + h / 2), text, font)
         y += h + gap
