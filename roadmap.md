@@ -111,14 +111,25 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 - Tests: 53 new (reference graphs for residual CNN, ConvLSTM, VAE, Transformer in
   `tests/ir_fixtures.py`, reused by later steps); 2 000-node graph validates in ~7 ms.
 
-### 6) PyTorch importer ⬜
-- Capture the graph by running the user's example input: `torch.fx` symbolic tracing with
-  module-hierarchy capture; forward-hook fallback for models with Python control flow (LSTM
-  loops, custom ConvLSTM cells) that fx cannot trace.
-- Record tensor shapes per edge; map `torch.nn` modules and functional ops to `OpCategory`.
-- User-defined modules (e.g. a `ConvLSTMCell`) become groups; their category can be given
-  explicitly (`categories={"ConvLSTMCell": "recurrent"}`) or guessed from their contents.
-- Tests with small reference models (no GPU needed, `meta`/CPU tensors).
+### 6) PyTorch importer ✅
+- `src/tensorgami/importers/torch/`: `trace(model, example_input, overrides=…, leaf_types=…)`
+  → `ir.Graph`, by eager execution tracing (module hooks + `TorchFunctionMode`, ADR-0003).
+  Small modules: `catalog` (categories, leaf modules, kept hyper-parameters), `recorder`,
+  `convert` (records → IR), `isolation` (no side effects), `overrides`, `importer`.
+- Handles: functional ops (`x + y`, `cat`, `split`, gates), Python loops (each call of a
+  cell is its own group), tuple/dict inputs and outputs, in-place ops, buffers and outside
+  constants, and plain indexing such as `h[-1]` that torch 2.2 does not report (recovered
+  as a `getitem` view with the right shape). Shape-only ops (`randn_like`, `new_zeros`)
+  become sources.
+- Leaves the model untouched (weights, BatchNorm statistics, train/eval flags, hooks, the
+  caller's RNG); explains failures ("missing batch dimension?"); warns about operations not
+  in the catalogue instead of failing.
+- `graph.summary()` prints a text table of the captured operations.
+- Dev environment: torch 2.2.2 (Intel Mac) / torch ≥ 2.2 CPU wheels (Linux), `numpy<2`
+  on Intel Mac; `tensorgami[torch]` extra for users.
+- Tests: 36 new on 7 reference models in `tests/models/` (CNN with residual blocks, LSTM,
+  cGAN generator + discriminator, VAE, ConvLSTM encoder, Transformer), including
+  "model untouched" checks (verified to fail when the RNG protection is removed).
 
 ### 7) Graph transforms (levels of detail) ⬜
 - Collapse module hierarchy to a target level (L0 system … L4 cell/operator).

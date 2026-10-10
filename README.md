@@ -22,10 +22,22 @@ uv run python docs/style/build_specimens.py    # rebuild the style specimens
 uv run python docs/survey/build.py             # rebuild the survey PDF
 ```
 
+## Capturing a PyTorch model
+
+Figures come in later roadmap steps; the model capture already works:
+
+```python
+import torch
+from tensorgami.importers.torch import trace
+
+graph = trace(model, torch.randn(1, 3, 32, 32))   # runs the model once, leaves it untouched
+print(graph.summary())                              # every operation, its module and shape
+```
+
 ## Drawing a scene today
 
-Automatic layout and model import are later roadmap steps; today a positioned scene can be
-rendered in the baseline style:
+Automatic layout is a later roadmap step; today a hand-positioned scene can be rendered in
+the baseline style:
 
 ```python
 from tensorgami.render import add_legend, render_svg
