@@ -18,6 +18,7 @@ from tensorgami.ir.model import (
 )
 from tensorgami.ir.serialize import SCHEMA_VERSION, from_dict, from_json, to_dict, to_json
 from tensorgami.ir.shapes import format_shape
+from tensorgami.ir.summary import summarize
 from tensorgami.ir.validation import GraphError, GraphValidator, Issue
 
 __all__ = [
@@ -41,6 +42,7 @@ __all__ = [
     "from_dict",
     "from_json",
     "invocation_id",
+    "summarize",
     "to_dict",
     "to_json",
 ]

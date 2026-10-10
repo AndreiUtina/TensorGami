@@ -101,6 +101,13 @@ class GraphBuilder:
         )
         return node_id
 
+    def get(self, node_id: str) -> Node:
+        """A node added so far (the graph itself is only available after :meth:`build`)."""
+        try:
+            return self._nodes[node_id]
+        except KeyError:
+            raise GraphError(f"unknown node '{node_id}'") from None
+
     def input(self, shape: Shape, *, node_id: str | None = None, label: str = "input") -> str:
         return self.node(
             INPUT_OP, node_id=node_id, category=OpCategory.IO, label=label, outputs=[shape]

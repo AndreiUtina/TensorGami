@@ -264,6 +264,12 @@ class Graph:
         """0 for the root, 1 for its children, …"""
         return len(self.ancestors(group_id))
 
+    def summary(self, *, max_rows: int | None = None) -> str:
+        """Plain-text table of the nodes (see :func:`tensorgami.ir.summary.summarize`)."""
+        from tensorgami.ir.summary import summarize
+
+        return summarize(self, max_rows=max_rows)
+
     def categories(self) -> list[OpCategory]:
         """Node categories in order of first appearance."""
         return list(dict.fromkeys(n.category for n in self.nodes))
