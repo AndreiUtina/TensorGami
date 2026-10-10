@@ -131,12 +131,22 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   cGAN generator + discriminator, VAE, ConvLSTM encoder, Transformer), including
   "model untouched" checks (verified to fail when the RNG protection is removed).
 
-### 7) Graph transforms (levels of detail) ⬜
-- Collapse module hierarchy to a target level (L0 system … L4 cell/operator).
-- Detect repeated sub-graphs → `×N` groups; fold activation/norm into the previous layer
-  label; hide trivial ops (reshape, dropout, identity).
-- Each transform is a `GraphTransform` object; pipelines are composed (open/closed).
-- Tests per transform with tiny graphs.
+### 7) Graph transforms (levels of detail) ✅
+- `src/tensorgami/transforms/`: small `Graph → Graph` transforms composed by `Pipeline`:
+  `DetectRecurrence` (step-to-step edges become *state*, steps a TIME repeat),
+  `DetectLayerRepeats` (identical chained siblings), `RemoveLayoutOps` (view/permute/getitem…),
+  `RemoveConstants` (zero initial states), `FoldIntoPrevious` (activation, dropout, scalar
+  arithmetic → `params["folded"]`), `CollapseCells` (custom recurrent/attention modules →
+  one node per call), `FoldRepeats` (×N stacks and time steps kept once with `count = N`;
+  folded time steps get state self-loops), `CollapseGroups`, `CollapseToSystem`,
+  `PruneEmptyGroups`.
+- Level presets: `simplify(graph, level)` with L0 system · L1 stages · **L2 layers (default)**
+  · L3 operators · L4 (= L3 until the cell view, step 11); `fold_time=False` keeps
+  recurrent steps unrolled.
+- IR: `count` on nodes and groups (a folded copy stands for N).
+- Results on the reference models (raw → L2): ConvLSTM 82 → 5 (two cells ×3 with h/c state
+  loops), CNN 23 → 12 (residual block ×2), Transformer 28 → 13 (encoder layer ×2).
+- Tests: 66 new (hand-built graphs without torch + real traces); 48-layer stack → L2 in ~30 ms.
 
 ### 8) Layout engine ⬜
 - Pure-Python layered (Sugiyama) layout: rank assignment, crossing minimisation, coordinate

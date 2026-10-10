@@ -32,6 +32,9 @@ from tensorgami.importers.torch import trace
 
 graph = trace(model, torch.randn(1, 3, 32, 32))   # runs the model once, leaves it untouched
 print(graph.summary())                              # every operation, its module and shape
+
+from tensorgami.transforms import simplify
+print(simplify(graph, level=2).summary())           # layers: activations folded, repeats ×N
 ```
 
 ## Drawing a scene today

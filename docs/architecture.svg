@@ -64,7 +64,7 @@
     <g class="tg-node tg-module" data-id="tr">
       <rect x="556" y="45" width="168" height="50" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
       <text x="640" y="66.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">GraphTransforms</text>
-      <text x="640" y="81.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">levels · ×N · step 7</text>
+      <text x="640" y="81.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">levels · ×N ✓ step 7</text>
     </g>
     <g class="tg-node tg-tensor" data-id="ir2">
       <rect x="788" y="53" width="104" height="34" rx="17" fill="#ffffff" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
