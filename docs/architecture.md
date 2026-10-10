@@ -11,7 +11,7 @@ How a PyTorch model becomes a figure. The decisions behind this page are recorde
 
 | Stage | Contract | Input → output | Status |
 |---|---|---|---|
-| Importer | `ModelImporter` protocol | `nn.Module` + example input → `ir.Graph` | step 6 ([ADR-0003](adr/0003-pytorch-capture.md)) |
+| Importer | `ModelImporter` protocol | `nn.Module` + example input → `ir.Graph` | ✅ step 6 ([ADR-0003](adr/0003-pytorch-capture.md)) |
 | IR | immutable dataclasses + `GraphBuilder`, rules, JSON | nodes, edges, module invocations, repeats, shapes | ✅ step 5 ([ADR-0002](adr/0002-intermediate-representation.md)) |
 | Transforms | `GraphTransform` protocol (`Graph → Graph`) | full trace → chosen level of detail | step 7 |
 | Layout | `LayoutEngine` protocol (`Graph → Scene`) | graph → positioned nodes and routed edges | step 8 ([ADR-0004](adr/0004-layout-engine.md)) |

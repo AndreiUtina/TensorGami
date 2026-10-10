@@ -25,7 +25,7 @@ def pipeline() -> Scene:
     s.add(
         Group("today", Box(232, 182, 528, 96), "exists today (step 2)"),
         Node("model", at(84, r1, 140, 44), C.IO, "nn.Module", "+ example input"),
-        Node("imp", at(280, r1, 156, 50), C.MODULE, "ModelImporter", "torch tracing · step 6"),
+        Node("imp", at(280, r1, 156, 50), C.MODULE, "ModelImporter", "torch tracing ✓ step 6"),
         Node("ir1", at(460, r1, 104, 44), C.TENSOR, "ir.Graph", "✓ step 5"),
         Node("tr", at(640, r1, 168, 50), C.MODULE, "GraphTransforms", "levels · ×N · step 7"),
         Node("ir2", at(840, r1, 104, 34), C.TENSOR, "ir.Graph", "chosen level"),
