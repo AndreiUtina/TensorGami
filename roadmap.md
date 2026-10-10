@@ -99,12 +99,17 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   torch / matplotlib may be imported; the suite passes on Python 3.11 and 3.12 with
   byte-identical figures.
 
-### 5) Intermediate representation (IR) ⬜
-- `tensorgami.ir`: `Graph`, `Node` (op category, op type, params, tensor shapes),
-  `Edge` (tensor flow + shape + kind), `Group` (module hierarchy), `Repeat` (×N).
-- Validation (acyclic except declared recurrent edges, dangling ports, shape consistency).
-- JSON serialisation (versioned) for caching and test fixtures.
-- Tests: construction, validation errors, round-trip serialisation.
+### 5) Intermediate representation (IR) ✅
+- `src/tensorgami/ir/`: immutable `Graph` of `Node` (op, category, module path, call index,
+  params, output shapes), `Edge` (ports, shape, kind), `Group` (one *invocation* of a module:
+  `cell`, `cell#1`, … so recurrent steps stay separable) and `Repeat` (LAYERS or TIME).
+- `GraphBuilder` for importers/tests (auto ids, ports and shapes); query helpers
+  (predecessors, children, members, nodes_under, depth…).
+- 7 validation rules (unique ids, group tree, edge endpoints/ports, shape consistency,
+  acyclic data flow with state/tied loops allowed, inputs/outputs, repeats).
+- Versioned JSON (`tensorgami.ir` v1), lossless round trip; `format_shape` → `64×56×56`.
+- Tests: 53 new (reference graphs for residual CNN, ConvLSTM, VAE, Transformer in
+  `tests/ir_fixtures.py`, reused by later steps); 2 000-node graph validates in ~7 ms.
 
 ### 6) PyTorch importer ⬜
 - Capture the graph by running the user's example input: `torch.fx` symbolic tracing with

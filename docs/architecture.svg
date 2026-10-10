@@ -57,8 +57,9 @@
       <text x="280" y="81.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">torch tracing · step 6</text>
     </g>
     <g class="tg-node tg-tensor" data-id="ir1">
-      <rect x="408" y="53" width="104" height="34" rx="17" fill="#ffffff" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
-      <text x="460" y="74.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">ir.Graph</text>
+      <rect x="408" y="48" width="104" height="44" rx="22" fill="#ffffff" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+      <text x="460" y="66.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">ir.Graph</text>
+      <text x="460" y="81.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">✓ step 5</text>
     </g>
     <g class="tg-node tg-module" data-id="tr">
       <rect x="556" y="45" width="168" height="50" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
