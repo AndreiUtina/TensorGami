@@ -10,7 +10,8 @@ information flow of different deep-learning/machine-learning models that I use l
 3. Code should follow SOLID design rules.
 
 Conventions derived from the rules (and from the sibling `Bayesball` project):
-- Python ≥ 3.12, managed with `uv`; `pytest` for tests, `ruff` for lint/format.
+- Python ≥ 3.11 (tested on 3.11 and 3.12), managed with `uv`; `pytest` for tests, `ruff` for
+  lint/format.
 - `src/` layout, fully type-hinted, immutable dataclasses for value objects.
 - Every module has one reason to change (S); new shapes / themes / importers / renderers are
   added by *registering* a new class or data file, not by editing existing code (O); all
@@ -84,10 +85,19 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 
 ## Phase B — From a PyTorch model to a figure
 
-### 4) Requirements & architecture decision records ⬜
-- Turn survey requirements R1–R10 + the interview answers into a short requirements list.
-- ADRs in `docs/adr/`: IR format, PyTorch capture strategy (fx tracing vs. hooks), layout
-  engine, matplotlib as the figure backend, dependency policy, public API.
+### 4) Requirements & architecture decision records ✅
+- Requirements: [`docs/requirements.md`](docs/requirements.md) — usage scenario, FR1–FR14
+  and NFR1–NFR9 with priorities, acceptance criteria, traceability to survey R1–R10.
+- ADRs: [`docs/adr/`](docs/adr/README.md) — 0001 pipeline architecture, 0002 IR, 0003
+  PyTorch capture by eager tracing (spike-verified on torch 2.2.2: CNN, LSTM, ConvLSTM, VAE,
+  Transformer; `torch.fx` fails on the ConvLSTM loop), 0004 pure-Python layout, 0005
+  matplotlib figures, 0006 dependencies (Python ≥ 3.11, torch ≥ 2.2 not installed by us),
+  0007 public API `tg.draw(...) → tg.Figure`.
+- Architecture overview with the pipeline drawn by Tensorgami itself:
+  [`docs/architecture.md`](docs/architecture.md).
+- Fitness tests: `tests/test_architecture.py` enforces the package import rules and where
+  torch / matplotlib may be imported; the suite passes on Python 3.11 and 3.12 with
+  byte-identical figures.
 
 ### 5) Intermediate representation (IR) ⬜
 - `tensorgami.ir`: `Graph`, `Node` (op category, op type, params, tensor shapes),
