@@ -151,7 +151,7 @@ def _midpoint(path: Sequence[Point]) -> Point:
     """Point halfway along the poly-line, measured by length."""
     segments = list(zip(path, path[1:], strict=False))
     lengths = [math.hypot(b.x - a.x, b.y - a.y) for a, b in segments]
-    remaining = sum(lengths) / 2
+    remaining = math.fsum(lengths) / 2
     for (a, b), length in zip(segments, lengths, strict=True):
         if remaining <= length and length > 0:
             t = remaining / length
