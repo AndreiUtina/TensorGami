@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import re
 from dataclasses import dataclass
 from enum import StrEnum
@@ -71,7 +72,9 @@ class HeuristicTextMeasurer:
         total = 0.0
         for run in parse_markup(text):
             scale = 1.0 if run.script is Script.NORMAL else SCRIPT_SCALE
-            em = sum(0.6 if mono else self._char_em(c) for c in run.text)
+            # fsum, not sum: sum() of floats changed in Python 3.12; fsum is identical on
+            # every version, which keeps figures byte-identical (NFR4)
+            em = math.fsum(0.6 if mono else self._char_em(c) for c in run.text)
             total += em * scale
         return total * font.size * bold
 
