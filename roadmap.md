@@ -40,13 +40,13 @@ Covers CNNs, VAE, RNN, LSTM, ConvLSTM, Transformers, GAN, U-Net and general DL.
   visualkeras, Net2Vis, Treescope…), empirical guidelines (Net2Vis, Marshall et al. 2025),
   and the design requirements R1–R10 that Tensorgami derives from them.
 
-### 2) Create a drawing style baseline ✅ (draft, awaiting review)
+### 2) Create a drawing style baseline ✅ (adopted as the `default` style)
 - Style guide: [`docs/style/style-baseline.md`](docs/style/style-baseline.md) — 10 principles,
   17 colour-coded categories, shapes, 5 edge kinds, typography, layout rules, levels of detail
   L0–L4, views, and the open style questions (§10).
 - Style as code: `src/tensorgami/vocabulary.py` (`OpCategory`, `EdgeKind`),
   `src/tensorgami/style/` (colour maths, style records, theme loader, validation rules) with
-  the data in `src/tensorgami/style/themes/baseline.toml`.
+  the data in `src/tensorgami/style/themes/default.toml` (renamed from `baseline.toml`).
 - Scene + SVG rendering layer used to prove the style: `src/tensorgami/scene.py`,
   `src/tensorgami/render/` (painter per shape, orthogonal edge router, groups, auto legend,
   SVG canvas).
@@ -56,7 +56,7 @@ Covers CNNs, VAE, RNN, LSTM, ConvLSTM, Transformers, GAN, U-Net and general DL.
 - Tests: `uv run pytest` — 85 tests (colour maths & WCAG contrast, theme parsing/validation,
   scene invariants, routing, painters, SVG output, legend, specimens as golden files).
 
-### 3) Interview the user if needed at any step ✅ (style review still open)
+### 3) Interview the user if needed at any step ✅
 Answers (2026-10-09):
 1. **Frameworks:** PyTorch only for now; other backends move to the backlog (step 16).
 2. **Purpose:** figures for scientific reports and presentations. Later, *dynamic* figures that
@@ -65,8 +65,9 @@ Answers (2026-10-09):
    TensorGami on it to plot the architecture.
 4. **Output:** a figure object that displays inline in Jupyter (or a window from a script);
    saving is optional and explicit, primarily as **PNG**.
-5. **Style:** 🔶 still open. The defaults in `docs/style/style-baseline.md` §10 apply until
-   reviewed.
+5. **Style:** ✅ the current look is adopted as the standard style **`default`**; the style is
+   an input (`style="default"`), and more named styles follow: **`origami`** (planned, see
+   step 13) and a third one to be decided (ADR-0008).
 6. **Models to support first:** CNNs, LSTMs, cGANs, VAEs, ConvLSTMs, Transformers (and others).
 7. **Distribution:** private install from GitHub first; public PyPI package later (step 15).
 
@@ -148,13 +149,25 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   loops), CNN 23 → 12 (residual block ×2), Transformer 28 → 13 (encoder layer ×2).
 - Tests: 66 new (hand-built graphs without torch + real traces); 48-layer stack → L2 in ~30 ms.
 
-### 8) Layout engine ⬜
-- Pure-Python layered (Sugiyama) layout: rank assignment, crossing minimisation, coordinate
-  assignment, orthogonal edge routing — no Graphviz system dependency.
-- Specialised layouts behind the same `LayoutEngine` protocol: linear chain (with row
-  wrapping), U-shape (encoder/decoder with skips), unrolled-in-time grid, vertical stack.
-- Output is a `Scene` (defined in step 2), so styling is reused unchanged.
-- Tests: no overlaps, edge monotonicity, determinism.
+### 8) Layout engine ✅
+- `src/tensorgami/layout/`: `LayeredLayout` (pure Python, no Graphviz) behind the
+  `LayoutEngine` protocol; `layout(graph, theme, options)` → `Scene`.
+- Recursive compound layout: every module group is laid out first and placed as one block,
+  so frames never overlap other boxes; ranks → border **ports** (residual/U-Net skips enter
+  or leave mid-block through their own lanes) → lane slots for long edges → barycentre
+  ordering → alignment of connected boxes → gaps sized for shape labels.
+- Orthogonal routes, state self-loops with delay markers, ×N badges, frame titles
+  (attribute name for `Sequential`), balanced row wrapping for wide models, top→bottom
+  direction, automatic legend.
+- `Labeler`: style-baseline text per operation ("Conv 3×3" / "64, s2, ReLU", "+", "‖",
+  "Multi-head attention" / "8 heads", "ε ~ N(0, I)"); shapes on edges only where they change.
+- Preview gallery drawn fully automatically from the reference models: `docs/gallery/`.
+- Tests: 127 new — geometric invariants (no overlaps, boxes inside their frames, frames never
+  cut foreign boxes, orthogonal edges, **no edge crosses a box it does not connect**, forward
+  flow) on hand-built graphs and on real traces of all reference models, at levels L0–L3, in
+  both directions; label rules; determinism. 338-node graph lays out in ~60 ms.
+- Moved to step 11 (views): the time × depth grid for *unrolled* recurrence (the general
+  layout draws it correctly but as a staircase) and the U-shape for encoder/decoder skips.
 
 ### 9) Matplotlib figure backend ⬜
 - `MatplotlibCanvas` implementing the existing `Canvas` protocol (the SVG canvas stays for
@@ -186,8 +199,27 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 
 ## Phase D — Reports, presentations and release
 
-### 13) Presentation output ⬜
-- Slide theme (16:9 sizing, larger fonts), dark theme, print/greyscale theme.
+### 13) Styles and presentation output 🔶 (`default` ✅, `origami` planned)
+- Named styles, one TOML file each, chosen with `style=` (ADR-0008): `load_style("default")`
+  now, `tg.draw(model, x, style="origami")` from step 10; a style may set layout
+  preferences (`[layout]`: spacing, direction, wrapping).
+- **`default`** ✅: the current light, print-friendly look.
+- **`origami`** (planned), after the radial figure in DeepMind's essay *Bending the curve of
+  discovery*:
+  - hairline "wires" (≈ 0.75–1 px, soft slate) with small round dot terminals and fine
+    arrowheads;
+  - layer boxes as **folded paper**: two translucent pastel facets split by a diagonal
+    crease, with hairline outlines, so overlapping elements show through;
+  - pastel palette with the same category meaning (sage green, sky blue, lavender, peach,
+    blush pink, mint, butter yellow);
+  - solid hairline frames with no fill and small-caps grey titles; merges as hollow hairline
+    circles;
+  - serif labels (e.g. Georgia / Source Serif) with grey sans details, and airier spacing via
+    `[layout]`;
+  - renderer additions needed (added once, referenced by name from `origami.toml`):
+    translucent fills, a folded-paper box painter, dot terminals.
+- **Third style:** to be decided.
+- Presentation variants: slide (16:9 sizing, larger fonts), dark, greyscale/print.
 - Export for LaTeX reports (PDF/SVG at exact column widths).
 
 ### 14) Dynamic information flow ⬜

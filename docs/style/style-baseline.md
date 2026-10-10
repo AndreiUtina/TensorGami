@@ -1,7 +1,7 @@
-# Tensorgami drawing style — baseline
+# Tensorgami drawing style — `default` (the baseline)
 
-**Status:** draft for review (roadmap Phase A, step 2) · **Theme file:**
-[`src/tensorgami/style/themes/baseline.toml`](../../src/tensorgami/style/themes/baseline.toml)
+**Status:** adopted as the standard style **`default`** (2026-10-10, ADR-0008) · **Style file:**
+[`src/tensorgami/style/themes/default.toml`](../../src/tensorgami/style/themes/default.toml)
 
 This baseline is the visual language every Tensorgami diagram uses by default. It turns the
 findings of the [literature survey](../survey/tensorgami-literature-survey.pdf) (requirements
@@ -191,13 +191,13 @@ and the residual edges run in a lane on the right.
 |---|---|
 | Semantic vocabulary (`OpCategory`, `EdgeKind`) | `src/tensorgami/vocabulary.py` |
 | Style records (`NodeStyle`, `EdgeStyle`, `Font`, `Metrics`, …) | `src/tensorgami/style/glyphs.py` |
-| Theme data | `src/tensorgami/style/themes/baseline.toml` |
+| Style data | `src/tensorgami/style/themes/default.toml` |
 | Loader (`load_theme`) and validation rules | `src/tensorgami/style/loader.py`, `validation.py` |
 | Scene model (positioned nodes, edges, groups, notes) | `src/tensorgami/scene.py` |
 | Rendering (painters per shape, edge routing, legend, SVG canvas) | `src/tensorgami/render/` |
 
-- **Custom themes:** copy `baseline.toml`, change values, then
-  `load_theme("path/to/mine.toml")`. A theme that breaks a rule (contrast, distinct hues,
+- **Custom styles:** copy `default.toml`, change values, then
+  `load_style("path/to/mine.toml")`. A theme that breaks a rule (contrast, distinct hues,
   distinct edge styles, completeness) is rejected with a message naming the offending key.
 - **New shapes:** register a painter with `PainterRegistry.register(shape, painter)`. The
   renderer and the router need no changes.
@@ -206,7 +206,12 @@ and the residual edges run in a lane on the right.
   invariants, routing, painters, SVG output, the legend, and the specimens. The specimens are
   also golden files: if the style changes without regenerating them, the tests fail.
 
-## 10. Open questions for review (roadmap step 3, Q5)
+## 10. Review outcome
+
+Adopted as-is as the `default` style (2026-10-10). The questions below were the open points
+of the draft; they stay as options to revisit per style (e.g. in `origami`).
+
+### Former open questions
 
 1. **Palette:** keep the ten hues above, or align them with a palette you already use
    (e.g. your paper template)?

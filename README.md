@@ -24,7 +24,7 @@ uv run python docs/survey/build.py             # rebuild the survey PDF
 
 ## Capturing a PyTorch model
 
-Figures come in later roadmap steps; the model capture already works:
+The pipeline already works end to end (as SVG; notebook figures and PNG come in step 9):
 
 ```python
 import torch
@@ -35,7 +35,15 @@ print(graph.summary())                              # every operation, its modul
 
 from tensorgami.transforms import simplify
 print(simplify(graph, level=2).summary())           # layers: activations folded, repeats ×N
+
+from tensorgami.layout import layout
+from tensorgami.render import render_svg
+from tensorgami.style import load_style
+style = load_style("default")                       # the standard style; more to come
+svg = render_svg(layout(simplify(graph, level=2), style), style)   # a complete figure
 ```
+
+See the automatically drawn [gallery](docs/gallery/README.md).
 
 ## Drawing a scene today
 

@@ -7,4 +7,4 @@ from tensorgami.style import Theme, load_theme
 
 @pytest.fixture(scope="session")
 def theme() -> Theme:
-    return load_theme("baseline")
+    return load_theme("default")

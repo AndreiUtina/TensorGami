@@ -67,7 +67,7 @@ class SceneRenderer:
 
 
 def render_svg(scene: Scene, theme: Theme | None = None) -> str:
-    """Render ``scene`` to an SVG document (baseline theme by default)."""
+    """Render ``scene`` to an SVG document (the ``default`` style unless given)."""
     if theme is None:
         from tensorgami.style import load_theme
 

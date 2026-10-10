@@ -14,7 +14,7 @@ How a PyTorch model becomes a figure. The decisions behind this page are recorde
 | Importer | `ModelImporter` protocol | `nn.Module` + example input → `ir.Graph` | ✅ step 6 ([ADR-0003](adr/0003-pytorch-capture.md)) |
 | IR | immutable dataclasses + `GraphBuilder`, rules, JSON | nodes, edges, module invocations, repeats, shapes | ✅ step 5 ([ADR-0002](adr/0002-intermediate-representation.md)) |
 | Transforms | `GraphTransform` protocol (`Graph → Graph`), `Pipeline` | full trace → chosen level of detail (`simplify(graph, level)`) | ✅ step 7 |
-| Layout | `LayoutEngine` protocol (`Graph → Scene`) | graph → positioned nodes and routed edges | step 8 ([ADR-0004](adr/0004-layout-engine.md)) |
+| Layout | `LayoutEngine` protocol (`Graph → Scene`), `Labeler` | graph → positioned nodes, frames and routed edges | ✅ step 8 ([ADR-0004](adr/0004-layout-engine.md)) |
 | Scene | `Scene`, `Node`, `Edge`, `Group`, `Note` | positioned diagram | ✅ step 2 |
 | Rendering | `SceneRenderer`, `GlyphPainter`, `Canvas` protocols | scene + theme → drawing | ✅ SVG (step 2) · matplotlib step 9 ([ADR-0005](adr/0005-figure-backend.md)) |
 | Style | `Theme` (TOML) + validation rules | all visual decisions | ✅ step 2 |

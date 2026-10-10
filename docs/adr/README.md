@@ -13,6 +13,7 @@ that *supersedes* the old one.
 | [0005](0005-figure-backend.md) | matplotlib for figures and PNG; the SVG canvas stays for vector output | Accepted |
 | [0006](0006-dependencies-and-compatibility.md) | Runtime deps: matplotlib only; Python ≥ 3.11; torch ≥ 2.2 not installed by us | Accepted |
 | [0007](0007-public-api.md) | `tg.draw(model, example_input, …)` returns a `tg.Figure` | Accepted |
+| [0008](0008-named-styles.md) | Named styles (`default`, later `origami`) selected with `style=` | Accepted |
 
 The overall picture is in [architecture.md](../architecture.md).
 

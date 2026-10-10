@@ -82,6 +82,7 @@ class _ThemeParser:
             edges=edges,
             group=self._group(self._table(self._data, "group"), "group"),
             metrics=self._metrics(self._data.get("metrics", {}), "metrics"),
+            layout=self._layout(self._data.get("layout", {}), "layout"),
         )
 
     # ------------------------------------------------------------------ sections
@@ -145,6 +146,17 @@ class _ThemeParser:
         if unknown:
             raise ThemeError(f"{path}: unknown keys {unknown}")
         return Metrics(**{k: self._number(t, k, path) for k in t})
+
+    @staticmethod
+    def _layout(t: Mapping[str, Any], path: str) -> dict[str, object]:
+        """Layout preferences of a style (spacing, direction…). Their names are checked by the
+        layout engine, which owns them; here only the value types are."""
+        if not isinstance(t, Mapping):
+            raise ThemeError(f"[{path}] must be a table")
+        for key, value in t.items():
+            if not isinstance(value, bool | int | float | str):
+                raise ThemeError(f"{path}.{key}: expected a number, string or true/false")
+        return dict(t)
 
     # ------------------------------------------------------------------ helpers
 

@@ -1,4 +1,4 @@
-# Tensorgami baseline theme.
+# Tensorgami "default" style: the standard look (formerly the style baseline).
 #
 # Every value here is a design decision documented in docs/style/style-baseline.md.
 # Rules enforced by tensorgami.style.validation (run on load):
@@ -8,8 +8,8 @@
 #   * every edge kind has a unique (colour, dash, arrow) signature
 
 [theme]
-name = "baseline"
-description = "Light, print-friendly baseline: semantic colour per operation category."
+name = "default"
+description = "Light, print-friendly: semantic colour per operation category."
 background = "#ffffff"
 
 [fonts.families]
@@ -72,6 +72,11 @@ delay_marker = 7
 cuboid_angle = 35
 trapezoid_ratio = 0.45
 line_gap = 3
+
+# [layout]            # optional: a style may change layout preferences, e.g.
+# rank_gap = 64       #   more space between layers
+# direction = "TB"    #   flow top → bottom
+# (names as in tensorgami.layout.LayoutOptions; the default style keeps the defaults)
 
 [group]
 fill = "#f8fafc"

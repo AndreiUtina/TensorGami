@@ -25,10 +25,11 @@ class Theme:
     group: GroupStyle
     metrics: Metrics = field(default_factory=Metrics)
     description: str = ""
+    layout: Mapping[str, object] = field(default_factory=dict)  # LayoutOptions overrides
 
     def __post_init__(self) -> None:
         # Freeze the mappings so a theme can be shared safely.
-        for attr in ("fonts", "nodes", "edges"):
+        for attr in ("fonts", "nodes", "edges", "layout"):
             object.__setattr__(self, attr, MappingProxyType(dict(getattr(self, attr))))
         missing = [
             *(f"font '{r}'" for r in TextRole if r not in self.fonts),

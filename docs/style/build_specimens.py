@@ -1,7 +1,7 @@
-"""Reference specimens of the Tensorgami baseline style.
+"""Reference specimens of the Tensorgami ``default`` style.
 
 Each specimen is a hand-positioned :class:`~tensorgami.scene.Scene` (the layout engine comes
-in a later roadmap step) rendered with the baseline theme. Rebuild with::
+in a later roadmap step) rendered with the default style. Rebuild with::
 
     uv run python docs/style/build_specimens.py [OUT_DIR]
 """
@@ -39,7 +39,7 @@ def caption(x: float, y: float, text: str, anchor: TextAnchor = TextAnchor.MIDDL
 
 
 def vocabulary(theme: Theme) -> Scene:
-    s = Scene(900, 760, "Tensorgami baseline: visual vocabulary")
+    s = Scene(900, 760, "Tensorgami default style: visual vocabulary")
     s.add(title(24, 24, "Categories — fill colour encodes the operation category, nothing else"))
     legend = build_legend(theme, list(OpCategory), origin=Point(24, 40), columns=3)
     s.add(*legend.items)
@@ -440,7 +440,7 @@ SPECIMENS: dict[str, Callable[[Theme], Scene]] = {
 
 
 def build(out_dir: Path = OUT_DIR, theme: Theme | None = None) -> list[Path]:
-    theme = theme or load_theme("baseline")
+    theme = theme or load_theme("default")
     out_dir.mkdir(parents=True, exist_ok=True)
     paths = []
     for name, make in SPECIMENS.items():

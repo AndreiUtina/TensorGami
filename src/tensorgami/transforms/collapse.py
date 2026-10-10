@@ -13,6 +13,32 @@ from tensorgami.ir import Graph, Group, Node
 from tensorgami.transforms.base import collapse, summary_node
 from tensorgami.vocabulary import OpCategory
 
+#: Categories that describe *what a block computes* (used to colour a collapsed block).
+_COMPUTE = frozenset(
+    {
+        OpCategory.CONV,
+        OpCategory.LINEAR,
+        OpCategory.RECURRENT,
+        OpCategory.ATTENTION,
+        OpCategory.EMBEDDING,
+        OpCategory.RESAMPLE,
+        OpCategory.NORM,
+    }
+)
+
+
+def content_category(graph: Graph, group_id: str) -> OpCategory:
+    """The category most of a group's compute operations share (e.g. a ``features`` block
+    of convolutions and pooling → convolution); ``module`` when there is no clear majority."""
+    counts: dict[OpCategory, int] = {}
+    for n in graph.nodes_under(group_id):
+        if n.category in _COMPUTE:
+            counts[n.category] = counts.get(n.category, 0) + 1
+    if not counts:
+        return OpCategory.MODULE
+    top = max(counts, key=lambda c: (counts[c], -list(OpCategory).index(c)))
+    return top if counts[top] * 2 > sum(counts.values()) else OpCategory.MODULE
+
 
 def _group_summary(graph: Graph, g: Group, size: int, exits: list[tuple[str, int]]) -> Node:
     return summary_node(
@@ -20,7 +46,7 @@ def _group_summary(graph: Graph, g: Group, size: int, exits: list[tuple[str, int
         f"<{g.id}>",
         exits,
         op=g.type_name,
-        category=g.category or OpCategory.MODULE,
+        category=g.category or content_category(graph, g.id),
         group=g.id,
         label=g.label,
         module=g.module,

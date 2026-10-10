@@ -74,7 +74,7 @@
     <g class="tg-node tg-module" data-id="lay">
       <rect x="36" y="205" width="168" height="50" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
       <text x="120" y="226.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">LayoutEngine</text>
-      <text x="120" y="241.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">layered · grid · step 8</text>
+      <text x="120" y="241.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">layered ✓ step 8</text>
     </g>
     <g class="tg-node tg-tensor" data-id="scene">
       <rect x="268" y="213" width="104" height="34" rx="17" fill="#ffffff" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>

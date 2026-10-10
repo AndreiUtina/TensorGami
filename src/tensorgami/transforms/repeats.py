@@ -148,10 +148,18 @@ def _same_ops(graph: Graph, a: list[str], b: list[str]) -> bool:
 
 
 def _leaf_time_plans(graph: Graph) -> list:
-    """Leaf modules called once per step (a cell drawn as one node), linked by state edges."""
+    """Leaf modules called once per step (a cell drawn as one node), linked by state edges.
+    Nodes inside a TIME-repeated group are folded with their group, not again here."""
+    covered = {
+        n.id
+        for r in graph.repeats
+        if r.kind is RepeatKind.TIME
+        for g in r.groups
+        for n in graph.nodes_under(g)
+    }
     calls: dict[str, list[str]] = defaultdict(list)
     for n in graph.nodes:
-        if n.module:
+        if n.module and n.id not in covered:
             calls[n.module].append(n.id)
     plans = []
     for module, ids in calls.items():

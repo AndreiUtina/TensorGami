@@ -10,7 +10,7 @@ import math
 from typing import Protocol
 
 from tensorgami.render.canvas import Canvas, Paint
-from tensorgami.scene import Node, Point, Side, TextAnchor
+from tensorgami.scene import Node, Point, Side
 from tensorgami.style.glyphs import NodeStyle, Shape, TextRole
 from tensorgami.style.theme import Theme
 
@@ -70,7 +70,7 @@ class PillPainter(RectPainter):
 
 
 class CirclePainter:
-    """Merge operation: a circle holding a symbol (+, ×, ‖); detail text above it.
+    """Merge operation: a circle holding a symbol (+, ×, ‖); detail text centred above it.
 
     Edges usually enter and leave merges horizontally, so the detail goes where they don't.
     """
@@ -84,8 +84,8 @@ class CirclePainter:
             canvas.text(node.box.center, node.label, font)
         if node.detail:
             font = theme.node_font(node.category, TextRole.DETAIL)
-            at = Point(node.box.cx + r * 0.7, node.box.cy - r - font.size * 0.7)
-            canvas.text(at, node.detail, font, TextAnchor.START)
+            at = Point(node.box.cx, node.box.cy - r - font.size * 0.8)
+            canvas.text(at, node.detail, font)
 
     def anchor(self, node: Node, side: Side, theme: Theme) -> Point:
         r, c = self._radius(node), node.box.center
