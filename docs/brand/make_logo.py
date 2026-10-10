@@ -85,19 +85,56 @@ def svg(width: float, height: float, body: str, title: str) -> str:
     )
 
 
+BANNER_W, BANNER_H, BANNER_SCALE = 1600, 400, 2.0
+
+
+def lockup(tensor_color: str) -> str:
+    """Icon + wordmark on a 470 × 128 canvas."""
+    placed_icon = f'<g transform="translate(8 8) scale({112 / 256:.4f})">\n{mark()}\n</g>'
+    return placed_icon + "\n" + wordmark(132, 80, 46, tensor_color)
+
+
+def banner() -> str:
+    """README banner: the white-"Tensor" logo centred on its own dark card.
+
+    The card makes one image legible on light pages, dark pages and in the GitHub mobile
+    app, which supports neither theme-switching <picture> elements nor sized <img> tags.
+    """
+    dx = (BANNER_W - 470 * BANNER_SCALE) / 2
+    dy = (BANNER_H - 128 * BANNER_SCALE) / 2
+    return (
+        f'<rect width="{BANNER_W}" height="{BANNER_H}" rx="48" fill="{INK}"/>\n'
+        f'<g transform="translate({_n(dx)} {_n(dy)}) scale({BANNER_SCALE})">\n'
+        f"{lockup('#ffffff')}\n</g>"
+    )
+
+
+def to_png(svg_path: Path, png_path: Path) -> Path:
+    """Rasterise with typst (dev dependency); 1 SVG px → 1 PNG px, transparent corners."""
+    import tempfile
+
+    import typst
+
+    with tempfile.TemporaryDirectory() as tmp:
+        source = Path(tmp) / "banner.typ"
+        (Path(tmp) / "banner.svg").write_text(svg_path.read_text(encoding="utf-8"))
+        source.write_text(
+            f"#set page(width: {BANNER_W}pt, height: {BANNER_H}pt, margin: 0pt, fill: none)\n"
+            f'#image("banner.svg", width: {BANNER_W}pt)\n',
+            encoding="utf-8",
+        )
+        png_path.write_bytes(typst.compile(str(source), format="png", ppi=72))
+    return png_path
+
+
 def main(out_dir: Path = OUT_DIR) -> list[Path]:
-    icon = mark()
-    placed_icon = f'<g transform="translate(8 8) scale({112 / 256:.4f})">\n{icon}\n</g>'
     files = {
         # main logo, for dark backgrounds: white "Tensor"
-        "logo.svg": svg(
-            470, 128, placed_icon + "\n" + wordmark(132, 80, 46, "#ffffff"), "TensorGami"
-        ),
-        # for light backgrounds, where white would vanish: dark "Tensor"
-        "logo-light.svg": svg(
-            470, 128, placed_icon + "\n" + wordmark(132, 80, 46, INK), "TensorGami"
-        ),
-        "logo-mark.svg": svg(256, 256, icon, "TensorGami"),
+        "logo.svg": svg(470, 128, lockup("#ffffff"), "TensorGami"),
+        # for light backgrounds (papers, slides), where white would vanish: dark "Tensor"
+        "logo-light.svg": svg(470, 128, lockup(INK), "TensorGami"),
+        "logo-mark.svg": svg(256, 256, mark(), "TensorGami"),
+        "logo-banner.svg": svg(BANNER_W, BANNER_H, banner(), "TensorGami"),
     }
     out_dir.mkdir(parents=True, exist_ok=True)
     paths = []
@@ -105,6 +142,7 @@ def main(out_dir: Path = OUT_DIR) -> list[Path]:
         path = out_dir / name
         path.write_text(content, encoding="utf-8")
         paths.append(path)
+    paths.append(to_png(out_dir / "logo-banner.svg", out_dir / "logo-banner.png"))
     return paths
 
 

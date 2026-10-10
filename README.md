@@ -1,9 +1,4 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/logo.svg">
-    <img src="docs/brand/logo-light.svg" alt="TensorGami" width="420">
-  </picture>
-</p>
+![TensorGami](docs/brand/logo-banner.png)
 
 # Tensorgami
 
