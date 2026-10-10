@@ -86,6 +86,7 @@ def svg(width: float, height: float, body: str, title: str) -> str:
 
 
 BANNER_W, BANNER_H, BANNER_SCALE = 1600, 400, 2.0
+BANNER_BG = "#0d1117"  # GitHub's dark-theme page background
 
 
 def lockup(tensor_color: str) -> str:
@@ -103,7 +104,7 @@ def banner() -> str:
     dx = (BANNER_W - 470 * BANNER_SCALE) / 2
     dy = (BANNER_H - 128 * BANNER_SCALE) / 2
     return (
-        f'<rect width="{BANNER_W}" height="{BANNER_H}" rx="48" fill="{INK}"/>\n'
+        f'<rect width="{BANNER_W}" height="{BANNER_H}" rx="48" fill="{BANNER_BG}"/>\n'
         f'<g transform="translate({_n(dx)} {_n(dy)}) scale({BANNER_SCALE})">\n'
         f"{lockup('#ffffff')}\n</g>"
     )
