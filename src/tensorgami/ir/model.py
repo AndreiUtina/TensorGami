@@ -51,6 +51,7 @@ class Node:
     params: Mapping[str, ParamValue] = field(default_factory=dict)
     output_shapes: tuple[Shape, ...] = ()
     module: str = ""
+    count: int = 1  # > 1: stands for N identical invocations (folded time steps)
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "params", _frozen(self.params))
@@ -100,6 +101,7 @@ class Group:
     call_index: int = 0
     label: str = ""
     category: OpCategory | None = None  # explicit override, e.g. a custom recurrent cell
+    count: int = 1  # > 1: stands for N identical invocations (a folded ×N repeat)
 
     @property
     def is_root(self) -> bool:

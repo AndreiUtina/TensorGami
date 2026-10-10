@@ -30,6 +30,7 @@ def to_dict(graph: Graph) -> dict[str, Any]:
                 "call_index": g.call_index,
                 "label": g.label,
                 "category": g.category.value if g.category else None,
+                "count": g.count,
             }
             for g in graph.groups
         ],
@@ -44,6 +45,7 @@ def to_dict(graph: Graph) -> dict[str, Any]:
                 "params": {k: _param_out(v) for k, v in n.params.items()},
                 "outputs": [list(s) for s in n.output_shapes],
                 "module": n.module,
+                "count": n.count,
             }
             for n in graph.nodes
         ],
@@ -83,6 +85,7 @@ def from_dict(data: Mapping[str, Any], *, validate: bool = True) -> Graph:
                     call_index=g.get("call_index", 0),
                     label=g.get("label", ""),
                     category=OpCategory(g["category"]) if g.get("category") else None,
+                    count=g.get("count", 1),
                 )
                 for g in data["groups"]
             ),
@@ -97,6 +100,7 @@ def from_dict(data: Mapping[str, Any], *, validate: bool = True) -> Graph:
                     {k: _param_in(v) for k, v in n.get("params", {}).items()},
                     tuple(_shape_in(s) for s in n.get("outputs", [])),
                     n.get("module", ""),
+                    n.get("count", 1),
                 )
                 for n in data["nodes"]
             ),

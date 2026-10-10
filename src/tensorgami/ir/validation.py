@@ -187,6 +187,19 @@ class RepeatRule:
                 yield Issue(self.name, f"group '{g}' belongs to {count} repeats")
 
 
+@dataclass(frozen=True)
+class CountRule:
+    """A node or group stands for at least one invocation."""
+
+    name: str = "counts"
+
+    def check(self, graph: Graph) -> Iterable[Issue]:
+        for what, items in (("node", graph.nodes), ("group", graph.groups)):
+            for item in items:
+                if item.count < 1:
+                    yield Issue(self.name, f"{what} '{item.id}' has count {item.count}; needs ≥ 1")
+
+
 def default_rules() -> list[GraphRule]:
     return [
         UniqueIdsRule(),
@@ -196,6 +209,7 @@ def default_rules() -> list[GraphRule]:
         AcyclicDataFlowRule(),
         InputOutputRule(),
         RepeatRule(),
+        CountRule(),
     ]
 
 
