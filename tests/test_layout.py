@@ -1,0 +1,289 @@
+"""Layout engine and labels on hand-built graphs (no torch needed)."""
+
+from __future__ import annotations
+
+import dataclasses
+
+import pytest
+from ir_fixtures import ALL, convlstm, residual_cnn, transformer
+from layout_checks import check_scene, routes
+
+from tensorgami.ir import GraphBuilder, Node
+from tensorgami.layout import Direction, Labeler, LayeredLayout, LayoutOptions, layout
+from tensorgami.render import render_svg
+from tensorgami.transforms import simplify
+from tensorgami.vocabulary import EdgeKind
+from tensorgami.vocabulary import OpCategory as C
+
+NO_WRAP = LayoutOptions(wrap_width=None)
+
+
+# --------------------------------------------------------------------------- labels
+
+
+@pytest.mark.parametrize(
+    ("node", "label", "detail"),
+    [
+        (
+            Node(
+                "n",
+                "Conv2d",
+                C.CONV,
+                params={"kernel_size": (3, 3), "out_channels": 64, "stride": (2, 2)},
+            ),
+            "Conv 3×3",
+            "64, s2",
+        ),
+        (
+            Node(
+                "n",
+                "ConvTranspose2d",
+                C.CONV,
+                params={"kernel_size": (4, 4), "out_channels": 1, "stride": (1, 1)},
+            ),
+            "ConvT 4×4",
+            "1",
+        ),
+        (
+            Node(
+                "n",
+                "Linear",
+                C.LINEAR,
+                params={"in_features": 4096, "out_features": 10, "folded": ("relu", "Dropout")},
+            ),
+            "Linear",
+            "4096→10, ReLU, Dropout",
+        ),
+        (
+            Node("n", "MaxPool2d", C.RESAMPLE, params={"kernel_size": 2, "stride": 2}),
+            "MaxPool 2×2",
+            "",
+        ),
+        (
+            Node("n", "AdaptiveAvgPool2d", C.RESAMPLE, params={"output_size": 1}),
+            "AdaptiveAvgPool",
+            "→ 1×1",
+        ),
+        (
+            Node(
+                "n",
+                "LSTM",
+                C.RECURRENT,
+                params={"hidden_size": 32, "num_layers": 2, "bidirectional": True},
+            ),
+            "LSTM",
+            "32 hidden, 2 layers, bidirectional",
+        ),
+        (
+            Node("n", "MultiheadAttention", C.ATTENTION, params={"num_heads": 8}),
+            "Multi-head attention",
+            "8 heads",
+        ),
+        (Node("n", "add", C.MERGE, params={"folded": ("relu",)}), "+", "ReLU"),
+        (Node("n", "cat", C.MERGE), "‖", ""),
+        (Node("n", "mul", C.OTHER, params={"args": (0.5,), "folded": ("exp",)}), "× 0.5", "exp"),
+        (Node("n", "randn_like", C.STOCHASTIC), "ε ~ N(0, I)", ""),
+        (Node("n", "input", C.IO, label="image"), "image", ""),
+        (Node("n", "Dropout", C.REGULARIZATION, params={"p": 0.5}), "Dropout", "p = 0.5"),
+        (
+            Node(
+                "n", "Embedding", C.EMBEDDING, params={"num_embeddings": 100, "embedding_dim": 32}
+            ),
+            "Embedding",
+            "100→32",
+        ),
+        (
+            Node("n", "GRUCell", C.RECURRENT, params={"hidden_size": 8}, count=3),
+            "GRUCell",
+            "8 hidden, ×3 steps",
+        ),
+        (Node("n", "BatchNorm2d", C.NORM, params={"folded": ("ReLU",)}), "BatchNorm", "ReLU"),
+        (Node("n", "fft_rfft", C.OTHER), "fft_rfft", ""),
+    ],
+)
+def test_node_labels(node, label, detail):
+    text = Labeler().describe(node)
+    assert (text.label, text.detail) == (label, detail)
+
+
+def test_shapes_are_labelled_only_where_they_change():
+    g = residual_cnn()
+    labeler = Labeler()
+    labelled = {(e.source, e.target): labeler.edge_label(g, e) for e in g.edges}
+    assert labelled[("n0", "n1")] == "3×32×32"  # from the input
+    assert labelled[("n6", "n7")] == "16×16×16"  # the pool halves the resolution
+    assert labelled[("n7", "n8")] == "4096"  # flatten
+    assert labelled[("n2", "n3")] == ""  # BatchNorm keeps the shape
+
+
+# --------------------------------------------------------------------------- invariants
+
+
+@pytest.mark.parametrize("make", ALL.values(), ids=ALL.keys())
+@pytest.mark.parametrize("level", [0, 1, 2, 3])
+@pytest.mark.parametrize("direction", list(Direction))
+def test_layout_invariants(theme, make, level, direction):
+    graph = simplify(make(), level)
+    options = LayoutOptions(direction=direction, wrap_width=None)
+    scene = LayeredLayout(options).layout(graph, theme)
+    check_scene(scene, graph, theme, monotonic="x" if direction is Direction.LEFT_RIGHT else "y")
+
+
+@pytest.mark.parametrize("make", ALL.values(), ids=ALL.keys())
+def test_wrapped_layouts_keep_the_invariants(theme, make):
+    graph = simplify(make(), 3)
+    scene = LayeredLayout(LayoutOptions(wrap_width=400)).layout(graph, theme)
+    check_scene(scene, graph, theme)
+
+
+def test_layout_is_deterministic(theme):
+    a = render_svg(layout(simplify(transformer(), 2), theme), theme)
+    b = render_svg(layout(simplify(transformer(), 2), theme), theme)
+    assert a == b
+
+
+# --------------------------------------------------------------------------- features
+
+
+def test_residual_skip_is_routed_around_the_block(theme):
+    """The skip into a block's merge enters through a port and runs in its own lane."""
+    b = GraphBuilder()
+    x = b.input((1, 8))
+    block = b.group("block", "ResidualBlock")
+    prev = x
+    chain = []
+    for _ in range(3):
+        n = b.node("Linear", category=C.LINEAR, group=block, outputs=[(1, 8)])
+        b.edge(prev, n)
+        prev = n
+        chain.append(n)
+    add = b.node("add", category=C.MERGE, group=block, outputs=[(1, 8)])
+    b.edge(prev, add)
+    b.edge(x, add)
+    b.output(add)
+    graph = b.build()
+    scene = layout(graph, theme, NO_WRAP)
+    check_scene(scene, graph, theme)  # in particular: the skip crosses no Linear box
+    skip = next(
+        path for edge, path in routes(scene, theme) if edge.source == x and edge.target == add
+    )
+    assert len(skip) > 2  # bent around the chain, not straight through it
+
+
+def test_folded_recurrence_draws_state_loops_and_badges(theme):
+    graph = simplify(convlstm(steps=3), 2)
+    scene = layout(graph, theme)
+    loops = [e for e in scene.edges if e.kind is EdgeKind.STATE and e.delay]
+    assert len(loops) == 2  # h and c (the legend's sample state arrow has no delay marker)
+    (frame,) = [g for g in scene.groups if g.id == "cell"]
+    assert frame.badge == "×3" and frame.title == ""
+
+
+def test_frames_titles_and_layer_badges(theme):
+    scene = layout(simplify(transformer(layers=3), 2), theme)
+    (frame,) = scene.groups
+    assert (frame.title, frame.badge) == ("TransformerEncoderLayer", "×3")
+    labels = {n.label for n in scene.nodes}
+    assert {"tokens", "Multi-head attention", "LayerNorm", "encoded"} <= labels
+
+
+def test_generic_containers_are_titled_by_attribute_name(theme):
+    b = GraphBuilder()
+    x = b.input((1, 4))
+    g = b.group("features", "Sequential")
+    first = b.node("Linear", category=C.LINEAR, group=g, outputs=[(1, 4)])
+    second = b.node("ReLU", category=C.ACTIVATION, group=g, outputs=[(1, 4)])
+    b.chain([x, first, second])
+    b.output(second)
+    scene = layout(b.build(), theme)
+    assert [grp.title for grp in scene.groups] == ["features"]
+
+
+def test_long_chains_wrap_into_rows(theme):
+    b = GraphBuilder()
+    prev = b.input((1, 8))
+    for _ in range(14):
+        n = b.node("Linear", category=C.LINEAR, outputs=[(1, 8)])
+        b.edge(prev, n)
+        prev = n
+    b.output(prev)
+    graph = b.build()
+    wrapped = layout(graph, theme, LayoutOptions(wrap_width=900))
+    flat = layout(graph, theme, NO_WRAP)
+
+    def rows(scene):
+        return {round(n.box.cy) for n in scene.nodes if not n.id.startswith("legend:")}
+
+    assert len(rows(wrapped)) >= 2 and wrapped.width < flat.width
+    assert len(rows(flat)) == 1
+    check_scene(wrapped, graph, theme)
+
+
+def test_top_bottom_direction_stacks_vertically(theme):
+    graph = simplify(transformer(), 2)
+    scene = layout(graph, theme, LayoutOptions(direction=Direction.TOP_BOTTOM))
+    ys = [n.box.cy for n in scene.nodes if n.category is C.IO]
+    assert ys[0] < ys[-1] and scene.height > scene.width / 2
+
+
+def test_legend_is_optional(theme):
+    graph = simplify(residual_cnn(), 2)
+    with_legend = layout(graph, theme)
+    without = layout(graph, theme, LayoutOptions(legend=False))
+    assert without.height < with_legend.height
+    assert not any(n.id.startswith("legend:") for n in without.nodes)
+
+
+def test_custom_labeler_is_used(theme):
+    class Upper(Labeler):
+        def describe(self, node):
+            text = super().describe(node)
+            return dataclasses.replace(text, label=text.label.upper())
+
+    scene = LayeredLayout(labeler=Upper()).layout(simplify(residual_cnn(), 2), theme)
+    labels = {n.label for n in scene.nodes}
+    assert "CONV 3×3" in labels and "Conv 3×3" not in labels
+
+
+def test_containers_are_named_after_their_attribute_when_collapsed():
+    text = Labeler().describe(
+        Node("<features>", "Sequential", C.CONV, module="features", params={"collapsed": 8})
+    )
+    assert (text.label, text.detail) == ("features", "8 layers")
+
+
+def test_wrapping_never_leaves_a_lone_pill_and_balances_rows():
+    from tensorgami.layout.layered import _best_cuts
+
+    levels = [0, 1, 2, 3, 4, 5]  # input, a wide block, 3 small layers, output
+    sizes = {0: 90.0, 1: 1900.0, 2: 200.0, 3: 120.0, 4: 900.0, 5: 90.0}
+    gaps = dict.fromkeys(levels, 48.0)
+    assert _best_cuts(levels, levels[:-1], sizes, gaps, 1100) == [1]  # [input, block] | rest
+    even = dict.fromkeys(levels, 300.0)
+    assert _best_cuts(levels, levels[:-1], even, gaps, 1100) == [2]  # 3 + 3, not 4 + 2
+
+
+def test_wrapping_cost_stays_bounded():
+    import time
+
+    from tensorgami.layout.layered import _best_cuts
+
+    levels = list(range(200))
+    started = time.perf_counter()
+    _best_cuts(levels, levels[:-1], dict.fromkeys(levels, 100.0), dict.fromkeys(levels, 48.0), 1100)
+    assert time.perf_counter() - started < 2.0  # exhaustive search would never finish
+
+
+def test_style_layout_preferences_apply_unless_options_are_explicit(theme):
+    graph = simplify(residual_cnn(), 2)
+    roomy = dataclasses.replace(theme, layout={"rank_gap": 160, "wrap_width": None})
+    plain = LayoutOptions.for_style(theme)
+    assert plain == LayoutOptions()  # the default style keeps the defaults
+    assert LayoutOptions.for_style(roomy).rank_gap == 160
+    wide = LayeredLayout().layout(graph, roomy)
+    narrow = LayeredLayout(LayoutOptions(wrap_width=None)).layout(graph, roomy)  # explicit wins
+    assert wide.width > narrow.width
+    vertical = dataclasses.replace(theme, layout={"direction": "TB"})
+    assert LayoutOptions.for_style(vertical).direction is Direction.TOP_BOTTOM
+    with pytest.raises(ValueError, match="unknown layout option"):
+        LayoutOptions.for_style(dataclasses.replace(theme, layout={"rank_spacing": 3}))

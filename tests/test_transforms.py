@@ -312,3 +312,36 @@ def test_level_presets_are_deterministic_and_inspectable():
     assert "fold-repeats" in repr(pipeline_for(Level.LAYERS))
     assert repr(pipeline_for(Level.SYSTEM)) == "Pipeline([collapse-to-system])"
     assert "fold-repeats" not in repr(pipeline_for(2, fold_layers=False, fold_time=False))
+
+
+def test_collapsed_blocks_take_the_colour_of_their_contents():
+    from tensorgami.transforms.collapse import content_category
+
+    b = GraphBuilder()
+    x = b.input((1, 3, 8, 8))
+    feats = b.group("features", "Sequential")
+    head = b.group("head", "Sequential")
+    mixed = b.group("mixed", "Block")
+    prev = x
+    for op, cat, grp in [
+        ("Conv2d", C.CONV, feats),
+        ("MaxPool2d", C.RESAMPLE, feats),
+        ("Conv2d", C.CONV, feats),
+        ("Linear", C.LINEAR, head),
+        ("Conv2d", C.CONV, mixed),
+        ("Linear", C.LINEAR, mixed),
+    ]:
+        n = b.node(op, category=cat, group=grp, outputs=[(1, 4)])
+        b.edge(prev, n)
+        prev = n
+    b.output(prev)
+    g = b.build()
+    assert content_category(g, "features") is C.CONV  # 2 of 3 compute ops
+    assert content_category(g, "head") is C.LINEAR
+    assert content_category(g, "mixed") is C.MODULE  # no majority
+    stages = CollapseGroups(depth=1).apply(g)
+    assert [n.category for n in stages.nodes if n.op != "input" and n.op != "output"] == [
+        C.CONV,
+        C.LINEAR,
+        C.MODULE,
+    ]

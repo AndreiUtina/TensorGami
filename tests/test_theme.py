@@ -24,7 +24,7 @@ from tensorgami.style.validation import (
 )
 from tensorgami.vocabulary import EdgeKind, OpCategory
 
-BASELINE_TOML = (Path(__file__).parents[1] / "src/tensorgami/style/themes/baseline.toml").read_text(
+DEFAULT_TOML = (Path(__file__).parents[1] / "src/tensorgami/style/themes/default.toml").read_text(
     encoding="utf-8"
 )
 
@@ -32,26 +32,26 @@ BASELINE_TOML = (Path(__file__).parents[1] / "src/tensorgami/style/themes/baseli
 # --------------------------------------------------------------------------- loading
 
 
-def test_baseline_is_shipped_and_complete(theme):
-    assert "baseline" in available_themes()
+def test_default_is_shipped_and_complete(theme):
+    assert "default" in available_themes()
     assert set(theme.nodes) == set(OpCategory)
     assert set(theme.edges) == set(EdgeKind)
     assert set(theme.fonts) == set(TextRole)
 
 
-def test_baseline_passes_every_validation_rule(theme):
+def test_default_passes_every_validation_rule(theme):
     assert ThemeValidator().validate(theme) == []
 
 
 def test_theme_can_be_loaded_from_a_path(tmp_path):
     path = tmp_path / "mine.toml"
-    path.write_text(BASELINE_TOML.replace('name = "baseline"', 'name = "mine"'), encoding="utf-8")
+    path.write_text(DEFAULT_TOML.replace('name = "default"', 'name = "mine"'), encoding="utf-8")
     assert load_theme(path).name == "mine"
     assert load_theme(str(path)).name == "mine"
 
 
 def test_unknown_theme_name_lists_builtins():
-    with pytest.raises(ThemeError, match="baseline"):
+    with pytest.raises(ThemeError, match="default"):
         read_theme("does-not-exist")
 
 
@@ -71,7 +71,7 @@ def test_category_text_defaults_to_label_colour(theme):
 
 def test_node_font_uses_category_text_colour_except_for_details():
     conv = 'name = "Convolution"\nshape = "rect"'
-    toml = BASELINE_TOML.replace(conv, conv + '\ntext = "#000000"')
+    toml = DEFAULT_TOML.replace(conv, conv + '\ntext = "#000000"')
     theme = parse_theme(toml)
     assert theme.node_font(OpCategory.CONV).color == Color(0, 0, 0)
     assert theme.node_font(OpCategory.CONV, TextRole.DETAIL) == theme.font(TextRole.DETAIL)
@@ -93,16 +93,16 @@ def test_node_font_uses_category_text_colour_except_for_details():
     ],
 )
 def test_malformed_themes_report_the_offending_key(old, new, message):
-    assert old in BASELINE_TOML
+    assert old in DEFAULT_TOML
     with pytest.raises(ThemeError, match=message):
-        parse_theme(BASELINE_TOML.replace(old, new, 1))
+        parse_theme(DEFAULT_TOML.replace(old, new, 1))
 
 
 def test_incomplete_theme_is_rejected():
-    start = BASELINE_TOML.index("[categories.loss]")
-    end = BASELINE_TOML.index("# ---", start)
+    start = DEFAULT_TOML.index("[categories.loss]")
+    end = DEFAULT_TOML.index("# ---", start)
     with pytest.raises(ThemeError, match="category 'loss'"):
-        parse_theme(BASELINE_TOML[:start] + BASELINE_TOML[end:])
+        parse_theme(DEFAULT_TOML[:start] + DEFAULT_TOML[end:])
 
 
 # --------------------------------------------------------------------------- validation
@@ -141,7 +141,7 @@ def test_distinct_edges_rule_flags_identical_edge_styles(theme):
 
 def test_load_theme_refuses_invalid_theme(tmp_path):
     path = tmp_path / "ugly.toml"
-    path.write_text(BASELINE_TOML.replace('fill = "#bfdbfe"', 'fill = "#0f172a"'), encoding="utf-8")
+    path.write_text(DEFAULT_TOML.replace('fill = "#bfdbfe"', 'fill = "#0f172a"'), encoding="utf-8")
     with pytest.raises(ThemeError, match="failed validation"):
         load_theme(path)
     assert load_theme(path, validate=False).node_style(OpCategory.CONV).fill.hex == "#0f172a"
@@ -158,10 +158,35 @@ def test_validator_accepts_custom_rule_set(theme):
     assert len(ThemeValidator([AlwaysFails()]).validate(theme)) == 1
 
 
-def test_baseline_uses_documented_shape_conventions(theme):
+def test_default_uses_documented_shape_conventions(theme):
     assert theme.node_style(OpCategory.IO).shape is Shape.PILL
     assert theme.node_style(OpCategory.MERGE).shape is Shape.CIRCLE
     assert theme.node_style(OpCategory.CONV).shape is Shape.RECT
     assert theme.node_style(OpCategory.STOCHASTIC).dash  # dashed outline
     assert theme.edge_style(EdgeKind.TRAINING).dash
     assert not theme.edge_style(EdgeKind.DATA).dash  # one solid style for data flow
+
+
+# --------------------------------------------------------------------------- named styles
+
+
+def test_default_style_is_the_standard():
+    from tensorgami.style import DEFAULT_STYLE, available_styles, load_style
+
+    assert DEFAULT_STYLE == "default" and "default" in available_styles()
+    assert load_style().name == "default" == load_style("default").name
+
+
+def test_unknown_style_lists_the_available_ones():
+    from tensorgami.style import load_style
+
+    with pytest.raises(ThemeError, match="built-in themes: default"):
+        load_style("origami-not-yet")
+
+
+def test_a_style_may_carry_layout_preferences():
+    theme = parse_theme(DEFAULT_TOML + '\n[layout]\nrank_gap = 96\ndirection = "TB"\n')
+    assert dict(theme.layout) == {"rank_gap": 96, "direction": "TB"}
+    assert dict(parse_theme(DEFAULT_TOML).layout) == {}
+    with pytest.raises(ThemeError, match="layout.rank_gap"):
+        parse_theme(DEFAULT_TOML + "\n[layout]\nrank_gap = [1, 2]\n")
