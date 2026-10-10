@@ -27,7 +27,7 @@ def pipeline() -> Scene:
         Node("model", at(84, r1, 140, 44), C.IO, "nn.Module", "+ example input"),
         Node("imp", at(280, r1, 156, 50), C.MODULE, "ModelImporter", "torch tracing ✓ step 6"),
         Node("ir1", at(460, r1, 104, 44), C.TENSOR, "ir.Graph", "✓ step 5"),
-        Node("tr", at(640, r1, 168, 50), C.MODULE, "GraphTransforms", "levels · ×N · step 7"),
+        Node("tr", at(640, r1, 168, 50), C.MODULE, "GraphTransforms", "levels · ×N ✓ step 7"),
         Node("ir2", at(840, r1, 104, 34), C.TENSOR, "ir.Graph", "chosen level"),
         Node("lay", at(120, r2, 168, 50), C.MODULE, "LayoutEngine", "layered · grid · step 8"),
         Node("scene", at(320, r2, 104, 34), C.TENSOR, "Scene"),
