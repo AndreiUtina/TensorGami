@@ -5,8 +5,9 @@ needed), traced on one 224×224 image, simplified and laid out automatically::
 
     uv run python examples/alexnet.py
 
-Writes ``alexnet.svg`` (layer level, left → right), ``alexnet-vertical.svg`` (top → bottom)
-and ``alexnet-stages.svg`` (stage level) next to this script.
+Writes ``alexnet`` (layer level, left → right), ``alexnet-vertical`` (top → bottom) and
+``alexnet-stages`` (stage level), each as ``.svg`` and as a 300 dpi ``.png``, next to this
+script. In a notebook, ``draw()`` shows the figure inline (see ``alexnet.ipynb``).
 """
 
 from __future__ import annotations
@@ -16,9 +17,9 @@ from pathlib import Path
 import torch
 from torch import nn
 
+import tensorgami as tg
 from tensorgami.importers.torch import trace
 from tensorgami.layout import Direction, LayoutOptions, layout
-from tensorgami.render import render_svg
 from tensorgami.style import load_style
 from tensorgami.transforms import simplify
 
@@ -63,21 +64,24 @@ class AlexNet(nn.Module):
         return self.classifier(x)
 
 
-def main() -> None:
-    model = AlexNet()
-    graph = trace(model, torch.randn(1, 3, 224, 224))  # runs once, leaves the model untouched
-    print(simplify(graph, level=2).summary())
+def draw(level: int = 2, options: LayoutOptions | None = None) -> tg.Figure:
+    """AlexNet as a Tensorgami figure (step 10 will shorten this to ``tg.draw(...)``)."""
+    graph = simplify(trace(AlexNet(), torch.randn(1, 3, 224, 224)), level)
+    style = load_style("default")  # the standard style (ADR-0008)
+    return tg.Figure(layout(graph, style, options), style, graph)
 
-    theme = load_style("default")  # the standard style (ADR-0008)
+
+def main() -> None:
     figures = {
-        "alexnet.svg": (2, LayoutOptions()),
-        "alexnet-vertical.svg": (2, LayoutOptions(direction=Direction.TOP_BOTTOM)),
-        "alexnet-stages.svg": (1, LayoutOptions()),
+        "alexnet": (2, None),
+        "alexnet-vertical": (2, LayoutOptions(direction=Direction.TOP_BOTTOM)),
+        "alexnet-stages": (1, None),
     }
     for name, (level, options) in figures.items():
-        scene = layout(simplify(graph, level), theme, options)
-        (HERE / name).write_text(render_svg(scene, theme), encoding="utf-8")
-        print(f"wrote examples/{name} ({scene.width:.0f}×{scene.height:.0f} px)")
+        fig = draw(level, options)
+        fig.save(HERE / f"{name}.svg")  # vector, for the docs
+        fig.save(HERE / f"{name}.png", dpi=300)  # for reports and slides
+        print(f"wrote examples/{name}.svg and .png — {fig!r}")
 
 
 if __name__ == "__main__":
