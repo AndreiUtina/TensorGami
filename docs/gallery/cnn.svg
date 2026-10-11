@@ -4,17 +4,12 @@
   <g class="tg-groups">
     <g class="tg-group" data-id="stem">
       <rect x="151.9" y="24" width="289.6" height="94" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 3"/>
-      <text x="161.9" y="40.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">stem</text>
     </g>
     <g class="tg-group" data-id="blocks.0">
       <rect x="24" y="174" width="656" height="120" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 3"/>
-      <text x="34" y="190.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">ResidualBlock</text>
-      <rect x="643.65" y="164.75" width="26.35" height="18.5" rx="9.25" fill="#ffffff" stroke="#64748b" stroke-width="1" stroke-linejoin="round"/>
-      <text x="656.82" y="177.68" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle" fill="#334155">×2</text>
     </g>
     <g class="tg-group" data-id="classifier">
       <rect x="205.6" y="350" width="268" height="94" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 3"/>
-      <text x="215.6" y="366.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">classifier</text>
     </g>
   </g>
   <g class="tg-edges">
@@ -47,11 +42,11 @@
       <polygon points="165.9,81 157.9,84.5 157.9,77.5" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">
-      <polyline points="427.5,81 441.5,81 441.5,146 10,146 10,211 52,211 52,257 58.8,257" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polyline points="427.5,81 455.5,81 455.5,146 10,146 10,211 52,211 52,257 58.8,257" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
       <polygon points="66,257 58,260.5 58,253.5" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">
-      <polyline points="427.5,81 441.5,81 441.5,146 10,146 10,211 618,211 618,234 634.8,234" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polyline points="427.5,81 455.5,81 455.5,146 10,146 10,211 618,211 618,234 634.8,234" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
       <polygon points="642,234 634,237.5 634,230.5" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">
@@ -152,6 +147,14 @@
     </g>
   </g>
   <g class="tg-labels">
+    <rect x="159.4" y="27.4" width="31.24" height="18.2" rx="2" fill="#f8fafc"/>
+    <text x="161.9" y="40.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">stem</text>
+    <rect x="31.5" y="177.4" width="82.66" height="18.2" rx="2" fill="#f8fafc"/>
+    <text x="34" y="190.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">ResidualBlock</text>
+    <rect x="643.65" y="164.75" width="26.35" height="18.5" rx="9.25" fill="#ffffff" stroke="#64748b" stroke-width="1" stroke-linejoin="round"/>
+    <text x="656.82" y="177.68" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle" fill="#334155">×2</text>
+    <rect x="213.1" y="353.4" width="54.55" height="18.2" rx="2" fill="#f8fafc"/>
+    <text x="215.6" y="366.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">classifier</text>
     <rect x="271.4" y="64.05" width="50.6" height="16.4" rx="2" fill="#ffffff"/>
     <text x="296.7" y="75.58" font-family="'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace" font-size="9.5" text-anchor="middle" fill="#475569">16×32×32</text>
     <rect x="325.7" y="390.05" width="27.8" height="16.4" rx="2" fill="#ffffff"/>

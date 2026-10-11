@@ -4,7 +4,6 @@
   <g class="tg-groups">
     <g class="tg-group" data-id="today">
       <rect x="232" y="182" width="528" height="96" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 3"/>
-      <text x="242" y="198.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">exists today (step 2)</text>
     </g>
   </g>
   <g class="tg-edges">
@@ -97,6 +96,8 @@
     </g>
   </g>
   <g class="tg-labels">
+    <rect x="239.5" y="185.4" width="113.55" height="18.2" rx="2" fill="#f8fafc"/>
+    <text x="242" y="198.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">exists today (step 2)</text>
     <text x="500" y="313.68" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" font-style="italic" text-anchor="middle" fill="#475569">a View (block · volume · unrolled · cell) chooses the transforms, the layout engine and the glyph mapping — step 11</text>
   </g>
 </svg>

@@ -57,3 +57,19 @@ blocks are named after their attributes and coloured by their contents.
 ![AlexNet, stage level](../../examples/alexnet-stages.svg)
 
 <img src="../../examples/alexnet-vertical.svg" alt="AlexNet, top to bottom" width="320">
+
+## Origami style
+
+The same models drawn with `style="origami"` (see [the style page](../style/origami.md)).
+
+![CNN, origami](origami/cnn.svg)
+
+![ConvLSTM, origami](origami/convlstm.svg)
+
+![VAE, origami](origami/vae.svg)
+
+![cGAN generator, origami](origami/cgan-generator.svg)
+
+<img src="origami/transformer.svg" alt="Transformer, origami" width="360">
+
+![AlexNet, origami](../../examples/alexnet-origami.svg)

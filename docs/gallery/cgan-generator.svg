@@ -4,7 +4,6 @@
   <g class="tg-groups">
     <g class="tg-group" data-id="deconv">
       <rect x="538.2" y="24" width="422.2" height="94" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 3"/>
-      <text x="548.2" y="40.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">deconv</text>
     </g>
   </g>
   <g class="tg-edges">
@@ -108,6 +107,8 @@
     </g>
   </g>
   <g class="tg-labels">
+    <rect x="545.7" y="27.4" width="43.48" height="18.2" rx="2" fill="#f8fafc"/>
+    <text x="548.2" y="40.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">deconv</text>
     <rect x="657.7" y="64.05" width="39.2" height="16.4" rx="2" fill="#ffffff"/>
     <text x="677.3" y="75.58" font-family="'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace" font-size="9.5" text-anchor="middle" fill="#475569">32×8×8</text>
     <rect x="103.5" y="64.05" width="10.7" height="16.4" rx="2" fill="#ffffff"/>

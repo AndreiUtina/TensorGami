@@ -33,7 +33,7 @@ when running Tensorgami (`style="default"`), with more styles added over time: a
 | Style | Status | Character |
 |---|---|---|
 | `default` | ✅ | light, print-friendly, semantic colour per operation category |
-| `origami` | planned | hairline "wire" look with translucent folded-paper boxes, after the radial figure in DeepMind's essay *Bending the curve of discovery* |
+| `origami` | ✅ ([style page](../style/origami.md)) | hairline "wire" look with translucent folded-paper boxes, after the radial figure in DeepMind's essay *Bending the curve of discovery* |
 | third | to be decided | — |
 
 ## Consequences
