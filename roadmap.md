@@ -191,10 +191,26 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   identical to the SVG), output formats, notebook display, no leftover pyplot figures,
   subplot scaling, quiet fonts, light import.
 
-### 10) Public API ⬜
-- `tg.draw(model, example_input, level=2, view="block", theme="baseline", **options)`.
-- Sensible defaults, clear errors (e.g. "model could not be traced, falling back to hooks").
-- Tests: end-to-end from a `torch.nn.Module` to a PNG.
+### 10) Public API ✅ (2026-10-11)
+- `tg.draw(model, example_input, *, level=2, view="auto", style="default", overrides=None,
+  direction=None, **layout_options) → tg.Figure` (ADR-0007, ADR-0008), in
+  `src/tensorgami/api/draw.py`; `import tensorgami` stays light (matplotlib loads with the
+  figure, torch only when a model is drawn).
+- Options after the input are keyword-only. `level` by number or name (`"stages"`);
+  `style` by name, path or `Theme`; any `LayoutOptions` field as a keyword (`legend=False`).
+- Views: a `View` protocol with a registry (`tensorgami.views`); `block` and `auto` now,
+  `volume`, `unrolled`, `cell` in step 11 (asking for them says so).
+- Clear errors, raised **before the model runs**: misspelt options ("did you mean
+  'direction'?", `theme=` → `style=`), unknown styles, levels, directions and views with the
+  valid choices; `LayoutOptions` checks every value's type. Model failures keep their hints
+  (missing batch dimension…), and passing the class instead of a model says
+  "create it first, e.g. AlexNet()". Warnings point at the user's own `tg.draw` line.
+- Fixed on the way: a `label` from `overrides` now names the box in the figure (it reached
+  the graph but the labeler ignored it for known layers).
+- The gallery, the AlexNet example and its notebook use `tg.draw`; every figure stayed
+  byte-identical.
+- Tests: `tests/test_draw.py`, end to end from each reference model to a PNG in both styles,
+  no side effects (weights, training flags, RNG, open figures, files), errors.
 
 ## Phase C — Your model families
 
@@ -215,7 +231,7 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 
 ### 13) Styles and presentation output 🔶 (`default` ✅, `origami` ✅, third to decide)
 - Named styles, one TOML file each, chosen with `style=` (ADR-0008): `load_style("origami")`
-  now, `tg.draw(model, x, style="origami")` from step 10; a style may set layout
+  or `tg.draw(model, x, style="origami")`; a style may set layout
   preferences (`[layout]`: spacing, direction, wrapping).
 - **`default`** ✅: the current light, print-friendly look.
 - **`origami`** ✅ (2026-10-11): [`docs/style/origami.md`](docs/style/origami.md), after the

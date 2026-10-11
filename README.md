@@ -5,7 +5,7 @@
 Draw the architecture and information flow of deep-learning / machine-learning models,
 locally, in Python.
 
-Status: design phase (see [roadmap.md](roadmap.md)).
+Status: in development; the pipeline works end to end (see [roadmap.md](roadmap.md)).
 
 - Literature survey: [docs/survey/tensorgami-literature-survey.pdf](docs/survey/tensorgami-literature-survey.pdf)
 - Drawing styles: [`default`](docs/style/style-baseline.md) and [`origami`](docs/style/origami.md)
@@ -22,32 +22,38 @@ uv run python docs/style/build_specimens.py    # rebuild the style specimens
 uv run python docs/survey/build.py             # rebuild the survey PDF
 ```
 
-## Capturing a PyTorch model
+## Drawing a PyTorch model
 
-The pipeline already works end to end, from a PyTorch model to a PNG or a notebook figure:
+In a script or a notebook, after the model is loaded:
 
 ```python
 import torch
-from tensorgami.importers.torch import trace
-
-graph = trace(model, torch.randn(1, 3, 32, 32))   # runs the model once, leaves it untouched
-print(graph.summary())                              # every operation, its module and shape
-
-from tensorgami.transforms import simplify
-print(simplify(graph, level=2).summary())           # layers: activations folded, repeats ×N
-
 import tensorgami as tg
-from tensorgami.layout import layout
-from tensorgami.style import load_style
-style = load_style("default")                       # or load_style("origami")
-layers = simplify(graph, level=2)
-fig = tg.Figure(layout(layers, style), style, layers)
-fig                                                 # shows inline in Jupyter
-fig.save("model.png", dpi=300)                      # or .svg / .pdf
+
+fig = tg.draw(model, torch.randn(1, 3, 224, 224))  # runs the model once, leaves it untouched
+fig                                                # shows inline in Jupyter
+fig.save("model.png", dpi=300)                     # or .svg / .pdf; nothing is saved before
+
+tg.draw(model, x, level="stages")                  # less detail: 0 system … 3 operators
+tg.draw(model, x, style="origami")                 # another style (or a path to your own)
+tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
+tg.draw(model, x, overrides={"classifier.6": {"label": "logits"}})  # rename a box
 ```
 
-Step 10 shortens this to `tg.draw(model, example_input, style="default")`. See
+The example input is what the model is called with: a tensor, a tuple of positional
+arguments, or a dict of keyword arguments, including the batch dimension. See
 [`examples/alexnet.ipynb`](examples/alexnet.ipynb) for a notebook.
+
+The stages are also usable one by one, e.g. to inspect what was captured:
+
+```python
+from tensorgami.importers.torch import trace
+from tensorgami.transforms import simplify
+
+graph = trace(model, torch.randn(1, 3, 32, 32))
+print(graph.summary())                    # every operation, its module and shape
+print(simplify(graph, level=2).summary())  # layers: activations folded, repeats ×N
+```
 
 See the automatically drawn [gallery](docs/gallery/README.md).
 
