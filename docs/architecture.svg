@@ -98,6 +98,6 @@
   <g class="tg-labels">
     <rect x="239.5" y="185.4" width="113.55" height="18.2" rx="2" fill="#f8fafc"/>
     <text x="242" y="198.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">exists today (step 2)</text>
-    <text x="500" y="313.68" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" font-style="italic" text-anchor="middle" fill="#475569">a View (block · volume · unrolled · cell) chooses the transforms, the layout engine and the glyph mapping — step 11</text>
+    <text x="500" y="313.68" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" font-style="italic" text-anchor="middle" fill="#475569">tg.draw(model, x, style=…) runs it all ✓ step 10 · a View chooses the transforms and the layout: block ✓, volume · unrolled · cell in step 11</text>
   </g>
 </svg>

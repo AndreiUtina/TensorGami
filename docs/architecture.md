@@ -18,8 +18,8 @@ How a PyTorch model becomes a figure. The decisions behind this page are recorde
 | Scene | `Scene`, `Node`, `Edge`, `Group`, `Note` | positioned diagram | ✅ step 2 |
 | Rendering | `SceneRenderer`, `GlyphPainter`, `Canvas` protocols | scene + style → drawing | ✅ SVG (step 2) · ✅ matplotlib (step 9, [ADR-0005](adr/0005-figure-backend.md)) |
 | Style | `Theme` (TOML) + validation rules | all visual decisions | ✅ step 2 |
-| View | `View` strategy | picks transforms, layout and glyph mapping | step 11 |
-| API | `tg.draw(...)` → `tg.Figure` | wires the stages; display and save | ✅ `tg.Figure` (step 9) · `tg.draw` step 10 ([ADR-0007](adr/0007-public-api.md)) |
+| View | `View` protocol, registry `get_view(name)` | picks transforms, layout and glyph mapping | ✅ `block`, `auto` (step 10) · `volume`, `unrolled`, `cell` step 11 |
+| API | `tg.draw(...)` → `tg.Figure` | wires the stages; display and save | ✅ `tg.Figure` (step 9) · ✅ `tg.draw` (step 10, [ADR-0007](adr/0007-public-api.md)) |
 
 ## Rules every stage follows
 

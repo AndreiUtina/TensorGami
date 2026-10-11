@@ -49,8 +49,8 @@ def pipeline() -> Scene:
         Edge("can", "fig"),
         Note(
             Point(500, 310),
-            "a View (block · volume · unrolled · cell) chooses the transforms, "
-            "the layout engine and the glyph mapping — step 11",
+            "tg.draw(model, x, style=…) runs it all ✓ step 10 · a View chooses the transforms "
+            "and the layout: block ✓, volume · unrolled · cell in step 11",
             TextAnchor.MIDDLE,
             TextRole.NOTE,
         ),
