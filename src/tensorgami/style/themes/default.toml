@@ -78,6 +78,12 @@ line_gap = 3
 # direction = "TB"    #   flow top → bottom
 # (names as in tensorgami.layout.LayoutOptions; the default style keeps the defaults)
 
+# [boxes]             # optional: size rules of box-shaped nodes, e.g.
+# text = "inline"     #   name and details on one line ("stacked": details below the name)
+# height = 26         #   a flat box
+# uniform_width = true  # every box as wide as the widest
+# (names as in tensorgami.style.BoxGeometry; the default style keeps the defaults)
+
 [group]
 fill = "#f8fafc"
 stroke = "#64748b"

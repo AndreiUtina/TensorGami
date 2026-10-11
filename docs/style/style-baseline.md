@@ -4,7 +4,7 @@
 [`src/tensorgami/style/themes/default.toml`](../../src/tensorgami/style/themes/default.toml)
 
 This baseline is the visual language every Tensorgami diagram uses by default. Other
-built-in styles: [`origami`](origami.md). It turns the
+built-in styles: [`origami` and `origami-extended`](origami.md). It turns the
 findings of the [literature survey](../survey/tensorgami-literature-survey.pdf) (requirements
 R1–R10) into concrete, testable decisions. The rules are not only described here; they are
 encoded in a theme file and checked automatically (§9), so a diagram cannot drift away from

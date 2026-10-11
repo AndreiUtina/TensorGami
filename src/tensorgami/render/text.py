@@ -11,6 +11,7 @@ from typing import Protocol
 from tensorgami.style.glyphs import Font
 
 SCRIPT_SCALE = 0.75  # size of sub/superscripts relative to the base font
+BASELINE_SHIFT = 0.35  # baseline offset from the visual centre of a line, in em
 
 _MARKUP = re.compile(r"([_^])\{([^{}]*)\}")
 

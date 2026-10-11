@@ -5,10 +5,10 @@ needed) and drawn with one call, ``tg.draw(model, example_input)``::
 
     uv run python examples/alexnet.py
 
-Writes ``alexnet`` (layer level, left → right), ``alexnet-vertical`` (top → bottom) and
-``alexnet-stages`` (stage level), in the ``default`` and ``origami`` styles, each as ``.svg``
-and as a 300 dpi ``.png``, next to this script. In a notebook the figure shows inline (see
-``alexnet.ipynb``).
+Writes ``alexnet`` (layer level), ``alexnet-vertical`` (top → bottom) and ``alexnet-stages``
+(stage level) in the ``default`` and ``origami`` styles, and ``alexnet-origami-extended`` in
+both directions, each as ``.svg`` and as a 300 dpi ``.png``, next to this script. In a
+notebook the figure shows inline (see ``alexnet.ipynb``).
 """
 
 from __future__ import annotations
@@ -71,9 +71,13 @@ def main() -> None:
         "alexnet": dict(level=2),
         "alexnet-vertical": dict(level=2, direction="TB"),
         "alexnet-stages": dict(level=1),
-        "alexnet-origami": dict(level=2, style="origami"),
+        "alexnet-origami": dict(level=2, style="origami"),  # upright cards, left → right
         "alexnet-origami-vertical": dict(level=2, style="origami", direction="TB"),
         "alexnet-origami-stages": dict(level=1, style="origami"),
+        "alexnet-origami-extended": dict(level=2, style="origami-extended"),  # top → bottom
+        "alexnet-origami-extended-horizontal": dict(
+            level=2, style="origami-extended", direction="LR"
+        ),
     }
     for name, settings in figures.items():
         fig = draw(**settings)

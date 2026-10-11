@@ -7,7 +7,15 @@ from dataclasses import dataclass, field, replace
 from types import MappingProxyType
 
 from tensorgami.style.color import Color
-from tensorgami.style.glyphs import EdgeStyle, Font, GroupStyle, Metrics, NodeStyle, TextRole
+from tensorgami.style.glyphs import (
+    BoxGeometry,
+    EdgeStyle,
+    Font,
+    GroupStyle,
+    Metrics,
+    NodeStyle,
+    TextRole,
+)
 from tensorgami.vocabulary import EdgeKind, OpCategory
 
 
@@ -26,6 +34,7 @@ class Theme:
     metrics: Metrics = field(default_factory=Metrics)
     description: str = ""
     layout: Mapping[str, object] = field(default_factory=dict)  # LayoutOptions overrides
+    boxes: BoxGeometry = field(default_factory=BoxGeometry)
 
     def __post_init__(self) -> None:
         # Freeze the mappings so a theme can be shared safely.

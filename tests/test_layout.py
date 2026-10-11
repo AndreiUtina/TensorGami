@@ -11,6 +11,7 @@ from layout_checks import check_scene, routes
 from tensorgami.ir import GraphBuilder, Node
 from tensorgami.layout import Direction, Labeler, LayeredLayout, LayoutOptions, layout
 from tensorgami.render import render_svg
+from tensorgami.style import Shape
 from tensorgami.transforms import simplify
 from tensorgami.vocabulary import EdgeKind
 from tensorgami.vocabulary import OpCategory as C
@@ -272,6 +273,17 @@ def test_wrapping_never_leaves_a_lone_pill_and_balances_rows():
     assert _best_cuts(levels, levels[:-1], even, gaps, 1100) == [2]  # 3 + 3, not 4 + 2
 
 
+def test_no_wrap_when_it_barely_narrows_the_figure():
+    """input → one frame wider than the page → output (e.g. a PatchGAN discriminator): a
+    second row would only strand the input pill and save < 20 % of the width."""
+    from tensorgami.layout.layered import _best_cuts
+
+    levels = [0, 1, 2]
+    sizes = {0: 64.0, 1: 1279.0, 2: 72.0}
+    gaps = {0: 75.0, 1: 64.0, 2: 48.0}
+    assert _best_cuts(levels, [0, 1], sizes, gaps, 1100) == []
+
+
 def test_wrapping_cost_stays_bounded():
     import time
 
@@ -317,12 +329,20 @@ def test_origami_layouts_keep_the_invariants(origami, make, direction):
     check_scene(scene, graph, origami, monotonic="x" if direction is Direction.LEFT_RIGHT else "y")
 
 
-def test_folded_boxes_are_widened_by_their_fold(theme, origami):
+@pytest.mark.parametrize(("direction", "along"), [("LR", "h"), ("TB", "w")])
+def test_folded_boxes_are_lengthened_by_their_fold(origami, direction, along):
+    """Along the text: upright cards (left → right) grow in height, flat ones in width."""
+    each = dataclasses.replace(
+        origami, boxes=dataclasses.replace(origami.boxes, uniform_width=False)
+    )
+    conv_style = dataclasses.replace(each.node_style(C.CONV), shape=Shape.RECT)
+    unfolded = dataclasses.replace(each, nodes={**each.nodes, C.CONV: conv_style})
     graph = simplify(residual_cnn(), 2)
-    plain = {n.id: n.box.w for n in layout(graph, theme).nodes}
-    folded = {n.id: n.box.w for n in layout(graph, origami).nodes}
+    options = LayoutOptions.for_style(origami, direction=direction)
     conv = next(n.id for n in graph.nodes if n.op == "Conv2d")
-    assert folded[conv] >= plain[conv] + origami.metrics.fold_width - 8  # grid rounding
+    folded = next(n.box for n in layout(graph, each, options).nodes if n.id == conv)
+    plain = next(n.box for n in layout(graph, unfolded, options).nodes if n.id == conv)
+    assert getattr(folded, along) >= getattr(plain, along) + origami.metrics.fold_width - 8
 
 
 @pytest.mark.parametrize("value", ["TB", "tb", Direction.TOP_BOTTOM])
@@ -349,3 +369,69 @@ def test_layout_options_are_checked(option, error, message):
 def test_layout_options_accept_numbers_and_none():
     options = LayoutOptions(rank_gap=60, node_gap=22.5, wrap_width=None, legend=False)
     assert (options.rank_gap, options.wrap_width, options.legend) == (60, None, False)
+
+
+def test_flat_boxes_with_inline_text_and_uniform_width(theme):
+    from tensorgami.style import BoxGeometry, TextLayout
+
+    flat = dataclasses.replace(
+        theme,
+        boxes=BoxGeometry(
+            text_lr=TextLayout.INLINE, text_tb=TextLayout.INLINE, height=26, uniform_width=True
+        ),
+    )
+    graph = simplify(residual_cnn(), 2)
+    scene = layout(graph, flat, NO_WRAP)
+    check_scene(scene, graph, flat)
+    boxes = [n for n in scene.nodes if n.category not in (C.IO, C.MERGE) and ":" not in n.id]
+    assert len({n.box.w for n in boxes}) == 1  # one width
+    assert {n.box.h for n in boxes} == {26}  # one line, whether or not there is a detail
+    stacked = layout(simplify(residual_cnn(), 2), theme, NO_WRAP)
+    assert {n.box.h for n in stacked.nodes if n.detail and n.category is C.CONV} == {46}
+
+
+def _boxes(scene):
+    return [n for n in scene.nodes if n.category not in (C.IO, C.MERGE) and ":" not in n.id]
+
+
+@pytest.mark.parametrize(
+    ("direction", "text", "widths"), [("TB", "inline", 1), ("LR", "stacked", None)]
+)
+def test_each_flow_direction_gets_its_own_arrangement(theme, direction, text, widths):
+    from tensorgami.style import BoxGeometry, TextLayout
+
+    styled = dataclasses.replace(
+        theme,
+        boxes=BoxGeometry(
+            text_tb=TextLayout.INLINE, min_width=48, height=26, detail_height=40, uniform_width=True
+        ),
+    )
+    graph = simplify(residual_cnn(), 2)
+    scene = layout(graph, styled, LayoutOptions(direction=direction, wrap_width=None))
+    check_scene(scene, graph, styled)
+    boxes = _boxes(scene)
+    assert {n.text.value for n in boxes} == {text}  # recorded for the painter
+    assert (len({n.box.w for n in boxes}) == 1) is (widths == 1)  # equal widths: one line only
+    if text == "stacked":
+        assert {n.box.h for n in boxes if n.detail} == {40}
+
+
+def test_upright_boxes_and_labels_in_a_horizontal_flow(theme):
+    from tensorgami.style import BoxGeometry, TextLayout
+
+    upright = dataclasses.replace(
+        theme, boxes=BoxGeometry(text_lr=TextLayout.ROTATED, height=26, uniform_width=True)
+    )
+    graph = simplify(residual_cnn(), 2)
+    scene = layout(graph, upright, NO_WRAP)
+    check_scene(scene, graph, upright)
+    boxes = _boxes(scene)
+    assert {n.box.w for n in boxes} == {26}  # thin along the flow
+    assert len({n.box.h for n in boxes}) == 1 and boxes[0].box.h > 26  # one length, upright
+    pills = [n for n in scene.nodes if n.category is C.IO and ":" not in n.id]
+    assert all(p.text is TextLayout.INLINE and p.box.w > p.box.h for p in pills)  # level
+    labelled = [e for e in scene.edges if e.label]
+    assert labelled and all(e.label_upright for e in labelled)
+    level = layout(graph, theme, NO_WRAP)
+    assert scene.width < level.width  # the point of it: much narrower
+    assert not any(e.label_upright for e in level.edges)

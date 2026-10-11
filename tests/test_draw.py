@@ -39,7 +39,7 @@ def x():
 # --------------------------------------------------------------------------- end to end
 
 
-@pytest.mark.parametrize("style", ["default", "origami"])
+@pytest.mark.parametrize("style", ["default", "origami", "origami-extended"])
 @pytest.mark.parametrize("name", REFERENCE)
 def test_every_reference_model_is_drawn(name, style):
     make, example = REFERENCE[name]

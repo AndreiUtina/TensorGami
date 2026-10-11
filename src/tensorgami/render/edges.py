@@ -93,6 +93,13 @@ class EdgePainter:
             return
         font = self._theme.font(TextRole.ANNOTATION)
         width = self._measurer.width(edge.label, font)
+        halo = self._theme.metrics.label_halo
+        if edge.label_upright and edge.label_at:  # reading bottom → top, centred on label_at
+            at = edge.label_at
+            box = Box(at.x - font.size * 0.6, at.y - width / 2, font.size * 1.2, width)
+            canvas.rect(box.inflate(halo), Paint(self._theme.background), radius=2)
+            canvas.text(at, edge.label, font, TextAnchor.MIDDLE, rotation=90)
+            return
         if edge.label_at:
             at, anchor = edge.label_at, TextAnchor.MIDDLE
         else:
@@ -107,7 +114,6 @@ class EdgePainter:
             TextAnchor.MIDDLE: at.x - width / 2,
             TextAnchor.END: at.x - width,
         }[anchor]
-        halo = self._theme.metrics.label_halo
         canvas.rect(
             Box(
                 left - halo,

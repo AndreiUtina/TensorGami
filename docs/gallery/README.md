@@ -60,7 +60,8 @@ blocks are named after their attributes and coloured by their contents.
 
 ## Origami style
 
-The same models drawn with `style="origami"` (see [the style page](../style/origami.md)).
+The same models drawn with `style="origami"`: upright cards, left → right (see [the style
+page](../style/origami.md)).
 
 ![CNN, origami](origami/cnn.svg)
 
@@ -73,3 +74,13 @@ The same models drawn with `style="origami"` (see [the style page](../style/orig
 <img src="origami/transformer.svg" alt="Transformer, origami" width="360">
 
 ![AlexNet, origami](../../examples/alexnet-origami.svg)
+
+## Origami-extended style
+
+With `style="origami-extended"`: flat single-line cards, top → bottom.
+
+<img src="origami-extended/cnn.svg" alt="CNN, origami-extended" width="420">
+<img src="origami-extended/vae.svg" alt="VAE, origami-extended" width="420">
+
+<img src="origami-extended/convlstm.svg" alt="ConvLSTM, origami-extended" width="360">
+<img src="origami-extended/transformer.svg" alt="Transformer, origami-extended" width="360">

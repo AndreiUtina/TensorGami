@@ -7,12 +7,14 @@ from pathlib import Path
 from tensorgami.style.color import BLACK, WHITE, Color
 from tensorgami.style.glyphs import (
     ArrowHead,
+    BoxGeometry,
     EdgeStyle,
     Font,
     GroupStyle,
     Metrics,
     NodeStyle,
     Shape,
+    TextLayout,
     TextRole,
 )
 from tensorgami.style.loader import available_themes, parse_theme, read_theme
@@ -48,6 +50,7 @@ __all__ = [
     "DEFAULT_STYLE",
     "WHITE",
     "ArrowHead",
+    "BoxGeometry",
     "Color",
     "EdgeStyle",
     "Font",
@@ -56,6 +59,7 @@ __all__ = [
     "Metrics",
     "NodeStyle",
     "Shape",
+    "TextLayout",
     "TextRole",
     "Theme",
     "ThemeError",

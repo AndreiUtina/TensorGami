@@ -20,6 +20,18 @@ class Shape(StrEnum):
     FOLDED = "folded"  # folded paper: two facets split by a slanted crease (origami style)
 
 
+class TextLayout(StrEnum):
+    """How a box arranges its label and detail."""
+
+    STACKED = "stacked"  # label above detail, centred
+    INLINE = "inline"  # one line: label on the left, detail on the right (block flowchart)
+    ROTATED = "rotated"  # one line turned upright, reading bottom → top: a narrow, tall box
+
+    @property
+    def single_line(self) -> bool:
+        return self is not TextLayout.STACKED
+
+
 class ArrowHead(StrEnum):
     FILLED = "filled"
     OPEN = "open"
@@ -111,3 +123,26 @@ class Metrics:
     terminal_radius: float = 2.5  # dot terminals of edges
     fold_width: float = 18  # width of the folded strip on the right of a folded box (px)
     fold_shade: float = 0.07  # how much darker the folded strip is
+
+
+@dataclass(frozen=True)
+class BoxGeometry:
+    """Size rules for box-shaped nodes (style table ``[boxes]``; px). Circles keep their own
+    size; pills follow ``height`` and ``detail_height`` minus 4 px and never turn upright.
+
+    The text arrangement can differ per flow direction (``text = { TB = "inline", LR =
+    "rotated" }`` in TOML); boxes placed by hand, without a layout, keep stacked text.
+    """
+
+    text_lr: TextLayout = TextLayout.STACKED  # in a left → right flow
+    text_tb: TextLayout = TextLayout.STACKED  # in a top → bottom flow
+    padding: float = 32  # along the text, both ends together
+    min_width: float = 96  # minimum length along the text
+    height: float = 36  # a box with one line of text (its thickness, when rotated)
+    detail_height: float = 46  # a box with a label and a detail line (stacked text)
+    gap: float = 12  # between label and detail on one line
+    uniform_width: bool = False  # single-line boxes all as long as the longest: a tidy column
+
+    def text(self, *, vertical: bool) -> TextLayout:
+        """The arrangement for a flow direction."""
+        return self.text_tb if vertical else self.text_lr

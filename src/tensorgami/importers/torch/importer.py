@@ -97,6 +97,7 @@ def trace(
 # --------------------------------------------------------------------------- helpers
 
 _SHAPE_ERROR = re.compile(r"\b\d+-?d\b|dimension|shape|size mismatch|mat1 and mat2")
+_CHANNELS = re.compile(r"to have (\d+) channels, but got (\d+) channels")
 
 
 def _call(model: nn.Module, example_input: Any) -> Any:
@@ -151,7 +152,14 @@ def _explain(model: nn.Module, example_input: Any, exc: Exception) -> str:
         f"  example input: {_shapes(example_input)}",
     ]
     lower = text.lower()
-    if _SHAPE_ERROR.search(lower):
+    if channels := _CHANNELS.search(lower):
+        expected, got = channels.groups()
+        lines.append(
+            f"  hint: a layer expects {expected} input channels but gets {got}: check the "
+            "channel dimension (dim 1). A model that takes several images stacked along the "
+            "channels needs them concatenated, e.g. torch.cat([a, b], 1)"
+        )
+    elif _SHAPE_ERROR.search(lower):
         lines.append(
             "  hint: check the input shape; a missing batch dimension is the most "
             "common cause, e.g. pass x.unsqueeze(0)"

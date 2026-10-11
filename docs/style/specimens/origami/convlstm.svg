@@ -129,20 +129,20 @@
       <text x="110" y="392.62" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">X<tspan dy="3.5" font-size="9.38">1</tspan></text>
     </g>
     <g class="tg-node tg-recurrent" data-id="e1_1">
-      <polygon points="60,248 150.1,248 142,292 60,292" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="150.1,248 160,248 160,292 142,292" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="150.1,248 142,292" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="60,248 154.5,248 150,292 60,292" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="154.5,248 160,248 160,292 150,292" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="154.5,248 150,292" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="60" y="248" width="100" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="102.98" y="267.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
-      <text x="102.98" y="282.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
+      <text x="106.1" y="267.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
+      <text x="106.1" y="282.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
     </g>
     <g class="tg-node tg-recurrent" data-id="e2_1">
-      <polygon points="60,158 150.1,158 142,202 60,202" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="150.1,158 160,158 160,202 142,202" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="150.1,158 142,202" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="60,158 154.5,158 150,202 60,202" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="154.5,158 160,158 160,202 150,202" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="154.5,158 150,202" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="60" y="158" width="100" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="102.98" y="177.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
-      <text x="102.98" y="192.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
+      <text x="106.1" y="177.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
+      <text x="106.1" y="192.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
     </g>
     <g class="tg-node tg-io" data-id="X2">
       <polygon points="259,336 280.3,321.09 280.3,361.09 259,376" fill="#cfcecb" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
@@ -151,20 +151,20 @@
       <text x="250" y="392.62" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">X<tspan dy="3.5" font-size="9.38">2</tspan></text>
     </g>
     <g class="tg-node tg-recurrent" data-id="e1_2">
-      <polygon points="200,248 290.1,248 282,292 200,292" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="290.1,248 300,248 300,292 282,292" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="290.1,248 282,292" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="200,248 294.5,248 290,292 200,292" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="294.5,248 300,248 300,292 290,292" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="294.5,248 290,292" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="200" y="248" width="100" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="242.98" y="267.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
-      <text x="242.98" y="282.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
+      <text x="246.1" y="267.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
+      <text x="246.1" y="282.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
     </g>
     <g class="tg-node tg-recurrent" data-id="e2_2">
-      <polygon points="200,158 290.1,158 282,202 200,202" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="290.1,158 300,158 300,202 282,202" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="290.1,158 282,202" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="200,158 294.5,158 290,202 200,202" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="294.5,158 300,158 300,202 290,202" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="294.5,158 290,202" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="200" y="158" width="100" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="242.98" y="177.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
-      <text x="242.98" y="192.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
+      <text x="246.1" y="177.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
+      <text x="246.1" y="192.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
     </g>
     <g class="tg-node tg-io" data-id="X3">
       <polygon points="399,336 420.3,321.09 420.3,361.09 399,376" fill="#cfcecb" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
@@ -173,72 +173,72 @@
       <text x="390" y="392.62" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">X<tspan dy="3.5" font-size="9.38">3</tspan></text>
     </g>
     <g class="tg-node tg-recurrent" data-id="e1_3">
-      <polygon points="340,248 430.1,248 422,292 340,292" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="430.1,248 440,248 440,292 422,292" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="430.1,248 422,292" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="340,248 434.5,248 430,292 340,292" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="434.5,248 440,248 440,292 430,292" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="434.5,248 430,292" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="340" y="248" width="100" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="382.98" y="267.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
-      <text x="382.98" y="282.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
+      <text x="386.1" y="267.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
+      <text x="386.1" y="282.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
     </g>
     <g class="tg-node tg-recurrent" data-id="e2_3">
-      <polygon points="340,158 430.1,158 422,202 340,202" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="430.1,158 440,158 440,202 422,202" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="430.1,158 422,202" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="340,158 434.5,158 430,202 340,202" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="434.5,158 440,158 440,202 430,202" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="434.5,158 430,202" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="340" y="158" width="100" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="382.98" y="177.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
-      <text x="382.98" y="192.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
+      <text x="386.1" y="177.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
+      <text x="386.1" y="192.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
     </g>
     <g class="tg-node tg-recurrent" data-id="f1_4">
-      <polygon points="540,248 630.1,248 622,292 540,292" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="630.1,248 640,248 640,292 622,292" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="630.1,248 622,292" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="540,248 634.5,248 630,292 540,292" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="634.5,248 640,248 640,292 630,292" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="634.5,248 630,292" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="540" y="248" width="100" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="582.98" y="267.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
-      <text x="582.98" y="282.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
+      <text x="586.1" y="267.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
+      <text x="586.1" y="282.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
     </g>
     <g class="tg-node tg-recurrent" data-id="f2_4">
-      <polygon points="540,158 630.1,158 622,202 540,202" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="630.1,158 640,158 640,202 622,202" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="630.1,158 622,202" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="540,158 634.5,158 630,202 540,202" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="634.5,158 640,158 640,202 630,202" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="634.5,158 630,202" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="540" y="158" width="100" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="582.98" y="177.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
-      <text x="582.98" y="192.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
+      <text x="586.1" y="177.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
+      <text x="586.1" y="192.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
     </g>
     <g class="tg-node tg-conv" data-id="o4">
-      <polygon points="534,72 636.1,72 628,112 534,112" fill="#cfe3f6" fill-opacity="0.92"/>
-      <polygon points="636.1,72 646,72 646,112 628,112" fill="#bed1e2" fill-opacity="0.92"/>
-      <polyline points="636.1,72 628,112" fill="none" stroke="#82a7cc" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="534,72 640.5,72 636,112 534,112" fill="#cfe3f6" fill-opacity="0.92"/>
+      <polygon points="640.5,72 646,72 646,112 636,112" fill="#bed1e2" fill-opacity="0.92"/>
+      <polyline points="640.5,72 636,112" fill="none" stroke="#82a7cc" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="534" y="72" width="112" height="40" fill="none" stroke="#3f78b0" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="582.98" y="89.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">Conv 1×1</text>
-      <text x="582.98" y="104.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">on ‖ of all states</text>
+      <text x="586.1" y="89.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">Conv 1×1</text>
+      <text x="586.1" y="104.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">on ‖ of all states</text>
     </g>
     <g class="tg-node tg-io" data-id="Y4">
       <rect x="562" y="15" width="56" height="30" rx="15" fill="#f1f0ec" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
       <text x="590" y="34.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">Ŷ<tspan dy="3.5" font-size="9.38">4</tspan></text>
     </g>
     <g class="tg-node tg-recurrent" data-id="f1_5">
-      <polygon points="680,248 770.1,248 762,292 680,292" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="770.1,248 780,248 780,292 762,292" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="770.1,248 762,292" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="680,248 774.5,248 770,292 680,292" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="774.5,248 780,248 780,292 770,292" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="774.5,248 770,292" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="680" y="248" width="100" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="722.98" y="267.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
-      <text x="722.98" y="282.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
+      <text x="726.1" y="267.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
+      <text x="726.1" y="282.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
     </g>
     <g class="tg-node tg-recurrent" data-id="f2_5">
-      <polygon points="680,158 770.1,158 762,202 680,202" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="770.1,158 780,158 780,202 762,202" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="770.1,158 762,202" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="680,158 774.5,158 770,202 680,202" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="774.5,158 780,158 780,202 770,202" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="774.5,158 770,202" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="680" y="158" width="100" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="722.98" y="177.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
-      <text x="722.98" y="192.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
+      <text x="726.1" y="177.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">ConvLSTM</text>
+      <text x="726.1" y="192.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">64 ch, 3×3</text>
     </g>
     <g class="tg-node tg-conv" data-id="o5">
-      <polygon points="674,72 776.1,72 768,112 674,112" fill="#cfe3f6" fill-opacity="0.92"/>
-      <polygon points="776.1,72 786,72 786,112 768,112" fill="#bed1e2" fill-opacity="0.92"/>
-      <polyline points="776.1,72 768,112" fill="none" stroke="#82a7cc" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="674,72 780.5,72 776,112 674,112" fill="#cfe3f6" fill-opacity="0.92"/>
+      <polygon points="780.5,72 786,72 786,112 776,112" fill="#bed1e2" fill-opacity="0.92"/>
+      <polyline points="780.5,72 776,112" fill="none" stroke="#82a7cc" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="674" y="72" width="112" height="40" fill="none" stroke="#3f78b0" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="722.98" y="89.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">Conv 1×1</text>
-      <text x="722.98" y="104.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">on ‖ of all states</text>
+      <text x="726.1" y="89.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">Conv 1×1</text>
+      <text x="726.1" y="104.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">on ‖ of all states</text>
     </g>
     <g class="tg-node tg-io" data-id="Y5">
       <rect x="702" y="15" width="56" height="30" rx="15" fill="#f1f0ec" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>

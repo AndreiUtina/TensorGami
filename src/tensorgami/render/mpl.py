@@ -9,6 +9,7 @@ smaller Axes (a subplot), text and line widths are scaled with the drawing.
 from __future__ import annotations
 
 import logging
+import math
 from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
 from functools import lru_cache
@@ -21,8 +22,7 @@ from matplotlib.patches import Circle, FancyBboxPatch, Polygon, Rectangle
 
 from tensorgami.render.canvas import Paint
 from tensorgami.render.scene_renderer import SceneRenderer
-from tensorgami.render.svg import BASELINE_SHIFT
-from tensorgami.render.text import Script, display_text, parse_markup
+from tensorgami.render.text import BASELINE_SHIFT, Script, display_text, parse_markup
 from tensorgami.scene import Box, Point, Scene, TextAnchor
 from tensorgami.style import Theme
 from tensorgami.style.glyphs import Font
@@ -180,13 +180,22 @@ class MatplotlibCanvas:
             line.set_linestyle((0, tuple(self._pt(d) for d in paint.dash)))
         self.ax.add_line(line)
 
-    def text(self, at: Point, text: str, font: Font, anchor: TextAnchor = TextAnchor.MIDDLE):
+    def text(
+        self,
+        at: Point,
+        text: str,
+        font: Font,
+        anchor: TextAnchor = TextAnchor.MIDDLE,
+        rotation: float = 0.0,
+    ):
         if not text:
             return
         families = font_families(font.family)
+        shift = BASELINE_SHIFT * font.size  # the baseline sits below the centre line, rotated
+        angle = math.radians(rotation)
         self.ax.text(
-            at.x,
-            at.y + BASELINE_SHIFT * font.size,
+            at.x + shift * math.sin(angle),
+            at.y + shift * math.cos(angle),
             to_mathtext(display_text(text, font)),
             fontsize=self._pt(font.size),
             fontfamily=list(families),
@@ -195,6 +204,8 @@ class MatplotlibCanvas:
             color=font.color.hex,
             ha=_ANCHOR[anchor],
             va="baseline",
+            rotation=rotation,
+            rotation_mode="anchor",
             zorder=self._z_next(),
         )
 

@@ -20,7 +20,7 @@ from tensorgami.render import (
 from tensorgami.render.edges import EdgeRouter, _midpoint
 from tensorgami.render.text import Run, Script
 from tensorgami.scene import Box, Edge, Group, Node, Note, Point, Scene, Side
-from tensorgami.style import Color, Shape, TextRole
+from tensorgami.style import Color, Shape, TextLayout, TextRole
 from tensorgami.vocabulary import EdgeKind, OpCategory
 
 SVG_NS = "{http://www.w3.org/2000/svg}"
@@ -302,3 +302,66 @@ def test_end_dot_does_not_shorten_the_line(theme):
     line = next(root.iter(f"{SVG_NS}polyline"))
     assert line.get("points").endswith("190,30")
     assert any(c.get("cx") == "190" for c in root.iter(f"{SVG_NS}circle"))
+
+
+def test_inline_text_puts_the_label_left_and_the_detail_right(origami):
+    import dataclasses
+
+    from tensorgami.style import BoxGeometry, TextLayout
+
+    flat = dataclasses.replace(origami, boxes=BoxGeometry(text_lr=TextLayout.INLINE, height=26))
+    node = Node(
+        "n", Box(0, 0, 220, 26), OpCategory.CONV, "Conv 3×3", "64, s2", text=TextLayout.INLINE
+    )
+    canvas = SvgCanvas(240, 40)
+    default_painters().for_node(node, flat).paint(canvas, node, flat)
+    texts = {"".join(t.itertext()): t for t in parse(canvas.to_svg()).iter(f"{SVG_NS}text")}
+    label, detail = texts["Conv 3×3"], texts["64, s2"]
+    assert label.get("text-anchor") is None and float(label.get("x")) < 30  # from the left
+    assert detail.get("text-anchor") == "end" and float(detail.get("x")) < 220 - 10  # off the fold
+    assert float(label.get("y")) == float(detail.get("y"))  # one baseline
+
+
+def test_painter_draws_the_arrangement_the_layout_sized(origami):
+    for text, lines in [(TextLayout.INLINE, 1), (TextLayout.STACKED, 2), (None, 2)]:
+        node = Node("n", Box(0, 0, 220, 46), OpCategory.CONV, "Conv 3×3", "64", text=text)
+        canvas = SvgCanvas(240, 60)
+        default_painters().for_node(node, origami).paint(canvas, node, origami)
+        ys = {t.get("y") for t in parse(canvas.to_svg()).iter(f"{SVG_NS}text")}
+        assert len(ys) == lines, text  # one baseline (inline) or two lines (stacked)
+
+
+def test_upright_card_reads_upwards_with_the_fold_on_top(origami):
+    node = Node("n", Box(0, 0, 26, 200), OpCategory.CONV, "Conv 3×3", "64", text=TextLayout.ROTATED)
+    canvas = SvgCanvas(40, 220)
+    default_painters().for_node(node, origami).paint(canvas, node, origami)
+    root = parse(canvas.to_svg())
+    texts = {"".join(t.itertext()): t for t in root.iter(f"{SVG_NS}text")}
+    for text in texts.values():
+        assert text.get("transform", "").startswith("rotate(-90 ")  # reads bottom → top
+    label, detail = texts["Conv 3×3"], texts["64"]
+    assert label.get("text-anchor") is None and float(label.get("x")) == 13  # from the bottom
+    assert detail.get("text-anchor") == "end"  # against the top
+    (crease,) = root.findall(f".//{SVG_NS}polyline")
+    ys = [float(p.split(",")[1]) for p in crease.get("points").split()]
+    assert max(ys) <= origami.metrics.fold_width  # the fold sits at the top end
+
+
+def test_rotated_text_in_both_canvases(theme):
+    font = theme.font(TextRole.LABEL)
+    canvas = SvgCanvas(100, 100)
+    canvas.text(Point(50, 50), "up", font, rotation=90)
+    (text,) = parse(canvas.to_svg()).iter(f"{SVG_NS}text")
+    assert text.get("transform") == "rotate(-90 50 50)"
+    import matplotlib
+
+    matplotlib.use("Agg")
+    from matplotlib.figure import Figure as MplFigure
+
+    from tensorgami.render.mpl import MatplotlibCanvas
+
+    ax = MplFigure().add_axes((0, 0, 1, 1))
+    MatplotlibCanvas(ax, 100, 100).text(Point(50, 50), "up", font, rotation=90)
+    (artist,) = ax.texts
+    assert artist.get_rotation() == 90
+    assert artist.get_position()[0] > 50  # the baseline sits right of the centre line

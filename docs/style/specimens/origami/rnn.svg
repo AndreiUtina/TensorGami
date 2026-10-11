@@ -82,12 +82,12 @@
   </g>
   <g class="tg-nodes">
     <g class="tg-node tg-recurrent" data-id="cell">
-      <polygon points="52,128 138.1,128 130,172 52,172" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="138.1,128 148,128 148,172 130,172" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="138.1,128 130,172" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="52,128 142.5,128 138,172 52,172" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="142.5,128 148,128 148,172 138,172" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="142.5,128 138,172" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="52" y="128" width="96" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="92.98" y="147.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">RNN cell</text>
-      <text x="92.98" y="162.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">tanh, 128</text>
+      <text x="96.1" y="147.41" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">RNN cell</text>
+      <text x="96.1" y="162.01" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" text-anchor="middle" fill="#4b5563">tanh, 128</text>
     </g>
     <g class="tg-node tg-io" data-id="x">
       <rect x="72" y="235" width="56" height="30" rx="15" fill="#f1f0ec" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
@@ -98,11 +98,11 @@
       <text x="100" y="54.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">h<tspan dy="3.5" font-size="9.38">t</tspan></text>
     </g>
     <g class="tg-node tg-recurrent" data-id="c0">
-      <polygon points="282,128 368.1,128 360,172 282,172" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="368.1,128 378,128 378,172 360,172" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="368.1,128 360,172" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="282,128 372.5,128 368,172 282,172" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="372.5,128 378,128 378,172 368,172" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="372.5,128 368,172" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="282" y="128" width="96" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="322.98" y="154.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">RNN cell</text>
+      <text x="326.1" y="154.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">RNN cell</text>
     </g>
     <g class="tg-node tg-io" data-id="x0">
       <rect x="298" y="235" width="64" height="30" rx="15" fill="#f1f0ec" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
@@ -113,11 +113,11 @@
       <text x="330" y="54.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">h<tspan dy="3.5" font-size="9.38">t-1</tspan></text>
     </g>
     <g class="tg-node tg-recurrent" data-id="c1">
-      <polygon points="422,128 508.1,128 500,172 422,172" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="508.1,128 518,128 518,172 500,172" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="508.1,128 500,172" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="422,128 512.5,128 508,172 422,172" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="512.5,128 518,128 518,172 508,172" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="512.5,128 508,172" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="422" y="128" width="96" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="462.98" y="154.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">RNN cell</text>
+      <text x="466.1" y="154.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">RNN cell</text>
     </g>
     <g class="tg-node tg-io" data-id="x1">
       <rect x="438" y="235" width="64" height="30" rx="15" fill="#f1f0ec" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
@@ -128,11 +128,11 @@
       <text x="470" y="54.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">h<tspan dy="3.5" font-size="9.38">t</tspan></text>
     </g>
     <g class="tg-node tg-recurrent" data-id="c2">
-      <polygon points="562,128 648.1,128 640,172 562,172" fill="#d4ecca" fill-opacity="0.92"/>
-      <polygon points="648.1,128 658,128 658,172 640,172" fill="#c3d9ba" fill-opacity="0.92"/>
-      <polyline points="648.1,128 640,172" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
+      <polygon points="562,128 652.5,128 648,172 562,172" fill="#d4ecca" fill-opacity="0.92"/>
+      <polygon points="652.5,128 658,128 658,172 648,172" fill="#c3d9ba" fill-opacity="0.92"/>
+      <polyline points="652.5,128 648,172" fill="none" stroke="#8cb385" stroke-width="0.64" stroke-linejoin="round"/>
       <rect x="562" y="128" width="96" height="44" fill="none" stroke="#4e8a44" stroke-width="0.8" stroke-linejoin="round"/>
-      <text x="602.98" y="154.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">RNN cell</text>
+      <text x="606.1" y="154.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">RNN cell</text>
     </g>
     <g class="tg-node tg-io" data-id="x2">
       <rect x="578" y="235" width="64" height="30" rx="15" fill="#f1f0ec" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>

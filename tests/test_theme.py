@@ -195,18 +195,27 @@ def test_a_style_may_carry_layout_preferences():
 # --------------------------------------------------------------------------- origami
 
 
-def test_origami_is_built_in_and_passes_every_rule():
+@pytest.mark.parametrize("name", ["origami", "origami-extended"])
+def test_origami_styles_are_built_in_and_pass_every_rule(name):
     from tensorgami.style import available_styles, load_style
 
-    assert available_styles() == ["default", "origami"]
-    origami = load_style("origami")
+    assert available_styles() == ["default", "origami", "origami-extended"]
+    origami = load_style(name)
     assert ThemeValidator().validate(origami) == []
     assert origami.node_style(OpCategory.CONV).shape is Shape.FOLDED
     assert origami.node_style(OpCategory.CONV).opacity < 1
     assert origami.font(TextRole.GROUP_TITLE).caps
     assert origami.group.fill_opacity == 0
     assert origami.edge_style(EdgeKind.DATA).start.value == "dot"
-    assert origami.layout["rank_gap"] == 60  # airier than the default
+    assert origami.boxes.text(vertical=True).value == "inline"  # flat cards in a column
+
+
+def test_the_two_origami_styles_differ_in_rows():
+    from tensorgami.style import load_style
+
+    origami, extended = load_style("origami"), load_style("origami-extended")
+    assert (origami.layout["direction"], origami.boxes.text_lr.value) == ("LR", "rotated")
+    assert (extended.layout["direction"], extended.boxes.text_lr.value) == ("TB", "stacked")
 
 
 def test_new_style_keys_are_parsed_and_checked():
@@ -225,3 +234,26 @@ def test_new_style_keys_are_parsed_and_checked():
     assert default.node_style(OpCategory.CONV).opacity == 1.0  # defaults keep the old look
     assert default.edge_style(EdgeKind.DATA).start.value == "none"
     assert not default.font(TextRole.GROUP_TITLE).caps and default.group.fill_opacity == 1.0
+
+
+def test_box_geometry_is_parsed_and_checked():
+    from tensorgami.style import BoxGeometry, TextLayout
+
+    assert parse_theme(DEFAULT_TOML).boxes == BoxGeometry()  # defaults keep the old look
+    toml = DEFAULT_TOML + '\n[boxes]\ntext = "inline"\nheight = 26\nuniform_width = true\n'
+    boxes = parse_theme(toml).boxes
+    assert (boxes.text_lr, boxes.text_tb) == (TextLayout.INLINE, TextLayout.INLINE)
+    assert (boxes.height, boxes.uniform_width) == (26, True)
+    per_direction = DEFAULT_TOML + '\n[boxes]\ntext = { TB = "inline", LR = "rotated" }\n'
+    boxes = parse_theme(per_direction).boxes
+    assert boxes.text(vertical=True) is TextLayout.INLINE
+    assert boxes.text(vertical=False) is TextLayout.ROTATED
+    for bad, message in [
+        ('text = "sideways"', "boxes.text.TB: expected one of: stacked, inline, rotated"),
+        ('text = { XY = "inline" }', r"boxes.text: use one arrangement or \{ TB = …, LR = … \}"),
+        ("height = true", "boxes.height: expected a number"),
+        ('uniform_width = "yes"', "boxes.uniform_width: expected true or false"),
+        ("colour = 1", "boxes: unknown keys"),
+    ]:
+        with pytest.raises(ThemeError, match=message):
+            parse_theme(DEFAULT_TOML + f"\n[boxes]\n{bad}\n")

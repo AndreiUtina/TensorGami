@@ -11,7 +11,7 @@ from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
 from enum import StrEnum
 
-from tensorgami.style.glyphs import Shape, TextRole
+from tensorgami.style.glyphs import Shape, TextLayout, TextRole
 from tensorgami.vocabulary import EdgeKind, OpCategory
 
 
@@ -124,7 +124,8 @@ class Node:
     """A glyph. ``label`` is the name, ``detail`` the hyper-parameters (second line).
 
     ``shape`` overrides the category's default shape (e.g. a CONV encoder drawn as a
-    trapezoid); ``depth`` is the oblique depth of a cuboid in the volume view.
+    trapezoid); ``depth`` is the oblique depth of a cuboid in the volume view; ``text`` is the
+    arrangement of label and detail the box was sized for (``None``: the style's).
     """
 
     id: str
@@ -134,6 +135,7 @@ class Node:
     detail: str = ""
     shape: Shape | None = None
     depth: float = 0.0
+    text: TextLayout | None = None
 
 
 Endpoint = str | Point  # a node id, or a free point (arrows entering from outside)
@@ -157,6 +159,7 @@ class Edge:
     label: str = ""
     label_at: Point | None = None
     delay: bool = False
+    label_upright: bool = False  # the label reads bottom → top (beside upright boxes)
 
 
 @dataclass(frozen=True, slots=True)

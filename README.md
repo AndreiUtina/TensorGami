@@ -8,7 +8,7 @@ locally, in Python.
 Status: in development; the pipeline works end to end (see [roadmap.md](roadmap.md)).
 
 - Literature survey: [docs/survey/tensorgami-literature-survey.pdf](docs/survey/tensorgami-literature-survey.pdf)
-- Drawing styles: [`default`](docs/style/style-baseline.md) and [`origami`](docs/style/origami.md)
+- Drawing styles: [`default`](docs/style/style-baseline.md), [`origami` and `origami-extended`](docs/style/origami.md)
 
 ![Visual vocabulary](docs/style/specimens/vocabulary.svg)
 
@@ -35,7 +35,7 @@ fig                                                # shows inline in Jupyter
 fig.save("model.png", dpi=300)                     # or .svg / .pdf; nothing is saved before
 
 tg.draw(model, x, level="stages")                  # less detail: 0 system … 3 operators
-tg.draw(model, x, style="origami")                 # another style (or a path to your own)
+tg.draw(model, x, style="origami")                 # or "origami-extended", or a path
 tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
 tg.draw(model, x, overrides={"classifier.6": {"label": "logits"}})  # rename a box
 ```

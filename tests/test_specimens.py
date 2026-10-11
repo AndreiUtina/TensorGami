@@ -40,7 +40,7 @@ def test_build_writes_well_formed_svgs(tmp_path, theme):
         assert root.tag.endswith("svg")
 
 
-@pytest.mark.parametrize("style", ["default", "origami"])
+@pytest.mark.parametrize("style", ["default", "origami", "origami-extended"])
 def test_committed_specimens_are_up_to_date(tmp_path, style):
     """Fails when a style changed but its specimens were not rebuilt."""
     from tensorgami.style import load_theme

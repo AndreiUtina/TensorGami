@@ -11,12 +11,14 @@ from typing import Any
 from tensorgami.style.color import Color
 from tensorgami.style.glyphs import (
     ArrowHead,
+    BoxGeometry,
     EdgeStyle,
     Font,
     GroupStyle,
     Metrics,
     NodeStyle,
     Shape,
+    TextLayout,
     TextRole,
 )
 from tensorgami.style.theme import Theme, ThemeError
@@ -83,6 +85,7 @@ class _ThemeParser:
             group=self._group(self._table(self._data, "group"), "group"),
             metrics=self._metrics(self._data.get("metrics", {}), "metrics"),
             layout=self._layout(self._data.get("layout", {}), "layout"),
+            boxes=self._boxes(self._data.get("boxes", {}), "boxes"),
         )
 
     # ------------------------------------------------------------------ sections
@@ -150,6 +153,30 @@ class _ThemeParser:
         if unknown:
             raise ThemeError(f"{path}: unknown keys {unknown}")
         return Metrics(**{k: self._number(t, k, path) for k in t})
+
+    def _boxes(self, t: Mapping[str, Any], path: str) -> BoxGeometry:
+        if not isinstance(t, Mapping):
+            raise ThemeError(f"[{path}] must be a table")
+        known = {"text"} | set(BoxGeometry.__dataclass_fields__) - {"text_lr", "text_tb"}
+        unknown = sorted(set(t) - known)
+        if unknown:
+            raise ThemeError(f"{path}: unknown keys {unknown}; known: {sorted(known)}")
+        values: dict[str, Any] = {}
+        for key in t:
+            if key == "text":  # one arrangement, or one per flow direction: { TB = …, LR = … }
+                text = t[key] if isinstance(t[key], Mapping) else {"TB": t[key], "LR": t[key]}
+                if set(text) - {"TB", "LR"}:
+                    raise ThemeError(f"{path}.text: use one arrangement or {{ TB = …, LR = … }}")
+                for direction in text:
+                    arrangement = self._enum(text, direction, f"{path}.text", TextLayout)
+                    values[f"text_{direction.lower()}"] = arrangement
+            elif key == "uniform_width":
+                if not isinstance(t[key], bool):
+                    raise ThemeError(f"{path}.{key}: expected true or false")
+                values[key] = t[key]
+            else:
+                values[key] = self._number(t, key, path)
+        return BoxGeometry(**values)
 
     @staticmethod
     def _layout(t: Mapping[str, Any], path: str) -> dict[str, object]:

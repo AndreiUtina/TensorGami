@@ -278,6 +278,16 @@ def test_model_errors_are_explained_and_cleaned_up():
     trace(model, example())  # still usable afterwards
 
 
+def test_channel_mismatch_is_explained():
+    """E.g. a pix2pix discriminator, which sees two images stacked along the channels."""
+    model = nn.Sequential(nn.Conv2d(6, 8, 3), nn.ReLU())
+    with pytest.raises(ImporterError) as info:
+        trace(model, torch.randn(1, 3, 16, 16))
+    text = str(info.value)
+    assert "expects 6 input channels but gets 3" in text and "torch.cat([a, b], 1)" in text
+    assert "batch dimension" not in text  # the specific hint replaces the generic one
+
+
 def test_rejects_non_modules():
     with pytest.raises(ImporterError, match="torch.nn.Module"):
         trace(lambda x: x, torch.randn(1))  # type: ignore[arg-type]

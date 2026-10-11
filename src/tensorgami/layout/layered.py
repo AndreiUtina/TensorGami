@@ -30,7 +30,7 @@ from tensorgami.render.legend import add_legend, build_legend
 from tensorgami.render.text import HeuristicTextMeasurer, TextMeasurer
 from tensorgami.scene import Box, Edge, Node, Point, Scene, Side
 from tensorgami.scene import Group as SceneGroup
-from tensorgami.style import Shape, TextRole, Theme
+from tensorgami.style import Shape, TextLayout, TextRole, Theme
 from tensorgami.vocabulary import EdgeKind
 
 GRID = 8.0
@@ -126,9 +126,11 @@ class _Run:
         self.g, self.theme, self.opts = graph, theme, opts
         self.labeler, self.measurer = labeler, measurer
         self.lr = opts.direction is Direction.LEFT_RIGHT
+        self.boxes = theme.boxes
+        self.text = theme.boxes.text(vertical=not self.lr)  # the arrangement in this flow
         self.exec = {n.id: i for i, n in enumerate(graph.nodes)}
         self.texts: dict[str, NodeText] = {n.id: labeler.describe(n) for n in graph.nodes}
-        self.sizes = {n.id: self._node_size(n.id) for n in graph.nodes}
+        self.sizes = self._uniform({n.id: self._node_size(n.id) for n in graph.nodes})
         self.loops: dict[str, list[int]] = defaultdict(list)
         for i, e in enumerate(graph.edges):
             if e.source == e.target:
@@ -146,24 +148,59 @@ class _Run:
     def xy(self, f: float, c: float) -> tuple[float, float]:
         return (f, c) if self.lr else (c, f)
 
+    def _shape(self, node_id: str) -> Shape:
+        return self.theme.node_style(self.g.node(node_id).category).shape
+
+    def text_of(self, node_id: str) -> TextLayout:
+        """How the node's text is arranged: the flow's arrangement, except that data pills
+        never turn upright (they stay level, on one line)."""
+        if self.text is TextLayout.ROTATED and self._shape(node_id) is Shape.PILL:
+            return TextLayout.INLINE
+        return self.text
+
     def _node_size(self, node_id: str) -> tuple[float, float]:
         node = self.g.node(node_id)
         text = self.texts[node_id]
-        shape = self.theme.node_style(node.category).shape
+        shape = self._shape(node_id)
         if shape is Shape.CIRCLE:  # a note (e.g. folded ReLU) sits centred above the circle
             return 24.0, (48.0 if text.detail else 24.0)
+        boxes, arrangement = self.boxes, self.text_of(node_id)
         label_w = self.measurer.width(text.label, self.theme.node_font(node.category))
         detail_w = (
             self.measurer.width(text.detail, self.theme.font(TextRole.DETAIL))
             if text.detail
             else 0.0
         )
-        width = _ceil(max(label_w, detail_w) + 32)
+        if arrangement.single_line:  # label, gap, detail
+            text_w = label_w + (boxes.gap + detail_w if text.detail else 0.0)
+            thickness = boxes.height
+        else:
+            text_w = max(label_w, detail_w)
+            thickness = boxes.detail_height if text.detail else boxes.height
+        length = _ceil(text_w + boxes.padding)
         if shape is Shape.FOLDED:  # the folded strip is extra; text stays on the flat face
-            width = _ceil(width + self.theme.metrics.fold_width)
+            length = _ceil(length + self.theme.metrics.fold_width)
         if shape is Shape.PILL:
-            return max(width, 64.0), (42.0 if text.detail else 32.0)
-        return max(width, 96.0), (46.0 if text.detail else 36.0)
+            return max(length, 64.0), thickness - 4
+        length = max(length, boxes.min_width)
+        if arrangement is TextLayout.ROTATED:  # upright: thin along x, long along y
+            return thickness, length
+        return length, thickness
+
+    def _uniform(self, sizes: dict[str, tuple[float, float]]) -> dict[str, tuple[float, float]]:
+        """With ``uniform_width``, single-line boxes all take the longest one's length (pills
+        and circles keep theirs): a column (or row of upright boxes) reads like a table."""
+        if not (self.boxes.uniform_width and self.text.single_line):
+            return sizes
+        boxes = [i for i in sizes if self._shape(i) not in (Shape.CIRCLE, Shape.PILL)]
+        if not boxes:
+            return sizes
+        axis = 1 if self.text is TextLayout.ROTATED else 0  # the length runs along y upright
+        longest = max(sizes[i][axis] for i in boxes)
+        return {
+            i: (size[:axis] + (longest,) + size[axis + 1 :]) if i in boxes else size
+            for i, size in sizes.items()
+        }
 
     def _loop_pads(self, node_id: str) -> FC:
         """Space for state self-loops: above the node (LR) or to its right (TB)."""
@@ -282,7 +319,11 @@ class _Run:
             box = Box(m + x, m + y, w, h)
             boxes[node.id] = box
             text = self.texts[node.id]
-            scene_nodes.append(Node(node.id, box, node.category, text.label, text.detail))
+            scene_nodes.append(
+                Node(
+                    node.id, box, node.category, text.label, text.detail, text=self.text_of(node.id)
+                )
+            )
 
         frames = []
         for gid, (f, c, fs, cs) in block.frames.items():
@@ -331,17 +372,34 @@ class _Run:
             end = boxes[e.target].anchor(entry_side)
             label_at = self._label_position([start, *via, end], label)
         return Edge(
-            e.source, e.target, EdgeKind(e.kind), exit_side, entry_side, tuple(via), label, label_at
+            e.source,
+            e.target,
+            EdgeKind(e.kind),
+            exit_side,
+            entry_side,
+            tuple(via),
+            label,
+            label_at,
+            label_upright=bool(label) and self.upright_labels,
         )
+
+    @property
+    def upright_labels(self) -> bool:
+        """Beside upright boxes (rotated text, left → right) the tensor shapes stand upright
+        too, so a gap between two boxes needs one line of text, not a whole label."""
+        return self.lr and self.text is TextLayout.ROTATED
 
     def _label_position(self, path: list[Point], label: str) -> Point:
         font = self.theme.font(TextRole.ANNOTATION)
         width = self.label_width(label)
         segments = list(zip(path, path[1:], strict=False))
         if self.lr:
+            along = font.size if self.upright_labels else width  # the label's extent along x
             flat = [(a, b) for a, b in segments if abs(a.y - b.y) < 0.5] or segments
-            fitting = [s for s in flat if abs(s[1].x - s[0].x) >= width + 8]
+            fitting = [s for s in flat if abs(s[1].x - s[0].x) >= along + 8]
             a, b = (fitting or sorted(flat, key=lambda s: -abs(s[1].x - s[0].x)))[0]
+            if self.upright_labels:  # standing on the line, reading upwards
+                return Point((a.x + b.x) / 2, a.y - 4 - width / 2)
             return Point((a.x + b.x) / 2, a.y - font.size / 2 - 4)
         upright = [(a, b) for a, b in segments if abs(a.x - b.x) < 0.5] or segments
         fitting = [s for s in upright if abs(s[1].y - s[0].y) >= font.size + 8]
@@ -374,7 +432,7 @@ class _Run:
                 break
         scene.width = max(scene.width, legend.box.right + m)
         scene.height = legend.box.bottom + m
-        add_legend(scene, self.theme, Point(m, top), columns)
+        add_legend(scene, self.theme, Point(m, top), columns, text=self.text)
 
 
 def _simplify(points: list[Point]) -> list[Point]:
@@ -441,6 +499,8 @@ def _best_cuts(
                 value = max(best[i][k - 1], span(i, j - 1))
                 if value < best[j][k] - 1e-9:
                     best[j][k], back[j][k] = value, i
+    if widest_unit > width and best[n][rows] > 0.8 * span(0, n - 1):
+        return []  # wrapping around a block wider than ``width`` would only strand small items
     breaks, j = [], n
     for k in range(rows, 0, -1):
         i = back[j][k]
@@ -662,7 +722,8 @@ class _Level:
                 < 0.5
             )
             if run.lr:
-                need = run.label_width(label) + 24
+                font_size = run.theme.font(TextRole.ANNOTATION).size
+                need = (font_size if run.upright_labels else run.label_width(label)) + 24
                 gap = max(gap, need if straight else 2 * need - 8)
             else:
                 gap = max(gap, run.theme.font(TextRole.ANNOTATION).size + 28)

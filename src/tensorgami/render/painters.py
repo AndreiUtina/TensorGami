@@ -10,8 +10,9 @@ import math
 from typing import Protocol
 
 from tensorgami.render.canvas import Canvas, Paint
-from tensorgami.scene import Node, Point, Side
-from tensorgami.style.glyphs import NodeStyle, Shape, TextRole
+from tensorgami.render.text import BASELINE_SHIFT
+from tensorgami.scene import Box, Node, Point, Side, TextAnchor
+from tensorgami.style.glyphs import NodeStyle, Shape, TextLayout, TextRole
 from tensorgami.style.theme import Theme
 
 
@@ -48,13 +49,64 @@ def draw_text_block(canvas: Canvas, node: Node, theme: Theme, center: Point) -> 
         y += h + gap
 
 
+def draw_text_line(canvas: Canvas, node: Node, theme: Theme, face: Box, *, centred: bool) -> None:
+    """Label and detail on one line, baselines aligned: the label from the left edge of
+    ``face`` and the detail against its right edge, like a row of a table (``[boxes] text =
+    "inline"``). ``centred`` puts a label without a detail in the middle (pills)."""
+    label_font = theme.node_font(node.category, TextRole.LABEL)
+    detail_font = theme.node_font(node.category, TextRole.DETAIL)
+    label, detail = node.label.replace("\n", " "), node.detail.replace("\n", " ")
+    inset = theme.boxes.padding / 2
+    if label:
+        at, anchor = (
+            (Point(face.cx, face.cy), TextAnchor.MIDDLE)
+            if centred and not detail
+            else (Point(face.x + inset, face.cy), TextAnchor.START)
+        )
+        canvas.text(at, label, label_font, anchor)
+    if detail:
+        y = face.cy + BASELINE_SHIFT * (label_font.size - detail_font.size)  # same baseline
+        canvas.text(Point(face.right - inset, y), detail, detail_font, TextAnchor.END)
+
+
+def draw_text_upright(canvas: Canvas, node: Node, theme: Theme, face: Box) -> None:
+    """Label and detail on one line turned upright, reading bottom → top: the label from the
+    bottom of ``face``, the detail against its top (``[boxes] text = "rotated"``)."""
+    label_font = theme.node_font(node.category, TextRole.LABEL)
+    detail_font = theme.node_font(node.category, TextRole.DETAIL)
+    label, detail = node.label.replace("\n", " "), node.detail.replace("\n", " ")
+    inset = theme.boxes.padding / 2
+    if label:
+        canvas.text(Point(face.cx, face.bottom - inset), label, label_font, TextAnchor.START, 90)
+    if detail:
+        x = face.cx + BASELINE_SHIFT * (label_font.size - detail_font.size)  # same baseline
+        canvas.text(Point(x, face.y + inset), detail, detail_font, TextAnchor.END, 90)
+
+
+def arrangement(node: Node, theme: Theme) -> TextLayout:
+    """As the layout sized the box (``node.text``); boxes placed by hand keep stacked text,
+    which their sizes were chosen for."""
+    return node.text or TextLayout.STACKED
+
+
+def draw_node_text(canvas: Canvas, node: Node, theme: Theme, face: Box, *, centred=False):
+    """The node's text inside ``face``, the part of the box that is free for text."""
+    text = arrangement(node, theme)
+    if text is TextLayout.ROTATED:
+        draw_text_upright(canvas, node, theme, face)
+    elif text is TextLayout.INLINE:
+        draw_text_line(canvas, node, theme, face, centred=centred)
+    else:
+        draw_text_block(canvas, node, theme, face.center)
+
+
 class RectPainter:
     """Rounded rectangle: operations and layers."""
 
     def paint(self, canvas: Canvas, node: Node, theme: Theme) -> None:
         style = node_style(node, theme)
         canvas.rect(node.box, outline(style, theme), theme.metrics.corner_radius)
-        draw_text_block(canvas, node, theme, node.box.center)
+        draw_node_text(canvas, node, theme, node.box)
 
     def anchor(self, node: Node, side: Side, theme: Theme) -> Point:
         return node.box.anchor(side)
@@ -66,7 +118,10 @@ class PillPainter(RectPainter):
     def paint(self, canvas: Canvas, node: Node, theme: Theme) -> None:
         style = node_style(node, theme)
         canvas.rect(node.box, outline(style, theme), node.box.h / 2)
-        draw_text_block(canvas, node, theme, node.box.center)
+        if arrangement(node, theme) is TextLayout.ROTATED:  # data pills never turn upright
+            draw_text_line(canvas, node, theme, node.box, centred=True)
+        else:
+            draw_node_text(canvas, node, theme, node.box, centred=True)
 
 
 class CirclePainter:
@@ -183,31 +238,40 @@ class CuboidPainter:
 
 
 class FoldedPainter(RectPainter):
-    """A paper card with its right edge folded over: a slanted crease separates the flat
-    face from a narrow, slightly darker strip. Sharp corners, hairline outline (origami).
+    """A paper card with one edge folded over: a slanted crease separates the flat face from a
+    narrow, slightly darker strip. Sharp corners, hairline outline (origami).
 
-    The text is centred on the flat face; the layout widens folded boxes by the strip's width
+    The strip is on the right, or on top for an upright card (rotated text). The text stays on
+    the flat face; the layout lengthens folded boxes by the strip's width
     (``Metrics.fold_width``), so a crease never crosses a label.
     """
 
     def paint(self, canvas: Canvas, node: Node, theme: Theme) -> None:
         style = node_style(node, theme)
         b, m = node.box, theme.metrics
-        fold = min(m.fold_width, b.w / 3)
-        top, bottom = b.right - fold * 0.55, b.right - fold  # the crease leans like a fold
-        face = [Point(b.x, b.y), Point(top, b.y), Point(bottom, b.bottom), Point(b.x, b.bottom)]
-        strip = [
-            Point(top, b.y),
-            Point(b.right, b.y),
-            Point(b.right, b.bottom),
-            Point(bottom, b.bottom),
-        ]
+        if arrangement(node, theme) is TextLayout.ROTATED:  # the right edge, turned to the top
+            fold = min(m.fold_width, b.h / 3)
+            near, far = b.y + fold * 0.55, b.y + fold  # the crease leans like a fold
+            face = [Point(b.x, near), Point(b.right, far), Point(b.right, b.bottom)]
+            face.append(Point(b.x, b.bottom))
+            strip = [Point(b.x, b.y), Point(b.right, b.y), Point(b.right, far), Point(b.x, near)]
+            crease_line = [Point(b.x, near), Point(b.right, far)]
+            text_face = Box(b.x, b.y + fold * 0.78, b.w, b.h - fold * 0.78)
+        else:
+            fold = min(m.fold_width, b.w / 3)
+            top, bottom = b.right - fold * 0.55, b.right - fold
+            face = [Point(b.x, b.y), Point(top, b.y), Point(bottom, b.bottom)]
+            face.append(Point(b.x, b.bottom))
+            strip = [Point(top, b.y), Point(b.right, b.y), Point(b.right, b.bottom)]
+            strip.append(Point(bottom, b.bottom))
+            crease_line = [Point(top, b.y), Point(bottom, b.bottom)]
+            text_face = Box(b.x, b.y, b.w - fold * 0.78, b.h)
         canvas.polygon(face, Paint(style.fill, opacity=style.opacity))
         canvas.polygon(strip, Paint(style.fill.darken(m.fold_shade), opacity=style.opacity))
         crease = Paint(None, style.stroke.lighten(0.35), m.node_stroke * 0.8)
-        canvas.polyline([Point(top, b.y), Point(bottom, b.bottom)], crease)
+        canvas.polyline(crease_line, crease)
         canvas.rect(b, Paint(None, style.stroke, m.node_stroke, style.dash))
-        draw_text_block(canvas, node, theme, Point(b.x + (b.w - fold * 0.78) / 2, b.cy))
+        draw_node_text(canvas, node, theme, text_face)
 
 
 class PainterRegistry:

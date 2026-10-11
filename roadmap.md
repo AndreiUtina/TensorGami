@@ -229,24 +229,32 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 
 ## Phase D — Reports, presentations and release
 
-### 13) Styles and presentation output 🔶 (`default` ✅, `origami` ✅, third to decide)
+### 13) Styles and presentation output 🔶 (`default`, `origami`, `origami-extended` ✅; third to decide)
 - Named styles, one TOML file each, chosen with `style=` (ADR-0008): `load_style("origami")`
-  or `tg.draw(model, x, style="origami")`; a style may set layout
-  preferences (`[layout]`: spacing, direction, wrapping).
+  or `tg.draw(model, x, style="origami")`; a style may set layout preferences (`[layout]`:
+  spacing, direction, wrapping) and box sizes (`[boxes]`).
 - **`default`** ✅: the current light, print-friendly look.
-- **`origami`** ✅ (2026-10-11): [`docs/style/origami.md`](docs/style/origami.md), after the
-  radial figure in DeepMind's essay *Bending the curve of discovery* — hairline wires with
-  dot terminals, folded-paper cards (slanted crease, darker folded strip; text always on the
-  flat face), translucent pastels with the same category meaning, solid hairline frames with
-  capital titles, serif labels, airier spacing. Passes the same validation rules; its own
-  specimens (`docs/style/specimens/origami/`) and gallery (`docs/gallery/origami/`) are kept
-  up to date by tests.
-  - Renderer capabilities added for it, usable by any style: `folded` shape, fill
-    `opacity`, dot terminals (`start`/`arrow = "dot"`), unfilled frames
-    (`fill_opacity = 0`), `caps` fonts. `default` is unchanged.
-  - Fixed on the way (both styles): frame titles are painted above the wires on a small
-    background patch, and wrapped edges bend outside frames, so no wire runs through a
-    title.
+- **Origami styles** ✅ (2026-10-11, [`docs/style/origami.md`](docs/style/origami.md)), after the
+  radial figure in DeepMind's essay *Bending the curve of discovery*: hairline wires with dot
+  terminals, folded-paper cards in translucent pastels with the same category meaning, solid
+  hairline frames with capital titles, serif labels. They differ in how a card holds its text:
+  - **`origami`**: left → right by default, with **upright cards** (one line of text reading
+    bottom → top, the fold on top, all cards equally tall, upright tensor shapes between
+    them): a layer takes ~ 60 px of width (AlexNet 1047 px in one row, the pix2pix U-Net
+    generator 3464 px instead of 9306). Top → bottom: flat single-line cards.
+  - **`origami-extended`**: top → bottom by default, with **flat single-line cards** of equal
+    width, name left and details right, as in the Transformer paper's block flowcharts
+    (survey Fig. 1d): figures fit a notebook's width and scroll down. Left → right: name
+    above details, each card as wide as its text.
+  - Chosen with the user from side-by-side comparisons at the same scale (the first origami
+    look, with two-line cards as wide as their text, was replaced).
+  - Renderer capabilities added, usable by any style: `folded` shape, fill `opacity`, dot
+    terminals, unfilled frames, `caps` fonts; the `[boxes]` table (text `stacked` /
+    `inline` / `rotated` per flow direction, padding, heights, equal lengths); rotated text
+    in both canvases; upright edge labels beside upright cards. `default` is unchanged.
+  - Fixed on the way (all styles): frame titles are painted above the wires on a small
+    background patch; wrapped edges bend outside frames; rows wrap only when that makes a
+    figure at least 20 % narrower.
 - **Third style:** to be decided.
 - Presentation variants: slide (16:9 sizing, larger fonts), dark, greyscale/print.
 - Export for LaTeX reports (PDF/SVG at exact column widths).

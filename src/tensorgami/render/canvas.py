@@ -40,8 +40,16 @@ class Canvas(Protocol):
     def polyline(self, points: Sequence[Point], paint: Paint) -> None: ...
 
     def text(
-        self, at: Point, text: str, font: Font, anchor: TextAnchor = TextAnchor.MIDDLE
-    ) -> None: ...
+        self,
+        at: Point,
+        text: str,
+        font: Font,
+        anchor: TextAnchor = TextAnchor.MIDDLE,
+        rotation: float = 0.0,
+    ) -> None:
+        """One line whose visual centre line passes through ``at``; ``rotation`` turns it
+        counter-clockwise about ``at`` (degrees; 90 reads bottom → top)."""
+        ...
 
     def begin_group(self, css_class: str, data_id: str | None = None) -> None: ...
 

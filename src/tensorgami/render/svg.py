@@ -6,11 +6,16 @@ from collections.abc import Sequence
 from xml.sax.saxutils import escape, quoteattr
 
 from tensorgami.render.canvas import Paint
-from tensorgami.render.text import SCRIPT_SCALE, Script, display_text, parse_markup
+from tensorgami.render.text import (
+    BASELINE_SHIFT,
+    SCRIPT_SCALE,
+    Script,
+    display_text,
+    parse_markup,
+)
 from tensorgami.scene import Box, Point, TextAnchor
 from tensorgami.style.glyphs import Font
 
-BASELINE_SHIFT = 0.35  # baseline offset from the visual centre of a line, in em
 SCRIPT_SHIFT = {Script.SUB: 0.28, Script.SUPER: -0.42}  # baseline shift of scripts, in em
 
 
@@ -57,7 +62,14 @@ class SvgCanvas:
     def polyline(self, points: Sequence[Point], paint: Paint) -> None:
         self._emit(f'<polyline points="{_points(points)}"{self._paint(paint)}/>')
 
-    def text(self, at: Point, text: str, font: Font, anchor: TextAnchor = TextAnchor.MIDDLE):
+    def text(
+        self,
+        at: Point,
+        text: str,
+        font: Font,
+        anchor: TextAnchor = TextAnchor.MIDDLE,
+        rotation: float = 0.0,
+    ):
         runs = parse_markup(display_text(text, font))
         if not runs:
             return
@@ -65,6 +77,8 @@ class SvgCanvas:
             f'x="{_num(at.x)}" y="{_num(at.y + BASELINE_SHIFT * font.size)}" '
             f'font-family={quoteattr(font.css_family)} font-size="{_num(font.size)}"'
         )
+        if rotation:  # SVG angles turn clockwise
+            attrs += f' transform="rotate({_num(-rotation)} {_num(at.x)} {_num(at.y)})"'
         if font.weight != 400:
             attrs += f' font-weight="{font.weight}"'
         if font.italic:

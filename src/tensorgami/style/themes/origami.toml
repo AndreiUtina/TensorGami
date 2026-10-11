@@ -1,14 +1,20 @@
 # Tensorgami "origami" style.
 #
-# A hairline "wire" look with folded-paper boxes, after the radial figure in DeepMind's essay
-# "Bending the curve of discovery": thin soft-slate wires with dot terminals, layers as sheets
-# of paper folded once (two pastel facets split by a slanted crease), solid hairline frames
-# without fill, serif labels, airy spacing. Same category meaning as the default style.
+# Paper and wire, after the radial figure in DeepMind's essay "Bending the curve of discovery":
+# thin soft-slate wires with dot terminals, layers as pastel paper cards folded once, solid
+# hairline frames without fill, serif names. Same category meaning as the default style.
+#
+# Compact cards (docs/style/origami.md):
+# - left → right (the default): every card stands upright, one line of text reading
+#   bottom → top (name at the bottom, details at the top), the fold on top, all cards equally
+#   tall; the tensor shapes between them stand upright too. A layer takes ~ 60 px of width.
+# - top → bottom: flat single-line cards of equal width in one column (block flowchart).
+#
 # It passes the same validation rules as every style (contrast, distinct categories).
 
 [theme]
 name = "origami"
-description = "Hairline wires and folded-paper layers in soft pastels; serif labels."
+description = "Paper cards and hairline wires in soft pastels; upright cards in rows."
 background = "#ffffff"
 
 [fonts.families]
@@ -72,14 +78,24 @@ cuboid_angle = 35
 trapezoid_ratio = 0.45
 line_gap = 3
 terminal_radius = 2.2
-fold_width = 18
+fold_width = 10
 fold_shade = 0.08
 
 [layout]
-rank_gap = 60
+direction = "LR"       # upright cards in a row; "TB" gives a column of flat cards
+rank_gap = 22
 node_gap = 26
-group_padding = 18
+group_padding = 14
 title_height = 22
+
+[boxes]
+text = { TB = "inline", LR = "rotated" }  # one line: level in columns, upright in rows
+padding = 24
+min_width = 48
+height = 26            # a card with one line
+detail_height = 40     # a card with name above details (left → right)
+gap = 16
+uniform_width = true   # one card length per figure: a tidy column, or an even row
 
 [group]
 fill = "#ffffff"

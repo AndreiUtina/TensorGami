@@ -1,0 +1,259 @@
+# Tensorgami "origami-extended" style.
+#
+# The origami look (paper cards, hairline wires, pastels, serif names; see origami.toml) with
+# cards whose text stays level (docs/style/origami.md):
+# - top → bottom (the default): flat single-line cards of equal width in one column, as in
+#   the block flowcharts of the Transformer paper: name on the left, details on the right;
+# - left → right: name above details, each card as wide as its own text.
+#
+# It passes the same validation rules as every style (contrast, distinct categories).
+
+[theme]
+name = "origami-extended"
+description = "Origami with level text: flat cards in columns, stacked cards in rows."
+background = "#ffffff"
+
+[fonts.families]
+serif = ["Source Serif 4", "Source Serif Pro", "Georgia", "Libertinus Serif", "DejaVu Serif", "serif"]
+sans = ["Avenir Next", "Helvetica Neue", "Helvetica", "Arial", "DejaVu Sans", "sans-serif"]
+mono = ["JetBrains Mono", "SF Mono", "Menlo", "Consolas", "DejaVu Sans Mono", "monospace"]
+
+[fonts.label]
+family = "serif"
+size = 12.5
+color = "#262a31"
+
+[fonts.detail]
+family = "sans"
+size = 9.5
+color = "#4b5563"
+
+[fonts.symbol]
+family = "serif"
+size = 13
+color = "#262a31"
+
+[fonts.annotation]   # tensor shapes on the wires
+family = "sans"
+size = 9
+color = "#5b616b"
+
+[fonts.group-title]
+family = "sans"
+size = 9
+weight = 600
+caps = true
+color = "#5b616b"
+
+[fonts.badge]
+family = "sans"
+size = 9.5
+weight = 600
+color = "#4b5563"
+
+[fonts.note]
+family = "serif"
+size = 10.5
+italic = true
+color = "#5b616b"
+
+[fonts.legend]
+family = "sans"
+size = 10
+color = "#374151"
+
+[metrics]
+grid = 8
+corner_radius = 2
+node_stroke = 0.8
+arrow_length = 6
+arrow_width = 4.5
+label_halo = 2
+delay_marker = 5
+cuboid_angle = 35
+trapezoid_ratio = 0.45
+line_gap = 3
+terminal_radius = 2.2
+fold_width = 10
+fold_shade = 0.08
+
+[layout]
+direction = "TB"
+rank_gap = 22
+node_gap = 26
+group_padding = 14
+title_height = 22
+
+[boxes]
+text = { TB = "inline", LR = "stacked" }  # one line in columns; name above details in rows
+padding = 24
+min_width = 48
+height = 26            # a card with one line
+detail_height = 40     # a card with name above details (left → right)
+gap = 16
+uniform_width = true   # top → bottom: one card width per figure, a tidy column
+
+[group]
+fill = "#ffffff"
+fill_opacity = 0       # hairline frames without a fill
+stroke = "#868b94"
+width = 0.8
+corner_radius = 3
+padding = 18
+badge_fill = "#ffffff"
+
+# ----------------------------------------------------------------- data and structure
+
+[categories.io]
+name = "Input / output"
+shape = "pill"
+fill = "#f1f0ec"
+stroke = "#727780"
+
+[categories.tensor]
+name = "Tensor / state"
+shape = "pill"
+fill = "#ffffff"
+stroke = "#727780"
+
+[categories.module]
+name = "Composite block"
+shape = "folded"
+fill = "#f2f2ef"
+stroke = "#727780"
+
+[categories.merge]
+name = "Merge (add, concat, multiply)"
+shape = "circle"
+fill = "#ffffff"
+stroke = "#5c626c"
+
+[categories.reshape]
+name = "Reshape / flatten"
+shape = "folded"
+fill = "#ecebe7"
+stroke = "#80858e"
+
+[categories.regularization]
+name = "Regularisation (dropout)"
+shape = "folded"
+fill = "#f6f5f2"
+stroke = "#80858e"
+dash = [3, 2]
+
+[categories.other]
+name = "Other operation"
+shape = "folded"
+fill = "#f7f7f4"
+stroke = "#80858e"
+
+# ----------------------------------------------------------------- operations (pastel paper)
+
+[categories.conv]
+name = "Convolution"
+shape = "folded"
+fill = "#cfe3f6"
+stroke = "#3f78b0"
+opacity = 0.92
+
+[categories.linear]
+name = "Linear / dense"
+shape = "folded"
+fill = "#e2daf6"
+stroke = "#7458b8"
+opacity = 0.92
+
+[categories.recurrent]
+name = "Recurrent cell"
+shape = "folded"
+fill = "#d4ecca"
+stroke = "#4e8a44"
+opacity = 0.92
+
+[categories.attention]
+name = "Attention"
+shape = "folded"
+fill = "#fde1c6"
+stroke = "#b8692b"
+opacity = 0.92
+
+[categories.norm]
+name = "Normalisation"
+shape = "folded"
+fill = "#f7ecb9"
+stroke = "#977c19"
+opacity = 0.92
+
+[categories.activation]
+name = "Activation"
+shape = "folded"
+fill = "#f6cfe2"
+stroke = "#b04c70"
+opacity = 0.92
+
+[categories.resample]
+name = "Pooling / resampling"
+shape = "folded"
+fill = "#c8eee3"
+stroke = "#2f8673"
+opacity = 0.92
+
+[categories.embedding]
+name = "Embedding"
+shape = "folded"
+fill = "#e8e4d6"
+stroke = "#8a6a46"
+opacity = 0.92
+
+[categories.stochastic]
+name = "Sampling / noise"
+shape = "pill"
+fill = "#fbeefc"
+stroke = "#9c4aa3"
+dash = [3, 2]
+opacity = 0.92
+
+[categories.loss]
+name = "Loss / objective"
+shape = "folded"
+fill = "#f9c9c2"
+stroke = "#b54a3a"
+opacity = 0.92
+
+# ----------------------------------------------------------------- wires
+
+[edges.data]
+name = "Data flow"
+color = "#6a707a"
+width = 0.9
+arrow = "filled"
+start = "dot"
+
+[edges.state]
+name = "Recurrent state"
+color = "#4e8a44"
+width = 1.0
+arrow = "filled"
+start = "dot"
+
+[edges.stochastic]
+name = "Sampling / noise"
+color = "#9c4aa3"
+width = 0.9
+arrow = "filled"
+dash = [1.5, 2.5]
+start = "dot"
+
+[edges.training]
+name = "Training signal (loss, gradient)"
+color = "#b54a3a"
+width = 0.9
+arrow = "open"
+dash = [5, 3]
+
+[edges.tied]
+name = "Shared weights"
+color = "#80858e"
+width = 0.8
+arrow = "none"
+dash = [1.5, 3]
