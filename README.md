@@ -8,7 +8,7 @@ locally, in Python.
 Status: design phase (see [roadmap.md](roadmap.md)).
 
 - Literature survey: [docs/survey/tensorgami-literature-survey.pdf](docs/survey/tensorgami-literature-survey.pdf)
-- Drawing style baseline: [docs/style/style-baseline.md](docs/style/style-baseline.md)
+- Drawing styles: [`default`](docs/style/style-baseline.md) and [`origami`](docs/style/origami.md)
 
 ![Visual vocabulary](docs/style/specimens/vocabulary.svg)
 
@@ -39,7 +39,7 @@ print(simplify(graph, level=2).summary())           # layers: activations folded
 import tensorgami as tg
 from tensorgami.layout import layout
 from tensorgami.style import load_style
-style = load_style("default")                       # the standard style; more to come
+style = load_style("default")                       # or load_style("origami")
 layers = simplify(graph, level=2)
 fig = tg.Figure(layout(layers, style), style, layers)
 fig                                                 # shows inline in Jupyter

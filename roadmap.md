@@ -213,25 +213,24 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 
 ## Phase D — Reports, presentations and release
 
-### 13) Styles and presentation output 🔶 (`default` ✅, `origami` planned)
-- Named styles, one TOML file each, chosen with `style=` (ADR-0008): `load_style("default")`
+### 13) Styles and presentation output 🔶 (`default` ✅, `origami` ✅, third to decide)
+- Named styles, one TOML file each, chosen with `style=` (ADR-0008): `load_style("origami")`
   now, `tg.draw(model, x, style="origami")` from step 10; a style may set layout
   preferences (`[layout]`: spacing, direction, wrapping).
 - **`default`** ✅: the current light, print-friendly look.
-- **`origami`** (planned), after the radial figure in DeepMind's essay *Bending the curve of
-  discovery*:
-  - hairline "wires" (≈ 0.75–1 px, soft slate) with small round dot terminals and fine
-    arrowheads;
-  - layer boxes as **folded paper**: two translucent pastel facets split by a diagonal
-    crease, with hairline outlines, so overlapping elements show through;
-  - pastel palette with the same category meaning (sage green, sky blue, lavender, peach,
-    blush pink, mint, butter yellow);
-  - solid hairline frames with no fill and small-caps grey titles; merges as hollow hairline
-    circles;
-  - serif labels (e.g. Georgia / Source Serif) with grey sans details, and airier spacing via
-    `[layout]`;
-  - renderer additions needed (added once, referenced by name from `origami.toml`):
-    translucent fills, a folded-paper box painter, dot terminals.
+- **`origami`** ✅ (2026-10-11): [`docs/style/origami.md`](docs/style/origami.md), after the
+  radial figure in DeepMind's essay *Bending the curve of discovery* — hairline wires with
+  dot terminals, folded-paper cards (slanted crease, darker folded strip; text always on the
+  flat face), translucent pastels with the same category meaning, solid hairline frames with
+  capital titles, serif labels, airier spacing. Passes the same validation rules; its own
+  specimens (`docs/style/specimens/origami/`) and gallery (`docs/gallery/origami/`) are kept
+  up to date by tests.
+  - Renderer capabilities added for it, usable by any style: `folded` shape, fill
+    `opacity`, dot terminals (`start`/`arrow = "dot"`), unfilled frames
+    (`fill_opacity = 0`), `caps` fonts. `default` is unchanged.
+  - Fixed on the way (both styles): frame titles are painted above the wires on a small
+    background patch, and wrapped edges bend outside frames, so no wire runs through a
+    title.
 - **Third style:** to be decided.
 - Presentation variants: slide (16:9 sizing, larger fonts), dark, greyscale/print.
 - Export for LaTeX reports (PDF/SVG at exact column widths).
