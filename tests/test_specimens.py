@@ -40,11 +40,14 @@ def test_build_writes_well_formed_svgs(tmp_path, theme):
         assert root.tag.endswith("svg")
 
 
-def test_committed_specimens_are_up_to_date(tmp_path, theme):
-    """Fails when the style changed but docs/style/specimens was not rebuilt."""
-    for path in builder.build(tmp_path, theme):
-        committed = DOCS / "specimens" / path.name
+@pytest.mark.parametrize("style", ["default", "origami"])
+def test_committed_specimens_are_up_to_date(tmp_path, style):
+    """Fails when a style changed but its specimens were not rebuilt."""
+    from tensorgami.style import load_theme
+
+    for path in builder.build(tmp_path, load_theme(style)):
+        committed = builder.specimen_dir(style) / path.name
         assert committed.exists(), f"missing {committed}; run docs/style/build_specimens.py"
         assert committed.read_text(encoding="utf-8") == path.read_text(encoding="utf-8"), (
-            f"{committed.name} is stale; run: uv run python docs/style/build_specimens.py"
+            f"{committed} is stale; run: uv run python docs/style/build_specimens.py"
         )

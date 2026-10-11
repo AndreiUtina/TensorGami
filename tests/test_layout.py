@@ -287,3 +287,30 @@ def test_style_layout_preferences_apply_unless_options_are_explicit(theme):
     assert LayoutOptions.for_style(vertical).direction is Direction.TOP_BOTTOM
     with pytest.raises(ValueError, match="unknown layout option"):
         LayoutOptions.for_style(dataclasses.replace(theme, layout={"rank_spacing": 3}))
+
+
+# --------------------------------------------------------------------------- origami
+
+
+@pytest.fixture(scope="module")
+def origami():
+    from tensorgami.style import load_style
+
+    return load_style("origami")
+
+
+@pytest.mark.parametrize("make", ALL.values(), ids=ALL.keys())
+@pytest.mark.parametrize("direction", list(Direction))
+def test_origami_layouts_keep_the_invariants(origami, make, direction):
+    graph = simplify(make(), 2)
+    options = LayoutOptions.for_style(origami, direction=direction, wrap_width=None)
+    scene = LayeredLayout(options).layout(graph, origami)
+    check_scene(scene, graph, origami, monotonic="x" if direction is Direction.LEFT_RIGHT else "y")
+
+
+def test_folded_boxes_are_widened_by_their_fold(theme, origami):
+    graph = simplify(residual_cnn(), 2)
+    plain = {n.id: n.box.w for n in layout(graph, theme).nodes}
+    folded = {n.id: n.box.w for n in layout(graph, origami).nodes}
+    conv = next(n.id for n in graph.nodes if n.op == "Conv2d")
+    assert folded[conv] >= plain[conv] + origami.metrics.fold_width - 8  # grid rounding

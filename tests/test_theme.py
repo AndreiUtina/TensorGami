@@ -190,3 +190,38 @@ def test_a_style_may_carry_layout_preferences():
     assert dict(parse_theme(DEFAULT_TOML).layout) == {}
     with pytest.raises(ThemeError, match="layout.rank_gap"):
         parse_theme(DEFAULT_TOML + "\n[layout]\nrank_gap = [1, 2]\n")
+
+
+# --------------------------------------------------------------------------- origami
+
+
+def test_origami_is_built_in_and_passes_every_rule():
+    from tensorgami.style import available_styles, load_style
+
+    assert available_styles() == ["default", "origami"]
+    origami = load_style("origami")
+    assert ThemeValidator().validate(origami) == []
+    assert origami.node_style(OpCategory.CONV).shape is Shape.FOLDED
+    assert origami.node_style(OpCategory.CONV).opacity < 1
+    assert origami.font(TextRole.GROUP_TITLE).caps
+    assert origami.group.fill_opacity == 0
+    assert origami.edge_style(EdgeKind.DATA).start.value == "dot"
+    assert origami.layout["rank_gap"] == 60  # airier than the default
+
+
+def test_new_style_keys_are_parsed_and_checked():
+    toml = DEFAULT_TOML.replace(
+        'fill = "#bfdbfe"\nstroke = "#1d4ed8"',
+        'fill = "#bfdbfe"\nstroke = "#1d4ed8"\nopacity = 0.5',
+    )
+    assert parse_theme(toml).node_style(OpCategory.CONV).opacity == 0.5
+    with pytest.raises(ThemeError, match="categories.conv.opacity"):
+        parse_theme(toml.replace("opacity = 0.5", "opacity = 1.5"))
+    with pytest.raises(ThemeError, match="edges.data.start"):
+        parse_theme(
+            DEFAULT_TOML.replace('arrow = "filled"\n', 'arrow = "filled"\nstart = "star"\n', 1)
+        )
+    default = parse_theme(DEFAULT_TOML)
+    assert default.node_style(OpCategory.CONV).opacity == 1.0  # defaults keep the old look
+    assert default.edge_style(EdgeKind.DATA).start.value == "none"
+    assert not default.font(TextRole.GROUP_TITLE).caps and default.group.fill_opacity == 1.0

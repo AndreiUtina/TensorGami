@@ -244,3 +244,61 @@ def test_legend_columns_trade_height_for_width(theme):
     assert four.box.w == two.box.w
     with pytest.raises(ValueError):
         build_legend(theme, cats, columns=0)
+
+
+# --------------------------------------------------------------------------- style capabilities
+
+
+@pytest.fixture(scope="module")
+def origami():
+    from tensorgami.style import load_style
+
+    return load_style("origami")
+
+
+def test_folded_box_has_two_facets_a_crease_and_text_on_the_flat_face(origami):
+    node = Node("n", Box(0, 0, 140, 46), OpCategory.CONV, "Conv 3×3", "64")
+    canvas = SvgCanvas(200, 100)
+    default_painters().for_node(node, origami).paint(canvas, node, origami)
+    root = parse(canvas.to_svg())
+    polygons = root.findall(f".//{SVG_NS}polygon")
+    assert len(polygons) == 2 and all(p.get("fill-opacity") for p in polygons)
+    (crease,) = root.findall(f".//{SVG_NS}polyline")
+    crease_x = min(float(c.split(",")[0]) for c in crease.get("points").split())
+    label = next(t for t in root.iter(f"{SVG_NS}text") if "".join(t.itertext()) == "Conv 3×3")
+    assert float(label.get("x")) < 70 < crease_x  # centred left of the fold, never under it
+
+
+def test_dot_terminals_and_frame_titles_drawn_over_wires(origami):
+    scene = Scene(400, 200).add(
+        Group("g", Box(150, 20, 200, 120), "block"),
+        Node("a", Box.centered(60, 80, 80, 32), OpCategory.IO, "x"),
+        Node("b", Box.centered(250, 80, 100, 40), OpCategory.CONV, "Conv"),
+        Edge("a", "b"),
+    )
+    root = parse(render_svg(scene, origami))
+    edge_group = next(
+        g for g in root.iter(f"{SVG_NS}g") if g.get("class") == "tg-edge tg-edge-data"
+    )
+    (dot,) = edge_group.findall(f"{SVG_NS}circle")  # the source terminal
+    assert float(dot.get("cx")) == pytest.approx(100)  # right side of node a
+    frame = next(g for g in root.iter(f"{SVG_NS}g") if g.get("class") == "tg-group")
+    assert frame.find(f"{SVG_NS}rect").get("fill-opacity") == "0"  # hairline, no fill
+    labels = next(g for g in root.iter(f"{SVG_NS}g") if g.get("class") == "tg-labels")
+    texts = ["".join(t.itertext()) for t in labels.iter(f"{SVG_NS}text")]
+    assert "BLOCK" in texts  # caps font; painted in the label pass, above the wires
+
+
+def test_end_dot_does_not_shorten_the_line(theme):
+    import dataclasses
+
+    from tensorgami.style import ArrowHead
+
+    edges = dict(theme.edges)
+    edges[EdgeKind.DATA] = dataclasses.replace(edges[EdgeKind.DATA], arrow=ArrowHead.DOT)
+    dotted = dataclasses.replace(theme, edges=edges)
+    scene = Scene(200, 60).add(Edge(Point(10, 30), Point(190, 30)))
+    root = parse(render_svg(scene, dotted))
+    line = next(root.iter(f"{SVG_NS}polyline"))
+    assert line.get("points").endswith("190,30")
+    assert any(c.get("cx") == "190" for c in root.iter(f"{SVG_NS}circle"))
