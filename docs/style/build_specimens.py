@@ -3,7 +3,7 @@
 Each specimen is a hand-positioned :class:`~tensorgami.scene.Scene` (the layout engine comes
 in a later roadmap step) rendered with the default style. Rebuild with::
 
-    uv run python docs/style/build_specimens.py [OUT_DIR]
+    uv run python docs/style/build_specimens.py [STYLE ...]   # default: every built-in style
 """
 
 from __future__ import annotations
@@ -439,6 +439,11 @@ SPECIMENS: dict[str, Callable[[Theme], Scene]] = {
 }
 
 
+def specimen_dir(style: str) -> Path:
+    """``default`` keeps the original folder; every other style gets a sub-folder."""
+    return OUT_DIR if style == "default" else OUT_DIR / style
+
+
 def build(out_dir: Path = OUT_DIR, theme: Theme | None = None) -> list[Path]:
     theme = theme or load_theme("default")
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -451,6 +456,9 @@ def build(out_dir: Path = OUT_DIR, theme: Theme | None = None) -> list[Path]:
 
 
 if __name__ == "__main__":
-    target = Path(sys.argv[1]) if len(sys.argv) > 1 else OUT_DIR
-    for p in build(target):
-        print(p)
+    from tensorgami.style import available_styles
+
+    styles = sys.argv[1:] or available_styles()
+    for style in styles:
+        for p in build(specimen_dir(style), load_theme(style)):
+            print(p)
