@@ -37,13 +37,13 @@ def read_theme(source: str | Path) -> Theme:
     if isinstance(source, Path) or str(source).endswith(".toml"):
         path = Path(source)
         if not path.is_file():
-            raise ThemeError(f"theme file not found: {path}")
+            raise ThemeError(f"style file not found: {path}")
         text = path.read_text(encoding="utf-8")
     else:
         resource = resources.files(_BUILTIN_PACKAGE) / f"{source}.toml"
         if not resource.is_file():
             known = ", ".join(available_themes())
-            raise ThemeError(f"unknown theme '{source}' (built-in themes: {known})")
+            raise ThemeError(f"unknown style '{source}' (built-in styles: {known})")
         text = resource.read_text(encoding="utf-8")
     return parse_theme(text)
 

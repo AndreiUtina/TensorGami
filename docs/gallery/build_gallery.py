@@ -1,4 +1,4 @@
-"""Draw the reference models automatically: trace → simplify → layout → SVG.
+"""Draw the reference models with ``tg.draw``, once per built-in style.
 
 A preview gallery of the full pipeline; snapshot tests over it come in roadmap step 12.
 
@@ -15,21 +15,18 @@ sys.path.insert(0, str(HERE.parents[1] / "tests"))  # the reference models live 
 
 from models import REFERENCE  # noqa: E402
 
-from tensorgami.importers.torch import trace  # noqa: E402
-from tensorgami.layout import LayoutOptions, layout  # noqa: E402
-from tensorgami.render import render_svg  # noqa: E402
-from tensorgami.style import available_styles, load_style  # noqa: E402
-from tensorgami.transforms import simplify  # noqa: E402
+import tensorgami as tg  # noqa: E402
+from tensorgami.style import available_styles  # noqa: E402
 
-FIGURES = {  # file name: (reference model, level, layout overrides, extra simplify options)
-    "cnn": ("cnn", 2, {}, {}),
-    "cnn-stages": ("cnn", 1, {}, {}),
-    "lstm": ("lstm", 2, {}, {}),
-    "cgan-generator": ("cgan_generator", 2, {}, {}),
-    "cgan-discriminator": ("cgan_discriminator", 2, {}, {}),
-    "vae": ("vae", 2, {}, {}),
-    "convlstm": ("convlstm", 2, {}, {}),
-    "transformer": ("transformer", 2, {"direction": "TB"}, {}),
+FIGURES = {  # file name: (reference model, tg.draw options besides the style)
+    "cnn": ("cnn", {"level": 2}),
+    "cnn-stages": ("cnn", {"level": 1}),
+    "lstm": ("lstm", {"level": 2}),
+    "cgan-generator": ("cgan_generator", {"level": 2}),
+    "cgan-discriminator": ("cgan_discriminator", {"level": 2}),
+    "vae": ("vae", {"level": 2}),
+    "convlstm": ("convlstm", {"level": 2}),
+    "transformer": ("transformer", {"level": 2, "direction": "TB"}),
 }
 
 
@@ -39,17 +36,13 @@ def gallery_dir(style: str) -> Path:
 
 
 def build(style: str = "default") -> list[Path]:
-    theme = load_style(style)
     out_dir = gallery_dir(style)
     out_dir.mkdir(parents=True, exist_ok=True)
     paths = []
-    for name, (model, level, overrides, extra) in FIGURES.items():
+    for name, (model, options) in FIGURES.items():
         make, example = REFERENCE[model]
-        graph = simplify(trace(make(), example()), level, **extra)
-        options = LayoutOptions.for_style(theme, **overrides)  # the style's spacing + overrides
-        path = out_dir / f"{name}.svg"
-        path.write_text(render_svg(layout(graph, theme, options), theme), encoding="utf-8")
-        paths.append(path)
+        fig = tg.draw(make(), example(), style=style, **options)
+        paths.append(fig.save(out_dir / f"{name}.svg"))
     return paths
 
 

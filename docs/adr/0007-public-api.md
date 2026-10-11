@@ -1,6 +1,7 @@
 # ADR-0007: `tg.draw(...)` returns a `tg.Figure`
 
-Status: Accepted · 2026-10-09
+Status: Accepted · 2026-10-09 · implemented in step 10 (2026-10-11); the `theme=` parameter is
+called `style=` ([ADR-0008](0008-named-styles.md))
 
 ## Context
 
@@ -19,8 +20,9 @@ fig = tg.draw(
     example_input,            # tensor | tuple of tensors | dict of keyword arguments
     level=2,                  # 0 system … 4 cell internals
     view="auto",              # "block" | "volume" | "unrolled" | "cell" | "auto"
-    theme="baseline",         # name or path of a TOML theme
+    style="default",          # "default" | "origami" | path of a TOML style (ADR-0008)
     overrides=None,           # {module path or type name: {"category": ..., "label": ...}}
+    direction=None,           # "LR" | "TB"; further layout options as keywords (legend=False)
 )
 fig                           # Jupyter: renders inline (_repr_png_)
 fig.show()                    # scripts: opens a matplotlib window
@@ -42,6 +44,7 @@ Rules:
   unknown op drawn as "other") become warnings that list the affected modules, not failures.
 - `view="auto"` picks the view from the graph: unrolled if a module is called repeatedly with
   state passed between calls, the block view otherwise.
+  Until the unrolled view exists (step 11), `auto` always picks the block view.
 
 Extension points (not part of the first release): `annotations=` for loss terms and
 condition inputs (FR11), a mapping of several models for cGANs, and `tg.animate(...)` for the

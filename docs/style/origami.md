@@ -10,9 +10,9 @@ category, one line style for data flow, shapes where they change, ×N for repeat
 the same validation (text contrast ≥ 4.5:1, outlines ≥ 3:1, distinct category colours).
 
 ```python
-from tensorgami.style import load_style
+import tensorgami as tg
 
-style = load_style("origami")  # later: tg.draw(model, x, style="origami")
+fig = tg.draw(model, example_input, style="origami")
 ```
 
 ![Origami vocabulary](specimens/origami/vocabulary.svg)

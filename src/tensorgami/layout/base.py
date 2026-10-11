@@ -15,6 +15,15 @@ class Direction(StrEnum):
     LEFT_RIGHT = "LR"  # main flow left → right (default, style baseline P4)
     TOP_BOTTOM = "TB"  # deep stacks top → bottom
 
+    @classmethod
+    def parse(cls, value: str) -> Direction:
+        try:
+            return cls(str(value).upper())
+        except ValueError:
+            raise ValueError(
+                f"direction must be 'LR' (left → right) or 'TB' (top → bottom); got {value!r}"
+            ) from None
+
 
 @dataclass(frozen=True)
 class LayoutOptions:
@@ -30,6 +39,26 @@ class LayoutOptions:
     shapes_on_edges: bool = True
     loop_clearance: float = 14  # height of a state self-loop above its node
 
+    def __post_init__(self) -> None:
+        """Accept ``direction`` as a string (``"TB"``, ``"tb"``); check every other value, so
+        a wrong option fails here rather than deep inside the layout."""
+        object.__setattr__(self, "direction", Direction.parse(self.direction))
+        for f in fields(self):
+            value = getattr(self, f.name)
+            if f.type == "bool":
+                if not isinstance(value, bool):
+                    raise TypeError(
+                        f"layout option {f.name}: expected True or False, got {value!r}"
+                    )
+            elif f.type.startswith("float"):
+                if value is None and f.type.endswith("None"):
+                    continue
+                if isinstance(value, bool) or not isinstance(value, int | float):
+                    allowed = "a number or None" if f.type.endswith("None") else "a number"
+                    raise TypeError(f"layout option {f.name}: expected {allowed}, got {value!r}")
+                if value < 0:
+                    raise ValueError(f"layout option {f.name}: must be ≥ 0, got {value!r}")
+
     @classmethod
     def for_style(cls, theme: Theme, **overrides: object) -> LayoutOptions:
         """Defaults, then the style's ``[layout]`` preferences, then explicit ``overrides``."""
@@ -40,8 +69,6 @@ class LayoutOptions:
             raise ValueError(
                 f"style '{theme.name}': unknown layout option(s) {unknown}; known: {sorted(known)}"
             )
-        if "direction" in values:
-            values["direction"] = Direction(values["direction"])
         return cls(**values)
 
 

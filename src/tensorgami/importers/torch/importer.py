@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import re
+import sys
 import warnings
 from collections.abc import Iterator, Mapping
+from pathlib import Path
 from typing import Any
 
 import torch
@@ -37,6 +39,11 @@ class TorchImporter:
         self._leaf_types = tuple(leaf_types)
 
     def import_model(self, model: nn.Module, example_input: Any) -> Graph:
+        if isinstance(model, type) and issubclass(model, nn.Module):
+            raise ImporterError(
+                f"got the class {model.__name__}, not a model: create it first, "
+                f"e.g. {model.__name__}(), and pass that"
+            )
         if not isinstance(model, nn.Module):
             raise ImporterError(f"expected a torch.nn.Module, got {type(model).__name__}")
         device = model_device(model)
@@ -158,7 +165,20 @@ def _explain(model: nn.Module, example_input: Any, exc: Exception) -> str:
     return "\n".join(lines)
 
 
+_PACKAGE = str(Path(__file__).parents[2])  # src/tensorgami
+
+
+def _user_stacklevel() -> int:
+    """The ``stacklevel`` that points a warning from :func:`_warn` at the first frame outside
+    Tensorgami: the user's ``tg.draw(...)`` or ``trace(...)`` line."""
+    level, frame = 1, sys._getframe(1)  # stacklevel 1 is the caller of warnings.warn: _warn
+    while frame is not None and frame.f_code.co_filename.startswith(_PACKAGE):
+        level, frame = level + 1, frame.f_back
+    return level
+
+
 def _warn(report: ConversionReport) -> None:
+    stacklevel = _user_stacklevel()
     if report.unclassified:
         listed = ", ".join(f"{op} ×{n}" for op, n in sorted(report.unclassified.items()))
         warnings.warn(
@@ -167,7 +187,7 @@ def _warn(report: ConversionReport) -> None:
                 f"catalogue and are drawn as 'other': {listed}. Set a category with "
                 f"overrides={{'<module or class>': {{'category': '...'}}}} if they matter."
             ),
-            stacklevel=3,
+            stacklevel=stacklevel,
         )
     if report.fused:
         warnings.warn(
@@ -175,5 +195,5 @@ def _warn(report: ConversionReport) -> None:
                 f"fused operation(s) {sorted(report.fused)} hide the structure inside them "
                 "(e.g. the Transformer fast path); the figure shows them as single boxes."
             ),
-            stacklevel=3,
+            stacklevel=stacklevel,
         )

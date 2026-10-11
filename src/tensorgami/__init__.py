@@ -6,12 +6,17 @@ __version__ = "0.1.0"
 
 
 def __getattr__(name: str):
-    """Lazy top-level API, so ``import tensorgami`` stays light (matplotlib loads on use)."""
-    if name == "Figure":
-        from tensorgami.api import Figure
+    """Lazy top-level API, so ``import tensorgami`` stays light: matplotlib loads when a
+    figure is made, torch when a model is drawn."""
+    if name in ("Figure", "draw"):
+        from tensorgami import api
 
-        return Figure
+        return getattr(api, name)
     raise AttributeError(f"module 'tensorgami' has no attribute {name!r}")
 
 
-__all__ = ["Figure", "__version__"]
+def __dir__() -> list[str]:  # tab completion lists the lazy names too
+    return sorted({*globals(), *__all__})
+
+
+__all__ = ["Figure", "__version__", "draw"]

@@ -24,13 +24,26 @@ class Level(IntEnum):
     OPERATORS = 3  # everything the trace recorded
     CELLS = 4  # operators, with recurrent cells expanded to gates by the cell view (step 11)
 
+    @classmethod
+    def parse(cls, value: int | str) -> Level:
+        """A level from its number (``2``) or name (``"layers"``), with a helpful error."""
+        try:
+            if isinstance(value, bool):  # True is an int, but never a level
+                raise ValueError
+            if isinstance(value, str):
+                return cls(int(value)) if value.isdigit() else cls[value.upper()]
+            return cls(value)
+        except (KeyError, ValueError, TypeError):
+            choices = ", ".join(f"{level.value} {level.name.lower()}" for level in cls)
+            raise ValueError(f"level must be one of {choices}; got {value!r}") from None
+
 
 def pipeline_for(
-    level: int = Level.LAYERS, *, fold_layers: bool = True, fold_time: bool = True
+    level: int | str = Level.LAYERS, *, fold_layers: bool = True, fold_time: bool = True
 ) -> Pipeline:
     """The transforms for a level. ``fold_layers``: draw ×N stacks once; ``fold_time``: draw
     a recurrent cell once with a state loop (False keeps time steps unrolled)."""
-    level = Level(level)
+    level = Level.parse(level)
     if level is Level.SYSTEM:
         return Pipeline([CollapseToSystem()])
     detect = [DetectRecurrence(), DetectLayerRepeats()]
@@ -51,7 +64,11 @@ def pipeline_for(
 
 
 def simplify(
-    graph: Graph, level: int = Level.LAYERS, *, fold_layers: bool = True, fold_time: bool = True
+    graph: Graph,
+    level: int | str = Level.LAYERS,
+    *,
+    fold_layers: bool = True,
+    fold_time: bool = True,
 ) -> Graph:
     """Reduce a full trace to the requested level of detail."""
     return pipeline_for(level, fold_layers=fold_layers, fold_time=fold_time).apply(graph)

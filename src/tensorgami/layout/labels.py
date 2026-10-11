@@ -162,6 +162,8 @@ class Labeler:
                 node.label or MODULE_NAMES.get(node.op, pretty(node.op)),
                 self._join(self._folded(node)),
             )
+        if node.label:  # set by the user (overrides) or a transform: it names the box
+            text = NodeText(node.label, text.detail)
         if node.count > 1:
             text = NodeText(text.label, self._join([text.detail, f"{TIMES}{node.count} steps"]))
         return text

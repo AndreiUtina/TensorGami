@@ -1,13 +1,14 @@
 """AlexNet (Krizhevsky et al. 2012) drawn by Tensorgami, end to end.
 
 The model is defined exactly as in ``torchvision.models.alexnet`` (so torchvision is not
-needed), traced on one 224×224 image, simplified and laid out automatically::
+needed) and drawn with one call, ``tg.draw(model, example_input)``::
 
     uv run python examples/alexnet.py
 
 Writes ``alexnet`` (layer level, left → right), ``alexnet-vertical`` (top → bottom) and
-``alexnet-stages`` (stage level), each as ``.svg`` and as a 300 dpi ``.png``, next to this
-script. In a notebook, ``draw()`` shows the figure inline (see ``alexnet.ipynb``).
+``alexnet-stages`` (stage level), in the ``default`` and ``origami`` styles, each as ``.svg``
+and as a 300 dpi ``.png``, next to this script. In a notebook the figure shows inline (see
+``alexnet.ipynb``).
 """
 
 from __future__ import annotations
@@ -18,10 +19,6 @@ import torch
 from torch import nn
 
 import tensorgami as tg
-from tensorgami.importers.torch import trace
-from tensorgami.layout import LayoutOptions, layout
-from tensorgami.style import load_style
-from tensorgami.transforms import simplify
 
 HERE = Path(__file__).parent
 
@@ -64,16 +61,9 @@ class AlexNet(nn.Module):
         return self.classifier(x)
 
 
-def draw(level: int = 2, style: str = "default", **layout_options: object) -> tg.Figure:
-    """AlexNet as a Tensorgami figure (step 10 will shorten this to ``tg.draw(...)``).
-
-    ``layout_options`` override the style's layout preferences, e.g. ``direction="TB"``.
-    """
-    graph = simplify(trace(AlexNet(), torch.randn(1, 3, 224, 224)), level)
-    theme = load_style(style)  # "default" or "origami" (ADR-0008)
-    return tg.Figure(
-        layout(graph, theme, LayoutOptions.for_style(theme, **layout_options)), theme, graph
-    )
+def draw(**options: object) -> tg.Figure:
+    """AlexNet on one 224×224 image; ``options`` go to ``tg.draw`` (level, style, direction)."""
+    return tg.draw(AlexNet(), torch.randn(1, 3, 224, 224), **options)
 
 
 def main() -> None:
