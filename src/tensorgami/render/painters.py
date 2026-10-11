@@ -125,9 +125,9 @@ class PillPainter(RectPainter):
 
 
 class CirclePainter:
-    """Merge operation: a circle holding a symbol (+, ×, ‖); detail text centred above it.
-
-    Edges usually enter and leave merges horizontally, so the detail goes where they don't.
+    """Merge operation: a circle holding a symbol (+, ×, ‖), with its detail where the wires
+    are not: above the circle, or to its right when the box is wider than tall (top → bottom
+    figures, whose wires enter from above).
     """
 
     def paint(self, canvas: Canvas, node: Node, theme: Theme) -> None:
@@ -139,8 +139,15 @@ class CirclePainter:
             canvas.text(node.box.center, node.label, font)
         if node.detail:
             font = theme.node_font(node.category, TextRole.DETAIL)
-            at = Point(node.box.cx, node.box.cy - r - font.size * 0.8)
-            canvas.text(at, node.detail, font)
+            side = node.note_side or (Side.RIGHT if node.box.w > node.box.h else Side.TOP)
+            c, away = node.box.center, r + font.size * 0.8
+            at, anchor = {
+                Side.TOP: (Point(c.x, c.y - away), TextAnchor.MIDDLE),
+                Side.BOTTOM: (Point(c.x, c.y + away), TextAnchor.MIDDLE),
+                Side.RIGHT: (Point(c.x + r + 6, c.y), TextAnchor.START),
+                Side.LEFT: (Point(c.x - r - 6, c.y), TextAnchor.END),
+            }[side]
+            canvas.text(at, node.detail, font, anchor)
 
     def anchor(self, node: Node, side: Side, theme: Theme) -> Point:
         r, c = self._radius(node), node.box.center

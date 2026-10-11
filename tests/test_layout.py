@@ -435,3 +435,12 @@ def test_upright_boxes_and_labels_in_a_horizontal_flow(theme):
     level = layout(graph, theme, NO_WRAP)
     assert scene.width < level.width  # the point of it: much narrower
     assert not any(e.label_upright for e in level.edges)
+
+
+def test_no_second_row_just_for_a_lone_pill():
+    """input → a block that fits the page → output: wrapping would save < 20 %."""
+    from tensorgami.layout.layered import _best_cuts
+
+    sizes = {0: 64.0, 1: 1000.0, 2: 72.0}
+    gaps = {0: 48.0, 1: 48.0, 2: 48.0}
+    assert _best_cuts([0, 1, 2], [0, 1], sizes, gaps, 1100) == []

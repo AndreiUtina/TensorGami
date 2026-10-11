@@ -38,6 +38,7 @@ tg.draw(model, x, level="stages")                  # less detail: 0 system … 3
 tg.draw(model, x, style="origami")                 # or "origami-extended", or a path
 tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
 tg.draw(model, x, view="unrolled")                 # recurrence as a time × layer grid
+tg.draw(unet, x, u_shape=False)                    # keep a U-Net on one line (default: a U)
 tg.draw(model, x, overrides={"classifier.6": {"label": "logits"}})  # rename a box
 ```
 

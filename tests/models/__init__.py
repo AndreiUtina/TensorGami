@@ -16,6 +16,7 @@ from models.cgan import Discriminator, Generator
 from models.cnn import SmallCNN
 from models.convlstm import ConvLSTMForecaster
 from models.lstm import LSTMClassifier
+from models.pix2pix import NLayerDiscriminator, UnetGenerator
 from models.transformer import TokenTransformer
 from models.vae import VAE
 
@@ -30,4 +31,12 @@ REFERENCE: dict[str, tuple[Callable[[], torch.nn.Module], Callable[[], Any]]] = 
     "vae": (VAE, lambda: torch.randn(1, 784)),
     "convlstm": (ConvLSTMForecaster, lambda: torch.randn(1, 3, 1, 16, 16)),
     "transformer": (TokenTransformer, lambda: torch.randint(0, 100, (1, 6))),
+    "pix2pix_generator": (
+        lambda: UnetGenerator(3, 3, num_downs=5, ngf=8, use_dropout=True),
+        lambda: torch.randn(1, 3, 32, 32),
+    ),
+    "pix2pix_discriminator": (
+        lambda: NLayerDiscriminator(6, ndf=8),
+        lambda: torch.randn(1, 6, 32, 32),
+    ),
 }

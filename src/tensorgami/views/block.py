@@ -4,17 +4,18 @@ from __future__ import annotations
 
 from tensorgami.ir import Graph, RepeatKind
 from tensorgami.layout import LayoutOptions, layout
-from tensorgami.layout.unrolled import UnrolledLayout
 from tensorgami.scene import Scene
 from tensorgami.style import Theme
 from tensorgami.transforms import DetectRecurrence, Level, Pipeline, pipeline_for, simplify
 from tensorgami.transforms.unroll import UnrollRecurrence
+from tensorgami.transforms.ushape import FoldUShape
 from tensorgami.views.base import View
 
 
 class BlockView:
     """Boxes and wires: one box per stage, layer or operation (by level) in a layered layout.
-    Fits every model family; recurrent cells are drawn once with a state loop."""
+    Fits every model family; recurrent cells are drawn once with a state loop, and nested
+    encoder–decoder skips (U-Net) fold into a U unless ``options.u_shape`` is off."""
 
     name = "block"
 
@@ -22,6 +23,8 @@ class BlockView:
         self, graph: Graph, theme: Theme, *, level: Level, options: LayoutOptions
     ) -> tuple[Graph, Scene]:
         shown = simplify(graph, level)
+        if options.u_shape:
+            shown = FoldUShape().apply(shown)
         return shown, layout(shown, theme, options)
 
 
@@ -40,7 +43,7 @@ class UnrolledView:
     ) -> tuple[Graph, Scene]:
         steps = [pipeline_for(level, fold_time=False), UnrollRecurrence(self.max_steps)]
         shown = Pipeline(steps).apply(graph)
-        return shown, UnrolledLayout(options).layout(shown, theme)
+        return shown, layout(shown, theme, options)
 
 
 class AutoView:

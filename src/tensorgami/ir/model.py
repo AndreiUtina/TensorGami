@@ -118,6 +118,11 @@ class Group:
 UNROLLED = "unrolled"
 STEP, LAYER, ROLE = "time_step", "time_layer", "time_role"
 
+# Encoder–decoder with nested skips (U-Net): a group of type USHAPE is laid out as a U; its
+# nodes carry U_LEVEL (0 = the outermost skip) and U_SIDE ("enc", "dec" or "bottom").
+USHAPE = "u-shape"
+U_LEVEL, U_SIDE = "u_level", "u_side"
+
 
 class RepeatKind(StrEnum):
     LAYERS = "layers"  # different modules with identical structure (Transformer layers)

@@ -161,4 +161,52 @@ def transformer(layers: int = 2) -> Graph:
     return b.build()
 
 
-ALL = {"residual_cnn": residual_cnn, "convlstm": convlstm, "vae": vae, "transformer": transformer}
+def unet(levels: int = 3) -> Graph:
+    """A small U-Net: per level, encoder Conv → ReLU → MaxPool (the skip leaves after the ReLU);
+    a bottleneck Conv; per level, decoder ConvTranspose → cat with the skip → Conv."""
+    b = GraphBuilder("unet", root_type="UNet")
+    x = b.input((1, 3, 64, 64), label="image")
+    size, channels, skips = 64, 16, []
+    for k in range(levels):
+        conv = b.node(
+            "Conv2d", category=C.CONV, module=f"down{k}.conv", outputs=[(1, channels, size, size)]
+        )
+        b.edge(x, conv)
+        act = b.node("relu", category=C.ACTIVATION, outputs=[(1, channels, size, size)])
+        b.edge(conv, act)
+        skips.append((act, channels, size))
+        size //= 2
+        x = b.node(
+            "MaxPool2d",
+            category=C.RESAMPLE,
+            module=f"down{k}.pool",
+            outputs=[(1, channels, size, size)],
+        )
+        b.edge(act, x)
+        channels *= 2
+    x_ = b.node("Conv2d", category=C.CONV, module="bottleneck", outputs=[(1, channels, size, size)])
+    b.edge(x, x_)
+    x = x_
+    for k, (skip, ch, sz) in reversed(list(enumerate(skips))):
+        up = b.node(
+            "ConvTranspose2d", category=C.CONV, module=f"up{k}.up", outputs=[(1, ch, sz, sz)]
+        )
+        b.edge(x, up)
+        cat = b.node("cat", category=C.MERGE, outputs=[(1, 2 * ch, sz, sz)])
+        b.edge(skip, cat)
+        b.edge(up, cat)
+        x = b.node("Conv2d", category=C.CONV, module=f"up{k}.conv", outputs=[(1, ch, sz, sz)])
+        b.edge(cat, x)
+    head = b.node("Conv2d", category=C.CONV, module="head", outputs=[(1, 1, 64, 64)])
+    b.edge(x, head)
+    b.output(head, label="mask")
+    return b.build()
+
+
+ALL = {
+    "residual_cnn": residual_cnn,
+    "convlstm": convlstm,
+    "vae": vae,
+    "transformer": transformer,
+    "unet": unet,
+}

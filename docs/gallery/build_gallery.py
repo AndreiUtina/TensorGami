@@ -29,6 +29,8 @@ FIGURES = {  # file name: (reference model, tg.draw options besides the style)
     "convlstm": ("convlstm", {"level": 2}),  # view="auto": unrolled (a loop over time)
     "convlstm-folded": ("convlstm", {"level": 2, "view": "block"}),
     "transformer": ("transformer", {"level": 2, "direction": "TB"}),
+    "pix2pix-generator": ("pix2pix_generator", {"level": 2}),  # nested skips: a U
+    "pix2pix-discriminator": ("pix2pix_discriminator", {"level": 2}),
 }
 
 

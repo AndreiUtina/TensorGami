@@ -54,6 +54,17 @@ With `view="block"` each layer is one cell, drawn once with its recurrent h/c st
 
 ![ConvLSTM, folded](convlstm-folded.svg)
 
+## pix2pix: U-Net generator and PatchGAN discriminator
+
+The generator's skip connections nest inside each other, so it is drawn as a U: one row per
+level, encoder on the left, decoder on the right, each skip a short arrow into its concat (‖),
+the bottleneck below. Each level's in-place LeakyReLU is folded into the layer before it, and
+the decoder's ReLU into the concat. (Small sizes here: 5 levels, 32×32 images.)
+
+![pix2pix generator](pix2pix-generator.svg)
+
+![pix2pix discriminator](pix2pix-discriminator.svg)
+
 ## Transformer encoder: top to bottom
 
 ![Transformer](transformer.svg)

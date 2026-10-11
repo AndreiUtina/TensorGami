@@ -28,6 +28,11 @@ Implement layout in pure Python behind a `LayoutEngine` protocol (`Graph → Sce
    - U-shape for skip-connected encoder/decoders.
 3. A **view** picks the engine. The layered layout is the fallback.
 
+*Implemented (step 11):* the specialised layouts are **block layouts** inside the layered
+engine, registered by group type (`BLOCK_LAYOUTS`): a transform gathers the nodes into a group
+of that type (`unrolled`: the time × layer grid, 11a; `u-shape`: the U, 11b) and the layered
+engine places the group as one block, so the rest of the model is laid out around it.
+
 All engines are deterministic: ties are broken by execution order, never by hash or set
 order.
 

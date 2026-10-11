@@ -19,6 +19,7 @@ Deterministic: ties are always broken by execution order.
 
 from __future__ import annotations
 
+import dataclasses
 import math
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -36,6 +37,10 @@ from tensorgami.vocabulary import EdgeKind
 GRID = 8.0
 DUMMY_CROSS = 6.0
 PORT_GAP = 28.0
+
+#: group type → layout of such a group as one block (e.g. the unrolled view's time × layer
+#: grid); registered by the modules that define them, laid out without a frame
+BLOCK_LAYOUTS: dict[str, type] = {}
 
 FC = tuple[float, float]  # (flow, cross)
 
@@ -168,8 +173,13 @@ class _Run:
         node = self.g.node(node_id)
         text = self.texts[node_id]
         shape = self._shape(node_id)
-        if shape is Shape.CIRCLE:  # a note (e.g. folded ReLU) sits centred above the circle
-            return 24.0, (48.0 if text.detail else 24.0)
+        if shape is Shape.CIRCLE:  # a note (e.g. a folded ReLU) sits above the circle, or
+            if not text.detail:  # beside it in a top → bottom flow, where wires come from above
+                return 24.0, 24.0
+            if self.lr:
+                return 24.0, 48.0
+            note = self.measurer.width(text.detail, self.theme.font(TextRole.DETAIL))
+            return _ceil(24 + 2 * (note + 6)), 24.0
         boxes, arrangement = self.boxes, self.text_of(node_id)
         label_w = self.measurer.width(text.label, self.theme.node_font(node.category))
         detail_w = (
@@ -235,8 +245,10 @@ class _Run:
     # ------------------------------------------------------------------ frames
 
     def framed(self, group: Group) -> bool:
-        """Frame a group unless it is a lone collapsed node (count 1) or a pass-through
-        container holding exactly one sub-group."""
+        """Frame a group unless it is a lone collapsed node (count 1), a pass-through
+        container holding exactly one sub-group, or laid out by a block layout."""
+        if group.type_name in BLOCK_LAYOUTS:
+            return False
         nodes = self.g.members(group.id)
         children = self.g.children(group.id)
         if group.count > 1:
@@ -282,6 +294,9 @@ class _Run:
         return None
 
     def layout_group(self, group_id: str) -> _Block:
+        special = BLOCK_LAYOUTS.get(self.g.group(group_id).type_name) if group_id != ROOT else None
+        if special is not None:
+            return special(self, group_id).solve()
         items: dict[str, _Item] = {}
         for child in self.g.children(group_id):
             block = self.layout_group(child.id)
@@ -343,6 +358,7 @@ class _Run:
         edges = [self._route_edge(r, boxes, m) for r in block.routes]
         for node_id, indices in self.loops.items():
             edges += self._loop_edges(indices, boxes[node_id])
+        scene_nodes = self._place_notes(scene_nodes, edges)
 
         notes = []
         for (f, c), text in block.notes:
@@ -353,6 +369,25 @@ class _Run:
         if self.opts.legend:
             self._add_legend(scene, m + height + 28)
         return scene
+
+    def _place_notes(self, nodes: list[Node], edges: list[Edge]) -> list[Node]:
+        """A merge circle's note goes on a side no wire uses: above or below a tall box,
+        right or left of a wide one (the layout sized the box for one of the two)."""
+        used: dict[str, set[Side]] = defaultdict(set)
+        for e in edges:
+            if isinstance(e.source, str) and e.exit:
+                used[e.source].add(e.exit)
+            if isinstance(e.target, str) and e.entry:
+                used[e.target].add(e.entry)
+        placed = []
+        for n in nodes:
+            circle = self.theme.node_style(n.category).shape is Shape.CIRCLE
+            if circle and n.detail and n.box.w != n.box.h:
+                options = (Side.RIGHT, Side.LEFT) if n.box.w > n.box.h else (Side.TOP, Side.BOTTOM)
+                free = [s for s in options if s not in used[n.id]]
+                n = dataclasses.replace(n, note_side=(free or options)[0])
+            placed.append(n)
+        return placed
 
     def _sides(self, name: str) -> Side:
         if self.lr:
@@ -516,8 +551,8 @@ def _best_cuts(
                 value = max(best[i][k - 1], span(i, j - 1))
                 if value < best[j][k] - 1e-9:
                     best[j][k], back[j][k] = value, i
-    if widest_unit > width and best[n][rows] > 0.8 * span(0, n - 1):
-        return []  # wrapping around a block wider than ``width`` would only strand small items
+    if best[n][rows] > 0.8 * span(0, n - 1):
+        return []  # a second row that saves < 20 % of the width would only strand small items
     breaks, j = [], n
     for k in range(rows, 0, -1):
         i = back[j][k]

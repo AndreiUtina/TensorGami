@@ -38,6 +38,7 @@ class LayoutOptions:
     legend: bool = True
     shapes_on_edges: bool = True
     loop_clearance: float = 14  # height of a state self-loop above its node
+    u_shape: bool = True  # fold encoder–decoder skips (U-Net) into a U (block view)
 
     def __post_init__(self) -> None:
         """Accept ``direction`` as a string (``"TB"``, ``"tb"``); check every other value, so

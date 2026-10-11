@@ -136,6 +136,7 @@ class Node:
     shape: Shape | None = None
     depth: float = 0.0
     text: TextLayout | None = None
+    note_side: Side | None = None  # a merge circle's detail: the side no wire uses
 
 
 Endpoint = str | Point  # a node id, or a free point (arrows entering from outside)

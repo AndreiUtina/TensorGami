@@ -214,7 +214,7 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 
 ## Phase C — Your model families
 
-### 11) Views 🔶 (11a unrolled ✅)
+### 11) Views 🔶 (11a unrolled ✅, 11b U-shape ✅)
 - Plan, in parts: **11a** unrolled time view ✅ · 11b U-shape layout for encoder–decoder skips
   and folding activations that come *before* a layer · 11c tensor-volume view for CNNs ·
   11d cell view (LSTM/GRU gates) · 11e generative figures (below).
@@ -232,6 +232,24 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
     figures turn the grid (time down, layers across). Blocks can now choose the side an edge
     enters by and carry notes ("⋯").
   - Gallery: ConvLSTM unrolled (auto) and folded (`view="block"`), LSTM unrolled.
+- **11b U-shape** ✅ (2026-10-11): encoder–decoders whose skips nest (U-Net, pix2pix) fold
+  into a U in the block view (`u_shape=False` keeps them on one line).
+  - `FoldUShape` (transform): ≥ 3 skips nested inside each other (an encoder tensor reaching
+    the merge of its decoder level) → the nodes from the outermost skip's source to its merge
+    go into one `u-shape` group, each marked with its level and side (encoder, decoder,
+    bottleneck); the modules inside lose their frames. Residual skips (one after another)
+    are untouched.
+  - U layout (block layout): a row per level, encoder layers on the left, decoder layers on
+    the right, the skip a short arrow across the middle, the bottleneck in its own row; top
+    → bottom figures turn it (levels become columns). The pix2pix generator (8 levels): 1086 ×
+    964 px instead of 8195 × 1177.
+  - Activations that open a module (pix2pix's in-place `LeakyReLU → Conv`) now fold into the
+    layer before them, across the module boundary (activations only; a `Dropout` opening a
+    classifier stays); the decoder's ReLU after each concat folds into the merge circle.
+  - Merge notes (e.g. a folded ReLU) sit on a side of the circle no wire uses. Rows wrap only
+    when that makes a figure ≥ 20 % narrower (no row for a lone pill).
+  - Specialised layouts are now block layouts registered by group type in the layered
+    engine (ADR-0004); pix2pix generator and discriminator joined the reference models.
 - Views: block (default), tensor-volume view for CNNs, cell view (LSTM/GRU gates), unrolled
   time view (RNN, LSTM, ConvLSTM).
 - Generative models: VAE (sampling node, μ/σ, loss terms) and cGAN (generator +

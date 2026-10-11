@@ -11,58 +11,22 @@ from __future__ import annotations
 
 from collections import defaultdict
 
-from tensorgami.ir import LAYER, ROLE, ROOT, STEP, UNROLLED, Graph, Group
-from tensorgami.layout.base import LayoutOptions
-from tensorgami.layout.layered import FC, LayeredLayout, _Block, _Route, _Run
-from tensorgami.scene import Scene
-from tensorgami.style import Theme
+from tensorgami.ir import LAYER, ROLE, STEP, UNROLLED
+from tensorgami.layout.layered import BLOCK_LAYOUTS, FC, _Block, _Route, _Run
 
 BUS = 18.0  # distance of the input (output) bus below (above) the grid
 ELIDED = 36.0  # extra width of a gap that hides time steps ("⋯")
-
-
-class UnrolledLayout(LayeredLayout):
-    """The layered layout, with each ``unrolled`` group arranged as a time × layer grid."""
-
-    def layout(self, graph: Graph, theme: Theme) -> Scene:
-        options = self.options or LayoutOptions.for_style(theme)
-        return _UnrolledRun(graph, theme, options, self.labeler, self.measurer).scene()
-
-
-class _UnrolledRun(_Run):
-    def __init__(self, *args) -> None:
-        super().__init__(*args)
-        inside = {n.id for n in self.g.nodes if self._in_grid(n.group)}
-        for i, e in enumerate(self.g.edges):  # inside a grid: shapes only between layers,
-            if e.source in inside and e.target in inside:  # once, at the first step
-                self.labels.pop(i, None)
-                a, b = self.g.node(e.source).params, self.g.node(e.target).params
-                cells = a.get(ROLE) == b.get(ROLE) == "cell"
-                if cells and a[STEP] == b[STEP] == 0 and a[LAYER] != b[LAYER]:
-                    text = self.labeler.edge_label(self.g, e) if self.opts.shapes_on_edges else ""
-                    if text:
-                        self.labels[i] = text
-
-    def _in_grid(self, group_id: str) -> bool:
-        return group_id != ROOT and self.g.group(group_id).type_name == UNROLLED
-
-    def framed(self, group: Group) -> bool:
-        return group.type_name != UNROLLED and super().framed(group)
-
-    def layout_group(self, group_id: str) -> _Block:
-        if self._in_grid(group_id):
-            return _Grid(self, group_id).solve()
-        return super().layout_group(group_id)
 
 
 class _Grid:
     """One grid, computed left → right with the first layer at the bottom; in a top → bottom
     figure the cross axis is mirrored, so the first layer sits on the left."""
 
-    def __init__(self, run: _UnrolledRun, group_id: str) -> None:
+    def __init__(self, run: _Run, group_id: str) -> None:
         self.run, self.gid = run, group_id
         nodes = run.g.members(group_id)
         self.ids = {n.id for n in nodes}
+        self._label_layers()
         self.top = top = max(
             (n.params[LAYER] for n in nodes if n.params.get(ROLE) == "cell"), default=0
         )
@@ -74,6 +38,19 @@ class _Grid:
         self.steps = sorted({t for _, t in self.place.values()})
         self.column = {t: j for j, t in enumerate(self.steps)}
         self.levels = sorted({lvl for lvl, _ in self.place.values()}, reverse=True)  # top first
+
+    def _label_layers(self) -> None:
+        """Inside the grid, a shape is shown only between layers, once, at the first step."""
+        run = self.run
+        for i, e in enumerate(run.g.edges):
+            if e.source in self.ids and e.target in self.ids:
+                run.labels.pop(i, None)
+                a, b = run.g.node(e.source).params, run.g.node(e.target).params
+                cells = a.get(ROLE) == b.get(ROLE) == "cell"
+                if cells and a[STEP] == b[STEP] == 0 and a[LAYER] != b[LAYER]:
+                    text = run.labeler.edge_label(run.g, e) if run.opts.shapes_on_edges else ""
+                    if text:
+                        run.labels[i] = text
 
     # ------------------------------------------------------------------ geometry
 
@@ -239,3 +216,6 @@ def _mirror(block: _Block, size: dict[str, FC]) -> _Block:
         {i: (swap.get(a, a), swap.get(b, b)) for i, (a, b) in block.sides.items()},
         [((f, total - c), text) for (f, c), text in block.notes],
     )
+
+
+BLOCK_LAYOUTS[UNROLLED] = _Grid
