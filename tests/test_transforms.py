@@ -345,3 +345,17 @@ def test_collapsed_blocks_take_the_colour_of_their_contents():
         C.LINEAR,
         C.MODULE,
     ]
+
+
+@pytest.mark.parametrize(
+    ("value", "level"),
+    [(2, Level.LAYERS), ("2", Level.LAYERS), ("stages", Level.STAGES), ("System", Level.SYSTEM)],
+)
+def test_levels_by_number_or_name(value, level):
+    assert Level.parse(value) is level
+
+
+@pytest.mark.parametrize("value", [5, -1, 2.5, True, "deep", None])
+def test_unknown_levels_are_explained(value):
+    with pytest.raises(ValueError, match="level must be one of 0 system, 1 stages, 2 layers"):
+        simplify(residual_cnn(), value)

@@ -99,6 +99,15 @@ NO_WRAP = LayoutOptions(wrap_width=None)
         ),
         (Node("n", "BatchNorm2d", C.NORM, params={"folded": ("ReLU",)}), "BatchNorm", "ReLU"),
         (Node("n", "fft_rfft", C.OTHER), "fft_rfft", ""),
+        # a label from overrides names the box; the computed detail stays
+        (
+            Node(
+                "n", "Linear", C.LINEAR, label="head", params={"in_features": 8, "out_features": 2}
+            ),
+            "head",
+            "8→2",
+        ),
+        (Node("n", "Conv2d", C.CONV, label="stem", params={"kernel_size": 3}), "stem", ""),
     ],
 )
 def test_node_labels(node, label, detail):
@@ -314,3 +323,29 @@ def test_folded_boxes_are_widened_by_their_fold(theme, origami):
     folded = {n.id: n.box.w for n in layout(graph, origami).nodes}
     conv = next(n.id for n in graph.nodes if n.op == "Conv2d")
     assert folded[conv] >= plain[conv] + origami.metrics.fold_width - 8  # grid rounding
+
+
+@pytest.mark.parametrize("value", ["TB", "tb", Direction.TOP_BOTTOM])
+def test_direction_accepts_strings(value):
+    assert LayoutOptions(direction=value).direction is Direction.TOP_BOTTOM
+
+
+@pytest.mark.parametrize(
+    ("option", "error", "message"),
+    [
+        ({"direction": "XY"}, ValueError, "direction must be 'LR'"),
+        ({"wrap_width": "wide"}, TypeError, "wrap_width: expected a number or None"),
+        ({"rank_gap": None}, TypeError, "rank_gap: expected a number"),
+        ({"legend": "no"}, TypeError, "legend: expected True or False"),
+        ({"node_gap": True}, TypeError, "node_gap: expected a number"),
+        ({"margin": -4}, ValueError, "margin: must be ≥ 0"),
+    ],
+)
+def test_layout_options_are_checked(option, error, message):
+    with pytest.raises(error, match=message):
+        LayoutOptions(**option)
+
+
+def test_layout_options_accept_numbers_and_none():
+    options = LayoutOptions(rank_gap=60, node_gap=22.5, wrap_width=None, legend=False)
+    assert (options.rank_gap, options.wrap_width, options.legend) == (60, None, False)

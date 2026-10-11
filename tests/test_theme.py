@@ -180,7 +180,7 @@ def test_default_style_is_the_standard():
 def test_unknown_style_lists_the_available_ones():
     from tensorgami.style import load_style
 
-    with pytest.raises(ThemeError, match="built-in themes: default"):
+    with pytest.raises(ThemeError, match="built-in styles: default"):
         load_style("origami-not-yet")
 
 
