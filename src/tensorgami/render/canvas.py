@@ -17,6 +17,11 @@ class Paint:
     stroke: Color | None = None
     width: float = 1.0
     dash: tuple[float, ...] = ()
+    opacity: float = 1.0  # of the fill only; translucent layers (e.g. the origami style)
+
+    def __post_init__(self) -> None:
+        if not 0.0 <= self.opacity <= 1.0:
+            raise ValueError(f"opacity must be within 0..1, got {self.opacity}")
 
 
 class Canvas(Protocol):

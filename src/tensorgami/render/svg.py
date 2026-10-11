@@ -121,6 +121,8 @@ class SvgCanvas:
     def _paint(paint: Paint) -> str:
         fill = paint.fill.hex if paint.fill else "none"
         out = f' fill="{fill}"'
+        if paint.fill and paint.opacity < 1:
+            out += f' fill-opacity="{_num(paint.opacity)}"'
         if paint.stroke:
             out += f' stroke="{paint.stroke.hex}" stroke-width="{_num(paint.width)}"'
             out += ' stroke-linejoin="round"'

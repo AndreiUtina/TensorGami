@@ -70,6 +70,8 @@ def check_scene(scene: Scene, graph: Graph, theme: Theme, *, monotonic: str | No
     for edge, path in routes(scene, theme):
         for a, b in zip(path, path[1:], strict=False):
             assert abs(a.x - b.x) < EPS or abs(a.y - b.y) < EPS, f"diagonal segment {a}→{b}"
+        last = abs(path[-1].x - path[-2].x) + abs(path[-1].y - path[-2].y)
+        assert last > EPS, f"edge {edge.source}→{edge.target} ends with a zero-length segment"
         if not isinstance(edge.source, str):
             continue  # loops and legend samples
         own = {edge.source, edge.target}

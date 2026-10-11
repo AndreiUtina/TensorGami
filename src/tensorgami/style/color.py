@@ -39,6 +39,11 @@ class Color:
     def __str__(self) -> str:
         return self.hex
 
+    @property
+    def rgb01(self) -> tuple[float, float, float]:
+        """Channels as floats in 0..1 (matplotlib's convention)."""
+        return self.r / 255, self.g / 255, self.b / 255
+
     # ------------------------------------------------------------------ mixing
 
     def mix(self, other: Color, amount: float) -> Color:

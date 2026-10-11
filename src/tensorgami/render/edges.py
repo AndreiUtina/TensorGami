@@ -31,8 +31,8 @@ class EdgeRouter:
         start, exit_side = self._attach(edge.source, edge.exit, first_hop)
         end, entry_side = self._attach(edge.target, edge.entry, last_hop)
         if edge.via:
-            return [start, *edge.via, end]
-        return [start, *self._elbows(start, exit_side, end, entry_side), end]
+            return _distinct([start, *edge.via, end])
+        return _distinct([start, *self._elbows(start, exit_side, end, entry_side), end])
 
     def _attach(self, end: Endpoint, side: Side | None, toward: Point) -> tuple[Point, Side | None]:
         if isinstance(end, Point):
@@ -128,6 +128,16 @@ class EdgePainter:
             canvas.polygon([tip, left, right], Paint(color, color, 0.5))
         else:
             canvas.polyline([left, tip, right], Paint(None, color, width))
+
+
+def _distinct(points: list[Point]) -> list[Point]:
+    """Drop repeated points: a zero-length final segment would leave the arrowhead without a
+    direction (it would collapse and vanish)."""
+    out = [points[0]]
+    for p in points[1:]:
+        if abs(p.x - out[-1].x) > 0.01 or abs(p.y - out[-1].y) > 0.01:
+            out.append(p)
+    return out if len(out) >= 2 else points[:1] + points[-1:]
 
 
 def _unit(a: Point, b: Point) -> tuple[float, float]:
