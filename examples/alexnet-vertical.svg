@@ -4,11 +4,9 @@
   <g class="tg-groups">
     <g class="tg-group" data-id="features">
       <rect x="48" y="104" width="140" height="752" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 3"/>
-      <text x="58" y="120.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">features</text>
     </g>
     <g class="tg-group" data-id="classifier">
       <rect x="24" y="1082" width="188" height="376" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 3"/>
-      <text x="34" y="1098.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">classifier</text>
     </g>
   </g>
   <g class="tg-edges">
@@ -175,6 +173,10 @@
     </g>
   </g>
   <g class="tg-labels">
+    <rect x="55.5" y="107.4" width="47.56" height="18.2" rx="2" fill="#f8fafc"/>
+    <text x="58" y="120.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">features</text>
+    <rect x="31.5" y="1085.4" width="54.55" height="18.2" rx="2" fill="#f8fafc"/>
+    <text x="34" y="1098.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">classifier</text>
     <rect x="121.5" y="199.8" width="50.6" height="16.4" rx="2" fill="#ffffff"/>
     <text x="146.8" y="211.32" font-family="'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace" font-size="9.5" text-anchor="middle" fill="#475569">64×55×55</text>
     <rect x="121.5" y="293.8" width="50.6" height="16.4" rx="2" fill="#ffffff"/>
