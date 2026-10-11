@@ -13,15 +13,15 @@
       <polygon points="182,385 174,388.5 174,381.5" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">
-      <polyline points="88,47 136,47 136,47" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
-      <polygon points="136,47 136,47 136,47" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      <polyline points="88,47 128.8,47" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polygon points="136,47 128,50.5 128,43.5" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">
-      <polyline points="240,47 240,47 280.8,47" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polyline points="240,47 280.8,47" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
       <polygon points="288,47 280,50.5 280,43.5" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">
-      <polyline points="240,47 240,47 264,47 264,113 280.8,113" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polyline points="240,47 264,47 264,113 280.8,113" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
       <polygon points="288,113 280,116.5 280,109.5" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">
@@ -45,11 +45,11 @@
       <polygon points="662.8,110.75 654.8,114.25 654.8,107.25" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">
-      <polyline points="686.8,110.75 700.8,110.75 700.8,300 24,300 24,385 38,385 38,385" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
-      <polygon points="38,385 38,385 38,385" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      <polyline points="686.8,110.75 700.8,110.75 700.8,300 24,300 24,385 30.8,385" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polygon points="38,385 30,388.5 30,381.5" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">
-      <polyline points="294,385 294,385 348.8,385" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polyline points="294,385 348.8,385" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
       <polygon points="356,385 348,388.5 348,381.5" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">

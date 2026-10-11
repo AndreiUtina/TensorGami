@@ -59,7 +59,7 @@
       <polygon points="177.5,426 174,418 181,418" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">
-      <polyline points="223,878 223,878 223,892 223,932.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polyline points="223,878 223,892 223,932.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
       <polygon points="223,940 219.5,932 226.5,932" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">
