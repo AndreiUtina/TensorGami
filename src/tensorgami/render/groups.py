@@ -14,14 +14,32 @@ class GroupPainter:
         self._theme, self._measurer = theme, measurer
 
     def paint(self, canvas: Canvas, group: Group) -> None:
+        """The frame itself (painted first, behind everything)."""
+        style = self._theme.group
+        paint = Paint(style.fill, style.stroke, style.width, style.dash, style.fill_opacity)
+        canvas.rect(group.box, paint, style.corner_radius)
+
+    def paint_labels(self, canvas: Canvas, group: Group) -> None:
+        """Title and badge, painted *after* the edges on a small background patch: a wire that
+        enters the frame where its title sits passes visibly under the title."""
         style = self._theme.group
         b = group.box
-        canvas.rect(
-            b, Paint(style.fill, style.stroke, style.width, style.dash), style.corner_radius
-        )
         if group.title:
             font = self._theme.font(TextRole.GROUP_TITLE)
             at = Point(b.x + style.corner_radius, b.y + style.padding * 0.5 + font.size / 2)
+            halo = self._theme.metrics.label_halo
+            width = self._measurer.width(group.title, font)
+            behind = self._theme.background if style.fill_opacity < 1 else style.fill
+            canvas.rect(
+                Box(
+                    at.x - halo,
+                    at.y - font.size * 0.6 - halo,
+                    width + 2 * halo,
+                    font.size * 1.2 + 2 * halo,
+                ),
+                Paint(behind),
+                radius=2,
+            )
             canvas.text(at, group.title, font, TextAnchor.START)
         if group.badge:
             self._badge(canvas, group)

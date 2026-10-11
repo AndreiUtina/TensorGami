@@ -19,7 +19,7 @@ from torch import nn
 
 import tensorgami as tg
 from tensorgami.importers.torch import trace
-from tensorgami.layout import Direction, LayoutOptions, layout
+from tensorgami.layout import LayoutOptions, layout
 from tensorgami.style import load_style
 from tensorgami.transforms import simplify
 
@@ -64,21 +64,29 @@ class AlexNet(nn.Module):
         return self.classifier(x)
 
 
-def draw(level: int = 2, options: LayoutOptions | None = None) -> tg.Figure:
-    """AlexNet as a Tensorgami figure (step 10 will shorten this to ``tg.draw(...)``)."""
+def draw(level: int = 2, style: str = "default", **layout_options: object) -> tg.Figure:
+    """AlexNet as a Tensorgami figure (step 10 will shorten this to ``tg.draw(...)``).
+
+    ``layout_options`` override the style's layout preferences, e.g. ``direction="TB"``.
+    """
     graph = simplify(trace(AlexNet(), torch.randn(1, 3, 224, 224)), level)
-    style = load_style("default")  # the standard style (ADR-0008)
-    return tg.Figure(layout(graph, style, options), style, graph)
+    theme = load_style(style)  # "default" or "origami" (ADR-0008)
+    return tg.Figure(
+        layout(graph, theme, LayoutOptions.for_style(theme, **layout_options)), theme, graph
+    )
 
 
 def main() -> None:
     figures = {
-        "alexnet": (2, None),
-        "alexnet-vertical": (2, LayoutOptions(direction=Direction.TOP_BOTTOM)),
-        "alexnet-stages": (1, None),
+        "alexnet": dict(level=2),
+        "alexnet-vertical": dict(level=2, direction="TB"),
+        "alexnet-stages": dict(level=1),
+        "alexnet-origami": dict(level=2, style="origami"),
+        "alexnet-origami-vertical": dict(level=2, style="origami", direction="TB"),
+        "alexnet-origami-stages": dict(level=1, style="origami"),
     }
-    for name, (level, options) in figures.items():
-        fig = draw(level, options)
+    for name, settings in figures.items():
+        fig = draw(**settings)
         fig.save(HERE / f"{name}.svg")  # vector, for the docs
         fig.save(HERE / f"{name}.png", dpi=300)  # for reports and slides
         print(f"wrote examples/{name}.svg and .png — {fig!r}")

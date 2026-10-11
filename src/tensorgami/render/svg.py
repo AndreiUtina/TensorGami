@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from xml.sax.saxutils import escape, quoteattr
 
 from tensorgami.render.canvas import Paint
-from tensorgami.render.text import SCRIPT_SCALE, Script, parse_markup
+from tensorgami.render.text import SCRIPT_SCALE, Script, display_text, parse_markup
 from tensorgami.scene import Box, Point, TextAnchor
 from tensorgami.style.glyphs import Font
 
@@ -58,7 +58,7 @@ class SvgCanvas:
         self._emit(f'<polyline points="{_points(points)}"{self._paint(paint)}/>')
 
     def text(self, at: Point, text: str, font: Font, anchor: TextAnchor = TextAnchor.MIDDLE):
-        runs = parse_markup(text)
+        runs = parse_markup(display_text(text, font))
         if not runs:
             return
         attrs = (

@@ -59,6 +59,8 @@ class SceneRenderer:
         canvas.end_group()
 
         canvas.begin_group("tg-labels")
+        for group in scene.groups:
+            self._groups.paint_labels(canvas, group)
         for edge, path in routes:
             self._edges.paint_label(canvas, edge, path)
         for note in scene.notes:

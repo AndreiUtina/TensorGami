@@ -77,8 +77,12 @@ class EdgePainter:
         if style.arrow is ArrowHead.FILLED:
             line[-1] = _retreat(line[-2], line[-1], m.arrow_length * 0.9)
         canvas.polyline(line, Paint(None, style.color, style.width, style.dash))
-        if style.arrow is not ArrowHead.NONE:
+        if style.arrow is ArrowHead.DOT:
+            canvas.circle(path[-1], m.terminal_radius, Paint(style.color))
+        elif style.arrow is not ArrowHead.NONE:
             self._arrow_head(canvas, path[-2], path[-1], style.arrow, style.color, style.width)
+        if style.start is ArrowHead.DOT and not edge.delay:  # not on recurrent self-loops
+            canvas.circle(path[0], m.terminal_radius, Paint(style.color))
         if edge.delay:
             mid = _midpoint(path)
             size = m.delay_marker

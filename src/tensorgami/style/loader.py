@@ -104,6 +104,7 @@ class _ThemeParser:
                 color=self._color(t, "color", path),
                 weight=int(t.get("weight", 400)),
                 italic=bool(t.get("italic", False)),
+                caps=bool(t.get("caps", False)),
             )
 
         return self._keyed(roles, "fonts", TextRole, font)
@@ -116,6 +117,7 @@ class _ThemeParser:
             stroke=self._color(t, "stroke", path),
             text=self._color(t, "text", path) if "text" in t else default_text,
             dash=self._dash(t, path),
+            opacity=self._fraction(t, "opacity", path),
         )
 
     def _edge(self, t: Mapping[str, Any], path: str) -> EdgeStyle:
@@ -125,6 +127,7 @@ class _ThemeParser:
             width=self._number(t, "width", path),
             arrow=self._enum(t, "arrow", path, ArrowHead) if "arrow" in t else ArrowHead.FILLED,
             dash=self._dash(t, path),
+            start=self._enum(t, "start", path, ArrowHead) if "start" in t else ArrowHead.NONE,
         )
 
     def _group(self, t: Mapping[str, Any], path: str) -> GroupStyle:
@@ -135,6 +138,7 @@ class _ThemeParser:
             corner_radius=self._number(t, "corner_radius", path),
             padding=self._number(t, "padding", path),
             dash=self._dash(t, path),
+            fill_opacity=self._fraction(t, "fill_opacity", path),
             badge_fill=self._color(t, "badge_fill", path)
             if "badge_fill" in t
             else Color(255, 255, 255),
@@ -216,6 +220,13 @@ class _ThemeParser:
         except ValueError:
             valid = ", ".join(m.value for m in enum_type)
             raise ThemeError(f"{path}.{key}: expected one of: {valid}") from None
+
+    @staticmethod
+    def _fraction(t: Mapping[str, Any], key: str, path: str) -> float:
+        value = t.get(key, 1.0)
+        if isinstance(value, bool) or not isinstance(value, int | float) or not 0 <= value <= 1:
+            raise ThemeError(f"{path}.{key}: expected a number from 0 to 1")
+        return float(value)
 
     @staticmethod
     def _dash(t: Mapping[str, Any], path: str) -> tuple[float, ...]:

@@ -22,7 +22,7 @@ from matplotlib.patches import Circle, FancyBboxPatch, Polygon, Rectangle
 from tensorgami.render.canvas import Paint
 from tensorgami.render.scene_renderer import SceneRenderer
 from tensorgami.render.svg import BASELINE_SHIFT
-from tensorgami.render.text import Script, parse_markup
+from tensorgami.render.text import Script, display_text, parse_markup
 from tensorgami.scene import Box, Point, Scene, TextAnchor
 from tensorgami.style import Theme
 from tensorgami.style.glyphs import Font
@@ -187,7 +187,7 @@ class MatplotlibCanvas:
         self.ax.text(
             at.x,
             at.y + BASELINE_SHIFT * font.size,
-            to_mathtext(text),
+            to_mathtext(display_text(text, font)),
             fontsize=self._pt(font.size),
             fontfamily=list(families),
             fontweight=font_weight(families[0], font.weight),

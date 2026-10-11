@@ -44,6 +44,11 @@ def parse_markup(text: str) -> list[Run]:
     return runs
 
 
+def display_text(text: str, font: Font) -> str:
+    """The text as it is drawn in ``font`` (capitals for ``caps`` fonts)."""
+    return text.upper() if font.caps else text
+
+
 def plain_text(text: str) -> str:
     return "".join(run.text for run in parse_markup(text))
 
@@ -70,7 +75,7 @@ class HeuristicTextMeasurer:
         )
         bold = 1.06 if font.weight >= 600 else 1.0
         total = 0.0
-        for run in parse_markup(text):
+        for run in parse_markup(display_text(text, font)):
             scale = 1.0 if run.script is Script.NORMAL else SCRIPT_SCALE
             # fsum, not sum: sum() of floats changed in Python 3.12; fsum is identical on
             # every version, which keeps figures byte-identical (NFR4)

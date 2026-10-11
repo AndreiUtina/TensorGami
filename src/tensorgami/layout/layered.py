@@ -159,6 +159,8 @@ class _Run:
             else 0.0
         )
         width = _ceil(max(label_w, detail_w) + 32)
+        if shape is Shape.FOLDED:  # the folded strip is extra; text stays on the flat face
+            width = _ceil(width + self.theme.metrics.fold_width)
         if shape is Shape.PILL:
             return max(width, 64.0), (42.0 if text.detail else 32.0)
         return max(width, 96.0), (46.0 if text.detail else 36.0)
@@ -832,12 +834,15 @@ class _Level:
         row_a = self.row_of[self.items[a].rank]
         middle = (self.row_bounds[row_a][1] + self.row_bounds[row_a + 1][0]) / 2
         e = self.run.g.edges[edge]
+        source, target = self.items[a], self.items[b]
+        # turn just outside the source/target *item*: for a framed group that is outside its
+        # frame, so the bend never runs through the padding where the frame title sits
         if edge in child_out:
-            leave = child_out[edge][-1][0]
+            leave = source.flow + source.flow_size
         else:
             leave = block.nodes[e.source][0] + self.run.node_fc(e.source)[0]
         if edge in child_in:
-            arrive = child_in[edge][0][0]
+            arrive = target.flow
         else:
             arrive = block.nodes[e.target][0]
         right, left = leave + 14, arrive - 14

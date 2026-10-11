@@ -17,11 +17,13 @@ class Shape(StrEnum):
     TRAPEZOID_NARROW = "trapezoid-narrow"  # encoder: compresses left → right
     TRAPEZOID_WIDEN = "trapezoid-widen"  # decoder: expands left → right
     CUBOID = "cuboid"  # tensor volume (C × H × W) in the volume view
+    FOLDED = "folded"  # folded paper: two facets split by a slanted crease (origami style)
 
 
 class ArrowHead(StrEnum):
     FILLED = "filled"
     OPEN = "open"
+    DOT = "dot"  # a small round terminal (origami wires)
     NONE = "none"
 
 
@@ -45,6 +47,7 @@ class Font:
     color: Color
     weight: int = 400
     italic: bool = False
+    caps: bool = False  # set in capitals (frame titles of the origami style)
 
     def __post_init__(self) -> None:
         if not self.family:
@@ -66,6 +69,7 @@ class NodeStyle:
     stroke: Color
     text: Color
     dash: tuple[float, ...] = ()
+    opacity: float = 1.0  # of the fill: translucent paper lets what lies beneath show through
 
 
 @dataclass(frozen=True, slots=True)
@@ -73,8 +77,9 @@ class EdgeStyle:
     name: str
     color: Color
     width: float
-    arrow: ArrowHead = ArrowHead.FILLED
+    arrow: ArrowHead = ArrowHead.FILLED  # at the target
     dash: tuple[float, ...] = ()
+    start: ArrowHead = ArrowHead.NONE  # at the source (e.g. a dot terminal)
 
 
 @dataclass(frozen=True, slots=True)
@@ -86,6 +91,7 @@ class GroupStyle:
     padding: float
     dash: tuple[float, ...] = ()
     badge_fill: Color = Color(255, 255, 255)
+    fill_opacity: float = 1.0  # 0: hairline frames without a fill
 
 
 @dataclass(frozen=True, slots=True)
@@ -102,3 +108,6 @@ class Metrics:
     cuboid_angle: float = 35  # degrees of the oblique depth axis
     trapezoid_ratio: float = 0.45  # short side / long side
     line_gap: float = 3  # vertical gap between label and detail lines
+    terminal_radius: float = 2.5  # dot terminals of edges
+    fold_width: float = 18  # width of the folded strip on the right of a folded box (px)
+    fold_shade: float = 0.07  # how much darker the folded strip is

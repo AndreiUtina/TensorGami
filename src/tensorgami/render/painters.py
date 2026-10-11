@@ -26,7 +26,7 @@ def node_style(node: Node, theme: Theme) -> NodeStyle:
 
 
 def outline(style: NodeStyle, theme: Theme) -> Paint:
-    return Paint(style.fill, style.stroke, theme.metrics.node_stroke, style.dash)
+    return Paint(style.fill, style.stroke, theme.metrics.node_stroke, style.dash, style.opacity)
 
 
 def draw_text_block(canvas: Canvas, node: Node, theme: Theme, center: Point) -> None:
@@ -182,6 +182,34 @@ class CuboidPainter:
         return depth * math.cos(angle), depth * math.sin(angle)
 
 
+class FoldedPainter(RectPainter):
+    """A paper card with its right edge folded over: a slanted crease separates the flat
+    face from a narrow, slightly darker strip. Sharp corners, hairline outline (origami).
+
+    The text is centred on the flat face; the layout widens folded boxes by the strip's width
+    (``Metrics.fold_width``), so a crease never crosses a label.
+    """
+
+    def paint(self, canvas: Canvas, node: Node, theme: Theme) -> None:
+        style = node_style(node, theme)
+        b, m = node.box, theme.metrics
+        fold = min(m.fold_width, b.w / 3)
+        top, bottom = b.right - fold * 0.55, b.right - fold  # the crease leans like a fold
+        face = [Point(b.x, b.y), Point(top, b.y), Point(bottom, b.bottom), Point(b.x, b.bottom)]
+        strip = [
+            Point(top, b.y),
+            Point(b.right, b.y),
+            Point(b.right, b.bottom),
+            Point(bottom, b.bottom),
+        ]
+        canvas.polygon(face, Paint(style.fill, opacity=style.opacity))
+        canvas.polygon(strip, Paint(style.fill.darken(m.fold_shade), opacity=style.opacity))
+        crease = Paint(None, style.stroke.lighten(0.35), m.node_stroke * 0.8)
+        canvas.polyline([Point(top, b.y), Point(bottom, b.bottom)], crease)
+        canvas.rect(b, Paint(None, style.stroke, m.node_stroke, style.dash))
+        draw_text_block(canvas, node, theme, Point(b.x + (b.w - fold * 0.78) / 2, b.cy))
+
+
 class PainterRegistry:
     """Maps shapes to painters; register a painter to support a new shape."""
 
@@ -211,5 +239,6 @@ def default_painters() -> PainterRegistry:
             Shape.TRAPEZOID_NARROW: TrapezoidPainter(narrowing=True),
             Shape.TRAPEZOID_WIDEN: TrapezoidPainter(narrowing=False),
             Shape.CUBOID: CuboidPainter(),
+            Shape.FOLDED: FoldedPainter(),
         }
     )
