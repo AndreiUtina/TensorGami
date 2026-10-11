@@ -5,8 +5,12 @@ from __future__ import annotations
 from tensorgami.ir.builder import GraphBuilder, invocation_id
 from tensorgami.ir.model import (
     INPUT_OP,
+    LAYER,
     OUTPUT_OP,
+    ROLE,
     ROOT,
+    STEP,
+    UNROLLED,
     Edge,
     Graph,
     Group,
@@ -23,8 +27,12 @@ from tensorgami.ir.validation import GraphError, GraphValidator, Issue
 
 __all__ = [
     "INPUT_OP",
+    "LAYER",
     "OUTPUT_OP",
+    "ROLE",
     "ROOT",
+    "STEP",
+    "UNROLLED",
     "SCHEMA_VERSION",
     "Edge",
     "Graph",

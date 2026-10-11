@@ -22,10 +22,12 @@ FIGURES = {  # file name: (reference model, tg.draw options besides the style)
     "cnn": ("cnn", {"level": 2}),
     "cnn-stages": ("cnn", {"level": 1}),
     "lstm": ("lstm", {"level": 2}),
+    "lstm-unrolled": ("lstm", {"level": 2, "view": "unrolled"}),
     "cgan-generator": ("cgan_generator", {"level": 2}),
     "cgan-discriminator": ("cgan_discriminator", {"level": 2}),
     "vae": ("vae", {"level": 2}),
-    "convlstm": ("convlstm", {"level": 2}),
+    "convlstm": ("convlstm", {"level": 2}),  # view="auto": unrolled (a loop over time)
+    "convlstm-folded": ("convlstm", {"level": 2, "view": "block"}),
     "transformer": ("transformer", {"level": 2, "direction": "TB"}),
 }
 

@@ -112,6 +112,13 @@ class Group:
         return self.label or self.type_name
 
 
+# Unrolled recurrence: a group of type UNROLLED is a time × layer grid; its nodes carry their
+# place in ``params``: STEP (0-based), LAYER (0 = reads the input) and ROLE ("cell", or "in" /
+# "out" for the per-step tensors x_t / h_t). Written by the unrolled view, read by its layout.
+UNROLLED = "unrolled"
+STEP, LAYER, ROLE = "time_step", "time_layer", "time_role"
+
+
 class RepeatKind(StrEnum):
     LAYERS = "layers"  # different modules with identical structure (Transformer layers)
     TIME = "time"  # the same module called repeatedly with state passed along (RNN cells)

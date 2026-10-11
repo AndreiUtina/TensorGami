@@ -20,7 +20,13 @@ before them, and shapes appear only where they change.
 
 ## LSTM classifier
 
+The fused `nn.LSTM` (2 layers) is one box; `view="unrolled"` draws it as a grid: a column
+per time step, a row per layer, the per-step inputs x_t below and state passed along each row.
+The 5-step sequence shows steps 1–3, "⋯" and step 5.
+
 ![LSTM](lstm.svg)
+
+![LSTM, unrolled](lstm-unrolled.svg)
 
 ## Conditional GAN: generator and discriminator
 
@@ -37,10 +43,16 @@ reparameterisation trick).
 
 ## ConvLSTM encoder
 
-Each ConvLSTM layer is one cell, drawn once with its recurrent h/c state loops (■ = one-step
-delay) and marked ×3 for the three time steps.
+The cells are called in a Python loop over time, so `view="auto"` unrolls them: the frames
+x₁…x₃ enter the first layer, h and c pass from step to step (green), and the last state of the
+top layer feeds the 1×1 convolution.
 
-![ConvLSTM](convlstm.svg)
+![ConvLSTM, unrolled](convlstm.svg)
+
+With `view="block"` each layer is one cell, drawn once with its recurrent h/c state loops
+(■ = one-step delay) and marked ×3 for the three time steps.
+
+![ConvLSTM, folded](convlstm-folded.svg)
 
 ## Transformer encoder: top to bottom
 

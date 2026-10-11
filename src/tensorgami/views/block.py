@@ -1,12 +1,14 @@
-"""The block view and the automatic choice of a view."""
+"""The block and unrolled views, and the automatic choice between them."""
 
 from __future__ import annotations
 
-from tensorgami.ir import Graph
+from tensorgami.ir import Graph, RepeatKind
 from tensorgami.layout import LayoutOptions, layout
+from tensorgami.layout.unrolled import UnrolledLayout
 from tensorgami.scene import Scene
 from tensorgami.style import Theme
-from tensorgami.transforms import Level, simplify
+from tensorgami.transforms import DetectRecurrence, Level, Pipeline, pipeline_for, simplify
+from tensorgami.transforms.unroll import UnrollRecurrence
 from tensorgami.views.base import View
 
 
@@ -23,20 +25,37 @@ class BlockView:
         return shown, layout(shown, theme, options)
 
 
-class AutoView:
-    """Picks the view that suits the captured graph, then draws with it.
+class UnrolledView:
+    """Recurrence unrolled over time: every recurrent cell drawn once per step, as a time ×
+    layer grid with per-step inputs x_t (fused ``nn.LSTM``/``GRU``/``RNN`` modules too). A
+    sequence longer than ``max_steps`` shows its first steps, "⋯" and the last one."""
 
-    Every model gets the block view until the views of roadmap step 11 arrive (then, e.g.,
-    recurrent models get the unrolled view).
-    """
+    name = "unrolled"
+
+    def __init__(self, max_steps: int = 4) -> None:
+        self.max_steps = max_steps
+
+    def draw(
+        self, graph: Graph, theme: Theme, *, level: Level, options: LayoutOptions
+    ) -> tuple[Graph, Scene]:
+        steps = [pipeline_for(level, fold_time=False), UnrollRecurrence(self.max_steps)]
+        shown = Pipeline(steps).apply(graph)
+        return shown, UnrolledLayout(options).layout(shown, theme)
+
+
+class AutoView:
+    """Picks the view that suits the captured graph, then draws with it (ADR-0007): the
+    unrolled view when a module was called step after step with state passed between the
+    calls (a recurrent loop), the block view otherwise."""
 
     name = "auto"
 
-    def __init__(self, block: View) -> None:
-        self._block = block
+    def __init__(self, block: View, unrolled: View) -> None:
+        self._block, self._unrolled = block, unrolled
 
     def choose(self, graph: Graph) -> View:
-        return self._block
+        loops = DetectRecurrence().apply(graph).repeats
+        return self._unrolled if any(r.kind is RepeatKind.TIME for r in loops) else self._block
 
     def draw(
         self, graph: Graph, theme: Theme, *, level: Level, options: LayoutOptions

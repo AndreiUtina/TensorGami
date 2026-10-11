@@ -107,7 +107,7 @@ def test_overrides_reach_the_importer(cnn, x):
 
 
 def test_views(cnn, x):
-    assert available_views() == ["auto", "block"]
+    assert available_views() == ["auto", "block", "unrolled"]
     assert VIEWS["auto"].choose(trace(cnn, x)) is get_view("block")
     assert tg.draw(cnn, x, view="block").to_svg() == tg.draw(cnn, x).to_svg()
 
@@ -163,7 +163,7 @@ class MustNotRun(nn.Module):
         ({"style": "origamy"}, ThemeError, "built-in styles: default, origami"),
         ({"level": 9}, ValueError, "level must be one of 0 system"),
         ({"direction": "XY"}, ValueError, "direction must be 'LR'"),
-        ({"view": "unrolled"}, NotImplementedError, "planned for roadmap step 11"),
+        ({"view": "volume"}, NotImplementedError, "planned for roadmap step 11"),
         ({"view": "fancy"}, ValueError, "unknown view 'fancy'"),
         ({"wrap_width": "wide"}, TypeError, None),
     ],
@@ -189,3 +189,15 @@ def test_warnings_point_at_the_callers_line():
     with pytest.warns(UnclassifiedOpWarning, match="fft_rfft") as record:
         tg.draw(Spectrum(), torch.randn(1, 8))
     assert record[0].filename == __file__
+
+
+def test_recurrent_models_get_the_unrolled_view():
+    make, example = REFERENCE["convlstm"]
+    fig = tg.draw(make(), example())  # view="auto": a cell called step after step
+    assert any(g.type_name == "unrolled" for g in fig.graph.groups)
+    folded = tg.draw(make(), example(), view="block")
+    assert not any(g.type_name == "unrolled" for g in folded.graph.groups)
+    make, example = REFERENCE["lstm"]
+    fig = tg.draw(make(), example(), view="unrolled")  # a fused nn.LSTM, on request
+    cells = [n for n in fig.graph.nodes if n.op == "LSTMCell"]
+    assert len(cells) == 2 * 4  # 2 layers × 4 of the 5 steps (1, 2, 3, ⋯, 5)

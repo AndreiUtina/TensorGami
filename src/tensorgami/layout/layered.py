@@ -28,7 +28,7 @@ from tensorgami.layout.base import Direction, LayoutOptions
 from tensorgami.layout.labels import GENERIC_CONTAINERS, Labeler, NodeText
 from tensorgami.render.legend import add_legend, build_legend
 from tensorgami.render.text import HeuristicTextMeasurer, TextMeasurer
-from tensorgami.scene import Box, Edge, Node, Point, Scene, Side
+from tensorgami.scene import Box, Edge, Node, Note, Point, Scene, Side, TextAnchor
 from tensorgami.scene import Group as SceneGroup
 from tensorgami.style import Shape, TextLayout, TextRole, Theme
 from tensorgami.vocabulary import EdgeKind
@@ -65,6 +65,10 @@ class _Block:
     routes: list[_Route] = field(default_factory=list)  # edges complete inside the block
     in_paths: dict[int, list[FC]] = field(default_factory=dict)  # border → target
     out_paths: dict[int, list[FC]] = field(default_factory=dict)  # source → border
+    # sides an edge leaves its source / enters its target by, when not the flow sides
+    # (e.g. a grid's per-step input enters its cell from below): edge → (exit, entry)
+    sides: dict[int, tuple[str | None, str | None]] = field(default_factory=dict)
+    notes: list[tuple[FC, str]] = field(default_factory=list)  # free text, e.g. "⋯"
 
     def shifted(self, df: float, dc: float) -> _Block:
         return _Block(
@@ -75,6 +79,8 @@ class _Block:
             [_Route(r.edge, _shift(r.points, df, dc), r.exit, r.entry) for r in self.routes],
             {e: _shift(p, df, dc) for e, p in self.in_paths.items()},
             {e: _shift(p, df, dc) for e, p in self.out_paths.items()},
+            dict(self.sides),
+            [((f + df, c + dc), text) for (f, c), text in self.notes],
         )
 
 
@@ -338,8 +344,12 @@ class _Run:
         for node_id, indices in self.loops.items():
             edges += self._loop_edges(indices, boxes[node_id])
 
+        notes = []
+        for (f, c), text in block.notes:
+            x, y = self.xy(f, c)
+            notes.append(Note(Point(m + x, m + y), text, TextAnchor.MIDDLE, TextRole.LABEL))
         scene = Scene(width + 2 * m, height + 2 * m, title=self.g.name)
-        scene.add(*frames, *scene_nodes, *edges)
+        scene.add(*frames, *scene_nodes, *edges, *notes)
         if self.opts.legend:
             self._add_legend(scene, m + height + 28)
         return scene
@@ -366,11 +376,11 @@ class _Run:
         via = _simplify([Point(m + x, m + y) for x, y in (self.xy(f, c) for f, c in route.points)])
         exit_side, entry_side = self._sides(route.exit), self._sides(route.entry)
         label = self.labels.get(route.edge, "")
-        label_at = None
+        label_at, upright = None, False
         if label:
             start = boxes[e.source].anchor(exit_side)
             end = boxes[e.target].anchor(entry_side)
-            label_at = self._label_position([start, *via, end], label)
+            label_at, upright = self._label_position([start, *via, end], label)
         return Edge(
             e.source,
             e.target,
@@ -380,7 +390,7 @@ class _Run:
             tuple(via),
             label,
             label_at,
-            label_upright=bool(label) and self.upright_labels,
+            label_upright=upright,
         )
 
     @property
@@ -389,22 +399,29 @@ class _Run:
         too, so a gap between two boxes needs one line of text, not a whole label."""
         return self.lr and self.text is TextLayout.ROTATED
 
-    def _label_position(self, path: list[Point], label: str) -> Point:
+    def _label_position(self, path: list[Point], label: str) -> tuple[Point, bool]:
+        """Where the label's centre goes, and whether it stands upright."""
         font = self.theme.font(TextRole.ANNOTATION)
         width = self.label_width(label)
         segments = list(zip(path, path[1:], strict=False))
+        if self.lr and all(abs(a.x - b.x) < 0.5 for a, b in segments):  # a vertical wire
+            a, b = max(segments, key=lambda s: abs(s[1].y - s[0].y))
+            return Point(a.x + 6 + width / 2, (a.y + b.y) / 2), False  # level, beside it
         if self.lr:
             along = font.size if self.upright_labels else width  # the label's extent along x
             flat = [(a, b) for a, b in segments if abs(a.y - b.y) < 0.5] or segments
             fitting = [s for s in flat if abs(s[1].x - s[0].x) >= along + 8]
             a, b = (fitting or sorted(flat, key=lambda s: -abs(s[1].x - s[0].x)))[0]
             if self.upright_labels:  # standing on the line, reading upwards
-                return Point((a.x + b.x) / 2, a.y - 4 - width / 2)
-            return Point((a.x + b.x) / 2, a.y - font.size / 2 - 4)
+                return Point((a.x + b.x) / 2, a.y - 4 - width / 2), True
+            return Point((a.x + b.x) / 2, a.y - font.size / 2 - 4), False
+        if all(abs(a.y - b.y) < 0.5 for a, b in segments):  # a level wire across the flow
+            a, b = max(segments, key=lambda s: abs(s[1].x - s[0].x))
+            return Point((a.x + b.x) / 2, a.y - font.size / 2 - 4), False  # above it
         upright = [(a, b) for a, b in segments if abs(a.x - b.x) < 0.5] or segments
         fitting = [s for s in upright if abs(s[1].y - s[0].y) >= font.size + 8]
         a, b = (fitting or sorted(upright, key=lambda s: -abs(s[1].y - s[0].y)))[0]
-        return Point(a.x + 6 + width / 2, (a.y + b.y) / 2)
+        return Point(a.x + 6 + width / 2, (a.y + b.y) / 2), False
 
     def _loop_edges(self, indices: list[int], box: Box) -> list[Edge]:
         edges = []
@@ -806,6 +823,8 @@ class _Level:
             block.nodes.update(inner.nodes)
             block.frames.update(inner.frames)
             block.routes += inner.routes
+            block.sides.update(inner.sides)
+            block.notes += inner.notes
             child_in.update(inner.in_paths)
             child_out.update(inner.out_paths)
             group_id = it.key[2:]
@@ -822,7 +841,10 @@ class _Level:
             else:
                 middle = self._lanes(a, b, start, end)
             points = child_out.get(index, []) + middle + child_in.get(index, [])
-            block.routes.append(_Route(index, points, "flow_end", "flow_start"))
+            exit_side, entry_side = block.sides.get(index, (None, None))
+            block.routes.append(
+                _Route(index, points, exit_side or "flow_end", entry_side or "flow_start")
+            )
 
         for index, b in self.entering:
             if index in self.port_of:
