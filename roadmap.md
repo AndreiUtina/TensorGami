@@ -214,8 +214,25 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 
 ## Phase C — Your model families
 
-### 11) Views ⬜
-- Block view (default), tensor-volume view for CNNs, cell view (LSTM/GRU gates), unrolled
+### 11) Views 🔶 (11a unrolled ✅)
+- Plan, in parts: **11a** unrolled time view ✅ · 11b U-shape layout for encoder–decoder skips
+  and folding activations that come *before* a layer · 11c tensor-volume view for CNNs ·
+  11d cell view (LSTM/GRU gates) · 11e generative figures (below).
+- **11a Unrolled time view** ✅ (2026-10-11): `view="unrolled"`, and `view="auto"` picks it
+  when a module is called step after step with state passed along (ADR-0007).
+  - `UnrollRecurrence` (transform): traced loops (TIME repeats; one node per call) and fused
+    `nn.LSTM`/`GRU`/`RNN` (expanded into `num_layers × steps` cells, the time axis from
+    `batch_first`) become one grid group; an outside tensor feeding every step becomes the
+    per-step inputs x₁…x_T (time axis dropped from the shape), a sequence read from every step
+    the outputs h₁…h_T; longer than `max_steps` (4): the first steps, "⋯" and the last one,
+    with the state bridged. Bidirectional fused modules stay one box (for now).
+  - `UnrolledLayout`: the layered engine with each grid group laid out as a block: a column
+    per step, a row per layer (the first at the bottom), x_t below on an input bus, state
+    along the rows, data up the columns, one shape label per layer boundary; top → bottom
+    figures turn the grid (time down, layers across). Blocks can now choose the side an edge
+    enters by and carry notes ("⋯").
+  - Gallery: ConvLSTM unrolled (auto) and folded (`view="block"`), LSTM unrolled.
+- Views: block (default), tensor-volume view for CNNs, cell view (LSTM/GRU gates), unrolled
   time view (RNN, LSTM, ConvLSTM).
 - Generative models: VAE (sampling node, μ/σ, loss terms) and cGAN (generator +
   discriminator in one figure, condition inputs, adversarial loop). Losses and the GAN loop

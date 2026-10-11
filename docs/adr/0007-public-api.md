@@ -44,7 +44,8 @@ Rules:
   unknown op drawn as "other") become warnings that list the affected modules, not failures.
 - `view="auto"` picks the view from the graph: unrolled if a module is called repeatedly with
   state passed between calls, the block view otherwise.
-  Until the unrolled view exists (step 11), `auto` always picks the block view.
+  Implemented in step 11a: a traced loop over time (TIME repeat) gives the unrolled view; a
+  fused `nn.LSTM` is one call, so it stays a block unless `view="unrolled"` is asked for.
 
 Extension points (not part of the first release): `annotations=` for loss terms and
 condition inputs (FR11), a mapping of several models for cGANs, and `tg.animate(...)` for the

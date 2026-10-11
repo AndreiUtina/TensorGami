@@ -37,6 +37,7 @@ fig.save("model.png", dpi=300)                     # or .svg / .pdf; nothing is 
 tg.draw(model, x, level="stages")                  # less detail: 0 system … 3 operators
 tg.draw(model, x, style="origami")                 # or "origami-extended", or a path
 tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
+tg.draw(model, x, view="unrolled")                 # recurrence as a time × layer grid
 tg.draw(model, x, overrides={"classifier.6": {"label": "logits"}})  # rename a box
 ```
 
