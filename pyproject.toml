@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Draw the architecture and information flow of deep-learning / machine-learning models"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "matplotlib>=3.7",  # figures, PNG, Jupyter display (ADR-0005); the only runtime dependency
+]
 
 [project.optional-dependencies]
 torch = ["torch>=2.2"]  # never a hard dependency: users keep their own CPU/CUDA build (ADR-0006)
@@ -15,7 +17,6 @@ dev = [
     "ruff>=0.6",
 ]
 docs = [
-    "matplotlib>=3.9",
     "typst>=0.12",
 ]
 torch = [

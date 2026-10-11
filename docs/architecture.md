@@ -16,10 +16,10 @@ How a PyTorch model becomes a figure. The decisions behind this page are recorde
 | Transforms | `GraphTransform` protocol (`Graph → Graph`), `Pipeline` | full trace → chosen level of detail (`simplify(graph, level)`) | ✅ step 7 |
 | Layout | `LayoutEngine` protocol (`Graph → Scene`), `Labeler` | graph → positioned nodes, frames and routed edges | ✅ step 8 ([ADR-0004](adr/0004-layout-engine.md)) |
 | Scene | `Scene`, `Node`, `Edge`, `Group`, `Note` | positioned diagram | ✅ step 2 |
-| Rendering | `SceneRenderer`, `GlyphPainter`, `Canvas` protocols | scene + theme → drawing | ✅ SVG (step 2) · matplotlib step 9 ([ADR-0005](adr/0005-figure-backend.md)) |
+| Rendering | `SceneRenderer`, `GlyphPainter`, `Canvas` protocols | scene + style → drawing | ✅ SVG (step 2) · ✅ matplotlib (step 9, [ADR-0005](adr/0005-figure-backend.md)) |
 | Style | `Theme` (TOML) + validation rules | all visual decisions | ✅ step 2 |
 | View | `View` strategy | picks transforms, layout and glyph mapping | step 11 |
-| API | `tg.draw(...)` → `tg.Figure` | wires the stages; display and save | step 10 ([ADR-0007](adr/0007-public-api.md)) |
+| API | `tg.draw(...)` → `tg.Figure` | wires the stages; display and save | ✅ `tg.Figure` (step 9) · `tg.draw` step 10 ([ADR-0007](adr/0007-public-api.md)) |
 
 ## Rules every stage follows
 
@@ -39,4 +39,4 @@ How a PyTorch model becomes a figure. The decisions behind this page are recorde
 ## Supported versions
 
 Python ≥ 3.11 (tested on 3.11 and 3.12) · torch ≥ 2.2 (2.2.2 locally, the last Intel-Mac
-release) · matplotlib as the only runtime dependency (from step 9).
+release) · matplotlib as the only runtime dependency.

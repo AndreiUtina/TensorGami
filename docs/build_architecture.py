@@ -32,8 +32,8 @@ def pipeline() -> Scene:
         Node("lay", at(120, r2, 168, 50), C.MODULE, "LayoutEngine", "layered ✓ step 8"),
         Node("scene", at(320, r2, 104, 34), C.TENSOR, "Scene"),
         Node("ren", at(500, r2, 168, 50), C.MODULE, "SceneRenderer", "+ Theme · painters"),
-        Node("can", at(680, r2, 132, 50), C.MODULE, "Canvas", "SVG · matplotlib (9)"),
-        Node("fig", at(880, r2, 128, 44), C.IO, "tg.Figure", "Jupyter · PNG"),
+        Node("can", at(680, r2, 132, 50), C.MODULE, "Canvas", "SVG · matplotlib ✓"),
+        Node("fig", at(880, r2, 128, 44), C.IO, "tg.Figure", "Jupyter · PNG ✓"),
     )
     s.add(
         Edge("model", "imp"),

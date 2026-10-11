@@ -88,12 +88,12 @@
     <g class="tg-node tg-module" data-id="can">
       <rect x="614" y="205" width="132" height="50" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
       <text x="680" y="226.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">Canvas</text>
-      <text x="680" y="241.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">SVG · matplotlib (9)</text>
+      <text x="680" y="241.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">SVG · matplotlib ✓</text>
     </g>
     <g class="tg-node tg-io" data-id="fig">
       <rect x="816" y="208" width="128" height="44" rx="22" fill="#e2e8f0" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
       <text x="880" y="226.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">tg.Figure</text>
-      <text x="880" y="241.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">Jupyter · PNG</text>
+      <text x="880" y="241.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">Jupyter · PNG ✓</text>
     </g>
   </g>
   <g class="tg-labels">

@@ -169,13 +169,27 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 - Moved to step 11 (views): the time × depth grid for *unrolled* recurrence (the general
   layout draws it correctly but as a staircase) and the U-shape for encoder/decoder skips.
 
-### 9) Matplotlib figure backend ⬜
-- `MatplotlibCanvas` implementing the existing `Canvas` protocol (the SVG canvas stays for
-  vector output).
-- `tg.Figure`: inline display in Jupyter (`_repr_png_`), `.show()` from scripts,
-  `.save("net.png", dpi=300)` (PNG first; SVG/PDF also possible), and `.figure`/`.ax` to
-  reach the underlying matplotlib objects (e.g. to place a diagram in a multi-panel figure).
-- Tests: image-level checks with tolerance plus scene-level assertions.
+### 9) Matplotlib figure backend ✅
+- `src/tensorgami/render/mpl.py`: `MatplotlibCanvas` implements the same `Canvas` protocol as
+  the SVG canvas, so both draw the identical scene (1 px = 0.75 pt; `dpi` alone sets the
+  PNG resolution). Installed fonts of the style's font stack only (no warnings), weights
+  snapped like browsers do, `x_{t}` markup → mathtext, explicit paint order.
+- `src/tensorgami/api/figure.py`: **`tg.Figure`** — inline in Jupyter (rendered at 2× for
+  sharp screens, shown at natural size), `fig.save("model.png", dpi=300)` (also `.svg`
+  — Tensorgami's own vector output — `.pdf`, `.jpg`, `.tif`), `fig.show()` for scripts,
+  `fig.figure` / `fig.ax` for matplotlib access, `fig.draw_on(ax)` to place a diagram in a
+  panel of your own `plt.subplots` layout (text and lines scale with the panel).
+- Translucent fills in both canvases (prepared for the `origami` style).
+- matplotlib is now the single runtime dependency; `import tensorgami` stays light (it loads
+  matplotlib only when a figure is drawn).
+- Fixed on the way: an arrow entering a frame exactly at its first box lost its arrowhead
+  (zero-length last segment) in SVG and PNG; routes now drop repeated points and the layout
+  invariants check every arrow ends with a real segment.
+- `examples/alexnet.py` writes SVG + 300 dpi PNG; `examples/alexnet.ipynb` shows inline
+  display, saving and multi-panel use.
+- Tests: 17 new — PNG pixels sampled inside every box match the box colours (geometry
+  identical to the SVG), output formats, notebook display, no leftover pyplot figures,
+  subplot scaling, quiet fonts, light import.
 
 ### 10) Public API ⬜
 - `tg.draw(model, example_input, level=2, view="block", theme="baseline", **options)`.

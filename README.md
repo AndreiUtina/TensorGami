@@ -24,7 +24,7 @@ uv run python docs/survey/build.py             # rebuild the survey PDF
 
 ## Capturing a PyTorch model
 
-The pipeline already works end to end (as SVG; notebook figures and PNG come in step 9):
+The pipeline already works end to end, from a PyTorch model to a PNG or a notebook figure:
 
 ```python
 import torch
@@ -36,12 +36,18 @@ print(graph.summary())                              # every operation, its modul
 from tensorgami.transforms import simplify
 print(simplify(graph, level=2).summary())           # layers: activations folded, repeats ×N
 
+import tensorgami as tg
 from tensorgami.layout import layout
-from tensorgami.render import render_svg
 from tensorgami.style import load_style
 style = load_style("default")                       # the standard style; more to come
-svg = render_svg(layout(simplify(graph, level=2), style), style)   # a complete figure
+layers = simplify(graph, level=2)
+fig = tg.Figure(layout(layers, style), style, layers)
+fig                                                 # shows inline in Jupyter
+fig.save("model.png", dpi=300)                      # or .svg / .pdf
 ```
+
+Step 10 shortens this to `tg.draw(model, example_input, style="default")`. See
+[`examples/alexnet.ipynb`](examples/alexnet.ipynb) for a notebook.
 
 See the automatically drawn [gallery](docs/gallery/README.md).
 
