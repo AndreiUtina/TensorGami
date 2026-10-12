@@ -8,7 +8,7 @@ __version__ = "0.1.0"
 def __getattr__(name: str):
     """Lazy top-level API, so ``import tensorgami`` stays light: matplotlib loads when a
     figure is made, torch when a model is drawn."""
-    if name in ("Figure", "draw"):
+    if name in ("Figure", "Input", "Loss", "Note", "draw"):
         from tensorgami import api
 
         return getattr(api, name)
@@ -19,4 +19,4 @@ def __dir__() -> list[str]:  # tab completion lists the lazy names too
     return sorted({*globals(), *__all__})
 
 
-__all__ = ["Figure", "__version__", "draw"]
+__all__ = ["Figure", "Input", "Loss", "Note", "__version__", "draw"]
