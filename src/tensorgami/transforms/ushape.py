@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import dataclasses
 
-from tensorgami.ir import U_LEVEL, U_SIDE, USHAPE, Graph, Group
+from tensorgami.ir import U_LEVEL, U_SIDE, USHAPE, Edge, Graph, Group
 from tensorgami.transforms.base import data_inputs, rebuild
 from tensorgami.transforms.cleanup import PruneEmptyGroups
 from tensorgami.vocabulary import EdgeKind, OpCategory
@@ -27,8 +27,12 @@ class FoldUShape:
 
     name = "fold-u-shape"
 
-    def __init__(self, min_levels: int = 3) -> None:
+    def __init__(self, min_levels: int = 3, max_levels: int | None = None) -> None:
+        """``max_levels``: draw at most this many levels; a deeper U keeps its first
+        ``max_levels - 1`` levels and the innermost one, bridged across the gap (the layout
+        marks it with ⋮)."""
         self.min_levels = min_levels
+        self.max_levels = max_levels
 
     def apply(self, graph: Graph) -> Graph:
         index = {n.id: i for i, n in enumerate(graph.nodes)}
@@ -47,24 +51,54 @@ class FoldUShape:
             and n.category is not OpCategory.IO
         ]
         gid = f"{USHAPE}:{home or 'model'}"
+        place = {n.id: _place(index[n.id], sources, merges) for n in region}
+        hidden = self._hidden(len(skips))
         nodes = []
-        inside = {n.id for n in region}
         for n in graph.nodes:
-            if n.id in inside:
-                level, side = _place(index[n.id], sources, merges)
+            if n.id in place:
+                level, side = place[n.id]
+                if level in hidden:
+                    continue
                 params = {**n.params, U_LEVEL: level, U_SIDE: side}
                 n = dataclasses.replace(n, group=gid, params=params)
             nodes.append(n)
+        gone = {n for n, (level, _) in place.items() if level in hidden}
+        edges = [e for e in graph.edges if e.source not in gone and e.target not in gone]
+        if hidden:
+            edges += _bridges(graph, place, hidden, skips)
         groups = [*graph.groups, Group(gid, USHAPE, parent=home)]
-        return PruneEmptyGroups().apply(rebuild(graph, nodes=nodes, groups=groups))
+        return PruneEmptyGroups().apply(rebuild(graph, nodes=nodes, edges=edges, groups=groups))
+
+    def _hidden(self, levels: int) -> set[int]:
+        """The middle levels left out when the U is deeper than ``max_levels``."""
+        if self.max_levels is None or levels <= self.max_levels:
+            return set()
+        return set(range(self.max_levels - 1, levels - 1))
+
+
+def _bridges(graph: Graph, place: dict, hidden: set[int], skips) -> list[Edge]:
+    """Across the hidden levels: the encoder hands on to the innermost level, which hands
+    back up to the merge of the last level shown above the gap."""
+    above, below = min(hidden) - 1, max(hidden) + 1
+    order = {n.id: i for i, n in enumerate(graph.nodes)}
+
+    def side(level: int, name: str) -> list[str]:
+        return sorted((n for n, p in place.items() if p == (level, name)), key=order.get)
+
+    down = Edge(skips[above][0], side(below, "enc")[0])
+    up = Edge(side(below, "dec")[-1], skips[above][1])
+    return [down, up]
 
 
 def _nested_skips(graph: Graph, index: dict[str, int]) -> list[tuple[str, str]]:
-    """The longest run of skips (source → merge) nested inside each other, outermost first."""
+    """The longest run of skips (source → merge) nested inside each other, outermost first.
+    A skip leaves an encoder layer (not a graph input) and stays inside one model."""
     skips = []
     for e in graph.edges:
-        merge = graph.node(e.target)
+        merge, source = graph.node(e.target), graph.node(e.source)
         if e.kind is not EdgeKind.DATA or merge.category is not OpCategory.MERGE:
+            continue
+        if source.is_input or _model(source.id) != _model(merge.id):
             continue
         if len(data_inputs(graph, merge.id)) >= 2 and index[merge.id] - index[e.source] >= 3:
             skips.append((index[e.source], index[merge.id], e.source, merge.id))
@@ -83,6 +117,11 @@ def _nested_skips(graph: Graph, index: dict[str, int]) -> list[tuple[str, str]]:
         chain.append((skips[j][2], skips[j][3]))
         j = previous[j]
     return chain[::-1]
+
+
+def _model(node_id: str) -> str:
+    """The model a node belongs to in a figure of several models (ids ``model/n3``)."""
+    return node_id.partition("/")[0] if "/" in node_id else ""
 
 
 def _common_group(graph: Graph, a: str, b: str) -> str:

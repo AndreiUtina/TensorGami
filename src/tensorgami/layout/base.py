@@ -39,6 +39,7 @@ class LayoutOptions:
     shapes_on_edges: bool = True
     loop_clearance: float = 14  # height of a state self-loop above its node
     u_shape: bool = True  # fold encoder–decoder skips (U-Net) into a U (block view)
+    u_levels: int | None = None  # a U shows at most this many levels (the middle: ⋮)
 
     def __post_init__(self) -> None:
         """Accept ``direction`` as a string (``"TB"``, ``"tb"``); check every other value, so
@@ -50,6 +51,13 @@ class LayoutOptions:
                 if not isinstance(value, bool):
                     raise TypeError(
                         f"layout option {f.name}: expected True or False, got {value!r}"
+                    )
+            elif f.type.startswith("int"):
+                if value is None and f.type.endswith("None"):
+                    continue
+                if isinstance(value, bool) or not isinstance(value, int) or value < 2:
+                    raise TypeError(
+                        f"layout option {f.name}: expected a whole number ≥ 2, got {value!r}"
                     )
             elif f.type.startswith("float"):
                 if value is None and f.type.endswith("None"):

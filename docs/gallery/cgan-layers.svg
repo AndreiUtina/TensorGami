@@ -96,8 +96,8 @@
       <polyline points="90.5,730 87,722 83.5,730" fill="none" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-training">
-      <polyline points="369.17,1590 369.17,1616 295.83,1616 295.83,1506" fill="none" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round" stroke-dasharray="6 4"/>
-      <polyline points="299.33,1514 295.83,1506 292.33,1514" fill="none" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round"/>
+      <polyline points="369.17,1590 369.17,1616 303.83,1616 303.83,1506" fill="none" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round" stroke-dasharray="6 4"/>
+      <polyline points="307.33,1514 303.83,1506 300.33,1514" fill="none" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round"/>
     </g>
     <g class="tg-edge tg-edge-data">
       <polyline points="232.79,1738 255.59,1738" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>

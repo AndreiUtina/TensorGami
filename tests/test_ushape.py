@@ -138,3 +138,23 @@ def test_merge_notes_sit_where_no_wire_is(theme):
         assert merge.note_side in (
             (Side.TOP, Side.BOTTOM) if direction == "LR" else (Side.RIGHT, Side.LEFT)
         )
+
+
+# --------------------------------------------------------------------------- u_levels
+
+
+def test_a_deep_u_can_leave_out_its_middle_levels(theme):
+    g = FoldUShape(max_levels=3).apply(simplify(unet(5), 2))
+    levels = sorted({lvl for lvl, _ in place(g).values()})
+    assert levels == [0, 1, 4, 5]  # the first two, the innermost, the bottleneck
+    scene = layout(g, theme, NO_WRAP)
+    check_scene(scene, g, theme)
+    assert [n.text for n in scene.notes].count("⋮") == 2  # on both sides of the U
+    full = layout(FoldUShape().apply(simplify(unet(5), 2)), theme, NO_WRAP)
+    assert scene.height < full.height
+
+
+def test_u_levels_is_checked():
+    with pytest.raises(TypeError, match="u_levels: expected a whole number ≥ 2"):
+        LayoutOptions(u_levels=1)
+    assert LayoutOptions(u_levels=4).u_levels == 4

@@ -21,12 +21,12 @@ def volume_geometry(volume: tuple[int, ...]) -> tuple[float, float, float]:
     if len(volume) == 3:
         c, h, w = volume
         return (
-            _clamp(2.2 * math.sqrt(c), 6, 64),
-            _clamp(10 * math.sqrt(h), 14, 160),
-            _clamp(5 * math.sqrt(w), 6, 80),
+            _clamp(2.0 * math.sqrt(c), 6, 56),
+            _clamp(7 * math.sqrt(h), 12, 112),
+            _clamp(3.5 * math.sqrt(w), 5, 56),
         )
     (f,) = volume
-    return 8.0, _clamp(2.4 * math.sqrt(f), 24, 170), 6.0
+    return 8.0, _clamp(1.8 * math.sqrt(f), 24, 128), 5.0
 
 
 def volume_label(volume: tuple[int, ...]) -> str:

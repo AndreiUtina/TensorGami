@@ -1,6 +1,10 @@
-"""Draw the reference models and AlexNet with ``tg.draw``, once per built-in style.
+"""The acceptance gallery (roadmap step 12): the reference models, AlexNet and the composed
+figures (a cGAN, a VAE with its losses, pix2pix whole), drawn with ``tg.draw`` in every view
+that suits them, once per built-in style.
 
-A preview gallery of the full pipeline; snapshot tests over it come in roadmap step 12.
+``tests/test_gallery.py`` redraws every figure and checks it against the committed SVG (and
+against the layout invariants), so a change to the drawing shows up as a failing test. After
+an intended change, rebuild and review the figures::
 
     uv run python docs/gallery/build_gallery.py
 """
@@ -8,6 +12,7 @@ A preview gallery of the full pipeline; snapshot tests over it come in roadmap s
 from __future__ import annotations
 
 import sys
+from collections.abc import Iterator
 from pathlib import Path
 
 HERE = Path(__file__).parent
@@ -17,6 +22,7 @@ sys.path[:0] = [str(ROOT / "tests"), str(ROOT / "examples")]  # reference models
 import torch  # noqa: E402
 from alexnet import AlexNet  # noqa: E402
 from models import REFERENCE  # noqa: E402
+from models.pix2pix import ConditionalDiscriminator  # noqa: E402
 
 import tensorgami as tg  # noqa: E402
 from tensorgami.style import available_styles  # noqa: E402
@@ -91,24 +97,48 @@ def vae_losses(**options: object) -> tg.Figure:
     )
 
 
+def pix2pix_system(**options: object) -> tg.Figure:
+    """pix2pix whole: the U-Net generator, the PatchGAN judging (A, real or fake B), the GAN
+    and L1 losses (step 11e); small sizes (5 levels, 32 × 32 images)."""
+    (make_g, example_g), (make_d, _) = MODELS["pix2pix_generator"], MODELS["pix2pix_discriminator"]
+    a, b = example_g(), example_g()
+    return tg.draw(
+        {"generator": make_g(), "discriminator": ConditionalDiscriminator(make_d())},
+        {"generator": a, "discriminator": {"A": a, "B": b}},
+        links=[
+            ("generator.input", "discriminator.A", "A"),
+            ("generator", "discriminator.B", "fake B"),
+        ],
+        annotations=[
+            tg.Input("real B", to="discriminator.B"),
+            tg.Loss("GAN loss", "discriminator", trains=["generator", "discriminator"]),
+            tg.Loss("L1 loss", "generator", "real B", trains=["generator"]),
+        ],
+        **options,
+    )
+
+
 COMPOSED = {  # file name: (figure, tg.draw options besides the style)
     "cgan": (cgan, {"level": 0}),  # the overview: each model one box
     "cgan-layers": (cgan, {"direction": "TB"}),
     "vae-losses": (vae_losses, {}),
+    "pix2pix-system": (pix2pix_system, {"view": "volume"}),
 }
+
+
+def figures(style: str = "default") -> Iterator[tuple[str, tg.Figure]]:
+    """Every gallery figure in one style, by file name (without ``.svg``)."""
+    for name, (model, options) in FIGURES.items():
+        make, example = MODELS[model]
+        yield name, tg.draw(make(), example(), style=style, **options)
+    for name, (figure, options) in COMPOSED.items():
+        yield name, figure(style=style, **options)
 
 
 def build(style: str = "default") -> list[Path]:
     out_dir = gallery_dir(style)
     out_dir.mkdir(parents=True, exist_ok=True)
-    paths = []
-    for name, (model, options) in FIGURES.items():
-        make, example = MODELS[model]
-        fig = tg.draw(make(), example(), style=style, **options)
-        paths.append(fig.save(out_dir / f"{name}.svg"))
-    for name, (figure, options) in COMPOSED.items():
-        paths.append(figure(style=style, **options).save(out_dir / f"{name}.svg"))
-    return paths
+    return [fig.save(out_dir / f"{name}.svg") for name, fig in figures(style)]
 
 
 if __name__ == "__main__":

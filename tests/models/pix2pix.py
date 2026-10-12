@@ -155,3 +155,16 @@ class NLayerDiscriminator(nn.Module):
 
     def forward(self, input):
         return self.model(input)
+
+
+class ConditionalDiscriminator(nn.Module):
+    """pix2pix judges an image B together with its input image A: the training code calls
+    ``netD(torch.cat((real_A, fake_B), 1))``. This wrapper makes the two images two inputs, so a
+    figure can show where each comes from."""
+
+    def __init__(self, netD):
+        super().__init__()
+        self.netD = netD
+
+    def forward(self, A, B):
+        return self.netD(torch.cat([A, B], 1))

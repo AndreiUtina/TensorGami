@@ -36,7 +36,7 @@ class BlockView:
     ) -> tuple[Graph, Scene]:
         shown = simplify(graph, level)
         if options.u_shape:
-            shown = FoldUShape().apply(shown)
+            shown = FoldUShape(max_levels=options.u_levels).apply(shown)
         return shown, layout(shown, theme, options)
 
 
@@ -71,7 +71,10 @@ class VolumeView:
     ) -> tuple[Graph, Scene]:
         layer_parts = (OpCategory.ACTIVATION, OpCategory.REGULARIZATION, OpCategory.NORM)
         fold = FoldIntoPrevious(layer_parts, across=layer_parts)  # a volume is a layer's output
-        shown = Pipeline([pipeline_for(level), fold, MarkVolumes()]).apply(graph)
+        steps = [pipeline_for(level), fold, MarkVolumes()]
+        if options.u_shape:  # a U-Net's volumes descend and climb, as in the U-Net paper
+            steps.append(FoldUShape(max_levels=options.u_levels))
+        shown = Pipeline(steps).apply(graph)
         options = dataclasses.replace(
             options, direction=Direction.LEFT_RIGHT, shapes_on_edges=False
         )

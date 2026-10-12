@@ -125,5 +125,40 @@ def test_training_arrows_rise_into_the_frames(theme, direction):
         end = arrow.target
         box = frames[model]
         from_below = box.x <= end.x <= box.right and abs(end.y - box.bottom) < 0.5
+        from_above = box.x <= end.x <= box.right and abs(end.y - box.y) < 0.5  # over the top
         from_left = abs(end.x - box.x) < 0.5 and box.y <= end.y <= box.bottom  # all blocked
-        assert from_below or from_left
+        assert from_below or from_above or from_left
+
+
+def test_arrows_from_several_losses_are_named(theme):
+    g = add_loss(gan(), "l1", ["generator", "real image"], trains=["generator"])
+    scene = layout(simplify(g, 2), theme, LayoutOptions(wrap_width=None))
+    into = [e for e in scene.edges if e.kind is EdgeKind.TRAINING and isinstance(e.source, str)]
+    named = {e.label for e in into if e.label}
+    assert named == {"adversarial", "l1"}  # the generator gets one from each loss
+    spots = [e.label_at for e in into if e.label]
+    assert len({(round(p.x), round(p.y)) for p in spots}) == len(spots)  # apart
+
+
+def test_the_loss_loops_back_over_the_top_into_the_model_beside_it(theme):
+    """GAN loss → discriminator: out of the loss's right side, up past the output, left
+    above the discriminator and down into it (counterclockwise); the generator, beyond the
+    discriminator, is reached from underneath."""
+    g = simplify(gan(), 2)
+    scene = layout(g, theme, LayoutOptions(wrap_width=None))
+    loss = next(n.box for n in scene.nodes if n.id.startswith("loss:"))
+    arrows = {
+        e.via[-1].x: e
+        for e in scene.edges
+        if e.kind is EdgeKind.TRAINING and e.source == "loss:adversarial"
+    }
+    into = {}
+    for e in arrows.values():
+        frame = next((f for f in scene.groups if f.box.x <= e.target.x <= f.box.right), None)
+        into[frame.id if frame else "discriminator"] = e
+    over = into["discriminator"]
+    assert over.exit.value == "right" and over.via[0].x > loss.right  # out of its side
+    assert all(p.y < loss.y for p in over.via[1:])  # up and over
+    assert over.target.y > over.via[-1].y  # then down into the discriminator's top
+    under = into["generator"]
+    assert under.exit.value == "bottom" and under.via[0].y > loss.bottom

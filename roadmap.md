@@ -299,10 +299,32 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   are not part of `nn.Module`, so the API accepts annotations and several models per figure.
 - Views are `View` strategies selecting transforms + layout + glyph mapping.
 
-### 12) Acceptance gallery ⬜
-- Reference PyTorch implementations of CNN, LSTM, cGAN, VAE, ConvLSTM and Transformer in
-  `tests/models/`, rendered to `docs/gallery/*.png` and snapshot-tested.
-- Add the user's own models when available.
+### 12) Acceptance gallery ✅ (2026-10-12)
+- [`docs/gallery/`](docs/gallery/README.md): the reference models in `tests/models/` (CNN,
+  LSTM, ConvLSTM, cGAN, VAE, Transformer, and the user's pix2pix), AlexNet, and composed
+  figures (a cGAN with its adversarial loop, a VAE with its losses, pix2pix whole in 3-D), in
+  every view that suits them (block, stages, unrolled, volume, cell, U-shape) and in every
+  built-in style: 23 figures × 3 styles, drawn by `build_gallery.py` with `tg.draw`.
+- `tests/test_gallery.py` accepts them: every figure keeps the layout invariants (no
+  overlapping boxes, no wire through a box, orthogonal wires, boxes inside their frames) and
+  matches its committed SVG byte for byte; no stray files; the gallery page shows each one.
+  A change to the drawing fails until it is reviewed on the page and accepted by rebuilding.
+- SVG is the snapshot format (deterministic and diffable; GitHub shows it); PNGs differ
+  between matplotlib versions and fonts, so they are made on demand (`fig.save("x.png")`).
+- On the way: the volume view folds U-Nets too (the U-Net paper's figure); a volume's face
+  sits in the middle of its slot (wires meet it straight), and a volume hands down from its
+  side (its name stays clear); each of several models is always framed; a U's skips start at
+  an encoder layer and stay inside one model; a model's name refers to its linked output;
+  training arrows rise in separate columns. The pix2pix notebook draws the whole system in
+  3-D (`ConditionalDiscriminator` stacks A and B, as pix2pix's training code does).
+- Then, for a compact 3-D pix2pix: volumes ~30 % smaller; a U's rows packed by each node's
+  own reach (a volume's oblique top above, its name below) and closer together; `u_levels=N`
+  (layout option) draws at most N levels of a U, with ⋮ for the middle ones (8-level
+  generator: 1186 → 737 px tall); training arrows are labelled with their loss where a model
+  is trained by several (pix2pix's generator: GAN and L1), labels spread apart.
+- A loss loops back into the model right beside it over the top, counterclockwise (out of
+  its side, up past the output, down into the model: GAN loss → discriminator); into models
+  further away its arrows run underneath.
 
 ## Phase D — Reports, presentations and release
 

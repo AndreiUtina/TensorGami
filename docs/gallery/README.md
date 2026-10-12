@@ -1,10 +1,21 @@
-# Gallery (preview)
+# Acceptance gallery
 
-Every figure on this page is drawn **automatically** from a PyTorch model: the model is traced
-(step 6), simplified to the layer level (step 7) and laid out (step 8). Nothing is positioned
-by hand. The models are the small reference implementations in
-[`tests/models/`](../../tests/models/). Rebuild with
-`uv run python docs/gallery/build_gallery.py`.
+Every figure on this page is drawn **automatically** from a PyTorch model with `tg.draw`: the
+model is traced, simplified to the chosen level and laid out; nothing is positioned by hand.
+The models are the small reference implementations in [`tests/models/`](../../tests/models/),
+one per family (CNN, LSTM, ConvLSTM, cGAN, VAE, Transformer, pix2pix), and AlexNet from
+[`examples/alexnet.py`](../../examples/alexnet.py). Every figure exists in each built-in
+style: `default` on this page, [`origami/`](origami/) and [`origami-extended/`](origami-extended/)
+below.
+
+**Accepted by tests (roadmap step 12).** [`tests/test_gallery.py`](../../tests/test_gallery.py)
+redraws every figure in every style and checks that it
+
+- keeps the layout invariants: no overlapping boxes, no wire through a box, only horizontal
+  and vertical wire segments, every box inside its frames;
+- matches the committed SVG byte for byte, so any change to a drawing fails the test until
+  it has been reviewed here and accepted by rebuilding the gallery:
+  `uv run python docs/gallery/build_gallery.py`.
 
 ## CNN with residual blocks: layer level
 
@@ -90,6 +101,13 @@ the decoder's ReLU into the concat. (Small sizes here: 5 levels, 32×32 images.)
 
 ![pix2pix discriminator](pix2pix-discriminator.svg)
 
+The whole system in the volume view: the generator's volumes descend and climb as in the
+U-Net paper; its output, fake B, and the real B each enter the discriminator together with
+the input A (`ConditionalDiscriminator` stacks them, as pix2pix's training code does); the
+GAN loss trains both networks, the L1 loss between fake and real B the generator:
+
+![pix2pix, the whole system](pix2pix-system.svg)
+
 ## Transformer encoder: top to bottom
 
 ![Transformer](transformer.svg)
@@ -137,3 +155,7 @@ With `style="origami-extended"`: flat single-line cards, top → bottom.
 
 <img src="origami-extended/convlstm.svg" alt="ConvLSTM, origami-extended" width="360">
 <img src="origami-extended/transformer.svg" alt="Transformer, origami-extended" width="360">
+
+Left to right instead (`direction="LR"`): name above details, each card as wide as its text.
+
+![AlexNet, origami-extended, left to right](origami-extended/alexnet-horizontal.svg)

@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 
-from tensorgami.ir import U_LEVEL, U_SIDE, USHAPE
+from tensorgami.ir import U_LEVEL, U_SIDE, USHAPE, VOLUME
 from tensorgami.layout.layered import BLOCK_LAYOUTS, _Block, _Route, _Run
 from tensorgami.style import TextRole
 
@@ -97,20 +97,33 @@ class _UShape:
             run.g.edges[i].source not in last for i in leaving
         )
 
-        row_gap = max(run.opts.node_gap + 26, 44.0)
-        self.top, self.height, cross = {}, {}, BUS if bus else 0.0
-        for level in self.levels:
-            self.top[level] = cross
-            self.height[level] = max(size[n][1] for ids in self.rows[level].values() for n in ids)
-            cross += self.height[level] + row_gap
-        total_cross = cross - row_gap
+        volumes = any(VOLUME in run.g.node(n).params for n in self.ids)
+        # volumes carry their name below and need no room for wire labels: tighter rows
+        row_gap = 22.0 if volumes else max(run.opts.node_gap + 26, 44.0)
+        self.top, self.bottom, self.line, cross = {}, {}, {}, BUS if bus else 0.0
+        for k, level in enumerate(self.levels):
+            ids = [n for row in self.rows[level].values() for n in row]
+            above = max(self._extent(n)[0] for n in ids)  # each node's own reach, so a
+            below = max(self._extent(n)[1] for n in ids)  # volume's labels pack tightly
+            self.top[level], self.line[level] = cross, cross + above
+            self.bottom[level] = cross + above + below
+            elided = k + 1 < len(self.levels) and self.levels[k + 1] - level > 1
+            cross = self.bottom[level] + row_gap + (30.0 if elided else 0.0)
         total_flow = max(flow[n] + size[n][0] for n in self.ids)
 
-        block = _Block(total_flow, total_cross)
+        block = _Block(total_flow, self.bottom[self.levels[-1]])
         for n in self.ids:
             level, _ = self.where[n]
             block.nodes[n] = (flow[n], self._cy(level) - size[n][1] / 2)
         self.flow, self.size = flow, size
+        for upper, lower in zip(self.levels, self.levels[1:], strict=False):
+            if lower - upper > 1:  # levels left out (u_levels): ⋮ on both sides of the U
+                y = self.bottom[upper] + 14
+                for side in ("enc", "dec"):
+                    near = self.rows[upper].get(side) or self.rows[lower].get(side) or []
+                    if near:
+                        x = sum(self._cx(n) for n in near) / len(near)
+                        block.notes.append(((x, y), "⋮"))
         for i in internal:
             block.routes.append(self._internal(i))
         for i in entering:
@@ -131,8 +144,19 @@ class _UShape:
                 block.sides[i] = ("cross_before", None)
         return block
 
+    def _extent(self, node: str) -> tuple[float, float]:
+        """How far a node reaches above and below its row's centre line."""
+        if VOLUME in self.run.g.node(node).params:
+            return self.run.volume_extent(node)
+        half = self.run.node_fc(node)[1] / 2
+        return half, half
+
     def _cy(self, level: int) -> float:
-        return self.top[level] + self.height[level] / 2
+        return self.line[level]
+
+    def _gap_y(self, upper: int, lower: int) -> float:
+        """The middle of the gap between two drawn rows."""
+        return (self.bottom[upper] + self.top[lower]) / 2
 
     def _cx(self, node: str) -> float:
         return self.flow[node] + self.size[node][0] / 2
@@ -143,6 +167,7 @@ class _UShape:
         e = self.run.g.edges[index]
         (la, sa), (lb, sb) = self.where[e.source], self.where[e.target]
         row_a, row_b = self.rows[la][sa], self.rows[lb][sb]
+        ra, rb = self.levels.index(la), self.levels.index(lb)  # drawn rows (levels may be left out)
         if la == lb:
             a, b = row_a.index(e.source) if sa == sb else -1, row_b.index(e.target)
             neighbours = sa == sb and b == a + 1
@@ -152,12 +177,16 @@ class _UShape:
             above = self.top[la] - 8  # anything else in a row: over the top
             points = [(self._cx(e.source), above), (self._cx(e.target), above)]
             return _Route(index, points, "cross_before", "cross_before")
-        if lb == la + 1 or (lb > la and sb == "bottom"):  # handing on to the next row down
-            y = (self.top[lb] + self.top[la] + self.height[la]) / 2 - 3
+        if rb == ra + 1:  # handing on to the next row down
+            y = self._gap_y(la, lb) - 3
+            if VOLUME in self.run.g.node(e.source).params:  # its name and shape sit below:
+                turn = self.flow[e.source] + self.size[e.source][0] + 4  # out of the side
+                points = [(turn, self._cy(la)), (turn, y), (self._cx(e.target), y)]
+                return _Route(index, points, "flow_end", "cross_before")
             points = [(self._cx(e.source), y), (self._cx(e.target), y)]
             return _Route(index, points, "cross_after", "cross_before")
-        if lb == la - 1 or (la > lb and sa == "bottom"):  # handing back up a row
-            y = (self.top[la] + self.top[lb] + self.height[lb]) / 2 + 3
+        if rb == ra - 1:  # handing back up a row
+            y = self._gap_y(lb, la) + 3
             points = [(self._cx(e.source), y), (self._cx(e.target), y)]
             return _Route(index, points, "cross_before", "cross_after")
         x = self.flow[e.source] + self.size[e.source][0] + 10  # rare: down the side

@@ -28,6 +28,8 @@ from tensorgami.ir import (
 from tensorgami.transforms.base import rebuild
 from tensorgami.vocabulary import EdgeKind, OpCategory
 
+LINKED = "linked"  # the op of a model output that a link turned into a tensor of the figure
+
 
 class UnknownReference(ValueError):
     """A reference names no tensor or module of the figure."""
@@ -119,11 +121,11 @@ def _names(graph: Graph, nodes: list[Node]) -> str:
 def resolve(graph: Graph, ref: str) -> str:
     """The node producing the tensor ``ref`` names (an output: the node behind it)."""
     model, rest, nodes = _scope(graph, ref)
-    if model and not rest:  # a model's name: its output
-        outputs = [n for n in nodes if n.is_output]
+    if model and not rest:  # a model's name: its output (or the tensor a link made of it)
+        outputs = [n for n in nodes if n.is_output or n.op == LINKED]
         if outputs:
             return outputs[0].id
-    module = f"{model}.{rest}" if model else rest
+    module = f"{model}.{rest}" if model and rest else (model or rest)
     for n in nodes:
         if (n.is_input or n.is_output) and n.label == rest:
             return n.id
@@ -175,7 +177,7 @@ def link(graph: Graph, source: str, target: str, label: str | None = None) -> Gr
             continue
         if n.id == src and n.is_output:  # now inside the figure: a tensor
             n = dataclasses.replace(
-                n, op="tensor", category=OpCategory.TENSOR, label=label or graph.node(dst).label
+                n, op=LINKED, category=OpCategory.TENSOR, label=label or graph.node(dst).label
             )
         nodes.append(n)
     edges = [

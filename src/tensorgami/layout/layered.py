@@ -22,9 +22,10 @@ from __future__ import annotations
 import dataclasses
 import math
 from collections import defaultdict
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 
-from tensorgami.ir import ROOT, TRAINS, VOLUME, Graph, Group
+from tensorgami.ir import MODELS, ROOT, TRAINS, VOLUME, Graph, Group
 from tensorgami.ir import Node as GraphNode
 from tensorgami.layout.base import Direction, LayoutOptions
 from tensorgami.layout.labels import GENERIC_CONTAINERS, Labeler, NodeText
@@ -215,9 +216,21 @@ class _Run:
         fw, fh, depth = volume_geometry(self.g.node(node_id).params[VOLUME])
         return fw, fh, depth, depth * math.cos(math.radians(self.theme.metrics.cuboid_angle))
 
+    def volume_extent(self, node_id: str) -> tuple[float, float]:
+        """How far a volume reaches above and below its centre line: the oblique top above,
+        the name and shape below (its footprint reserves the larger of the two both ways)."""
+        fw, fh, depth, _ = self._volume_geometry(node_id)
+        node = self.g.node(node_id)
+        dy = depth * math.sin(math.radians(self.theme.metrics.cuboid_angle))
+        below = 6 + self.theme.node_font(node.category).size * 1.15
+        if self.texts[node_id].detail:
+            below += self.theme.metrics.line_gap + self.theme.font(TextRole.DETAIL).size * 1.15
+        return fh / 2 + dy, fh / 2 + below
+
     def _volume_size(self, node: GraphNode, text: NodeText) -> tuple[float, float]:
-        """A volume's footprint: its face and oblique depth, with room for the name and shape
-        below and as much above, so the face sits in the middle and wires stay level."""
+        """A volume's footprint: its face in the middle, with room for the oblique depth on
+        both sides and above, and for the name and shape below (as much above), so wires
+        meet the face level from the sides and straight from above or below."""
         fw, fh, depth, dx = self._volume_geometry(node.id)
         dy = depth * math.sin(math.radians(self.theme.metrics.cuboid_angle))
         label_font = self.theme.node_font(node.category)
@@ -227,7 +240,7 @@ class _Run:
         if text.detail:
             below += self.theme.metrics.line_gap + detail_font.size * 1.15
             widths.append(self.measurer.width(text.detail, detail_font))
-        return _ceil(max(fw + dx, *widths) + 8), _ceil(fh + 2 * max(dy, below))
+        return _ceil(max(fw + 2 * dx, *widths) + 8), _ceil(fh + 2 * max(dy, below))
 
     def _uniform(self, sizes: dict[str, tuple[float, float]]) -> dict[str, tuple[float, float]]:
         """With ``uniform_width``, single-line boxes all take the longest one's length (pills
@@ -280,6 +293,8 @@ class _Run:
         container holding exactly one sub-group, or laid out by a block layout."""
         if group.type_name in BLOCK_LAYOUTS:  # framed only if the block layout asks for it
             return getattr(BLOCK_LAYOUTS[group.type_name], "framed", False)
+        if group.parent == ROOT and group.id in self.g.metadata.get(MODELS, "").split(","):
+            return True  # one of several models: always framed and named
         nodes = self.g.members(group.id)
         children = self.g.children(group.id)
         if group.count > 1:
@@ -370,9 +385,9 @@ class _Run:
             w, h = self.sizes[node.id]
             box = Box(m + x, m + y, w, h)
             text = self.texts[node.id]
-            if VOLUME in node.params:  # the front face, centred in the footprint
+            if VOLUME in node.params:  # the front face, in the middle of the footprint
                 fw, fh, depth, dx = self._volume_geometry(node.id)
-                face = Box(box.cx - (fw + dx) / 2, box.cy - fh / 2, fw, fh)
+                face = Box(box.cx - fw / 2, box.cy - fh / 2, fw, fh)
                 boxes[node.id] = face
                 scene_nodes.append(
                     Node(
@@ -414,7 +429,7 @@ class _Run:
             notes.append(Note(Point(m + x, m + y), text, TextAnchor.MIDDLE, TextRole.LABEL))
         training = self._training_arrows(boxes, frames, bottom=m + height)
         edges += training
-        height += 16 + 10 * len(training) if training else 0
+        height += 16 + 10 * self.under_lanes if self.under_lanes else 0
         scene = Scene(width + 2 * m, height + 2 * m, title=self.g.name)
         scene.add(*frames, *scene_nodes, *edges, *notes)
         if self.opts.legend:
@@ -422,31 +437,125 @@ class _Run:
         return scene
 
     def _training_arrows(self, boxes: dict[str, Box], frames: list, bottom: float) -> list[Edge]:
-        """A loss's dashed arrows to the models or modules it trains (``params[TRAINS]``): down
-        from the loss to a lane under the figure, along it, and up into the frame through a
-        clear column (or, if every column is blocked, up a gutter on the left and in from the
-        side)."""
+        """A loss's dashed arrows to the models or modules it trains (``params[TRAINS]``).
+
+        Into the model right beside the loss (the nearest thing on its left), *over the top*:
+        out of the loss's side, up past what stands above it, along above the frame and down
+        into it — a short counterclockwise loop (GAN loss → discriminator). Into any other,
+        *underneath*: down to a lane under the figure, along it and up into the frame through
+        a clear column (or, if every column is blocked, up a gutter on the left and in from
+        the side)."""
         frame_of = {f.id: f.box for f in frames}
+        losses_per: dict[str, int] = defaultdict(int)
+        for node in self.g.nodes:
+            for gid in node.params.get(TRAINS, ()):
+                losses_per[gid] += 1
+        font = self.theme.font(TextRole.ANNOTATION)
         arrows: list[Edge] = []
+        lanes = overs = 0
         for node in self.g.nodes:
             for gid in node.params.get(TRAINS, ()):
                 target = frame_of.get(gid) or self._bounds(gid, boxes)
                 if target is None:
                     continue
-                lane = bottom + 16 + 10 * len(arrows)
                 source = boxes[node.id]
                 others = [f.box for f in frames if f.id != gid and not self._inside(gid, f.id)]
-                x = self._clear_column(target, lane, [*boxes.values(), *others])
+                obstacles = [b for b in [*boxes.values(), *others] if b is not source]
+                width = self.measurer.width(node.label, font)
+                named = losses_per[gid] > 1  # which loss is which, where several meet
+                label = node.label if named else ""
+
+                lane = bottom + 16 + 10 * lanes
+                taken = [a.target.x for a in arrows if isinstance(a.target, Point)]
+                x = self._clear_column(target, lane, obstacles, taken)
                 if x is not None:
                     via = (Point(source.cx, lane), Point(x, lane))
                     end = Point(x, target.bottom)
+                    label_at = Point(x + 6 + width / 2, target.bottom + font.size + 4)
                 else:
                     every = [*boxes.values(), *frame_of.values()]
-                    gutter = max(min(b.x for b in every) - 12 - 6 * len(arrows), 4.0)
+                    gutter = max(min(b.x for b in every) - 12 - 6 * lanes, 4.0)
                     via = (Point(source.cx, lane), Point(gutter, lane), Point(gutter, target.cy))
                     end = Point(target.x, target.cy)
-                arrows.append(Edge(node.id, end, EdgeKind.TRAINING, Side.BOTTOM, via=via))
-        return arrows
+                    label_at = Point(target.x - 6 - width / 2, target.cy - font.size)
+                over = self._over_the_top(node.id, source, target, obstacles, overs, label, font)
+                if over is not None:  # the model right beside the loss: a short loop back
+                    arrows.append(over)
+                    overs += 1
+                else:
+                    arrows.append(
+                        Edge(
+                            node.id,
+                            end,
+                            EdgeKind.TRAINING,
+                            Side.BOTTOM,
+                            via=via,
+                            label=label,
+                            label_at=label_at if named else None,
+                        )
+                    )
+                    lanes += 1
+        self.under_lanes = lanes
+        return self._spread_labels(arrows, font.size)
+
+    def _over_the_top(
+        self, loss: str, source: Box, target: Box, obstacles: list[Box], k: int, label, font
+    ) -> Edge | None:
+        """Out of the loss's right side, up past everything above it, left above the target
+        and down into its top — or ``None`` unless the target is the nearest thing on the
+        loss's left (no other model or box in between) and the way is clear."""
+        if source.x < target.right:
+            return None
+        if any(b.x >= target.right - 1 and b.right <= source.x + 1 for b in obstacles):
+            return None  # it would jump over another model: the route underneath reads better
+        out = source.right + 14 + 8 * k
+        enter = target.right - 24 - 10 * k
+        spanned = [b for b in obstacles if b.right > enter - 12 and b.x < out + 12]
+        top = min([target.y, *(b.y for b in spanned if b.bottom > target.y - 1)]) - 14 - 8 * k
+        if top < 8:
+            return None
+        legs = [
+            (Point(out, source.cy), Point(out, top)),
+            (Point(out, top), Point(enter, top)),
+            (Point(enter, top), Point(enter, target.y)),
+        ]
+        for a, b in legs:
+            if any(_crosses(a, b, box) for box in obstacles):
+                return None
+        via = (Point(out, source.cy), Point(out, top), Point(enter, top))
+        at = (
+            Point(enter + 6 + self.measurer.width(label, font) / 2, top - font.size)
+            if label
+            else None
+        )
+        return Edge(
+            loss,
+            Point(enter, target.y),
+            EdgeKind.TRAINING,
+            Side.RIGHT,
+            via=via,
+            label=label,
+            label_at=at,
+        )
+
+    def _spread_labels(self, arrows: list[Edge], size: float) -> list[Edge]:
+        """Labels of arrows rising into the same box side by side: the leftmost labelled on
+        its left, the others on their right, each a line lower, so no two overlap."""
+        by_end: dict[float, list[int]] = defaultdict(list)
+        for i, a in enumerate(arrows):
+            if a.label and isinstance(a.target, Point):
+                by_end[round(a.target.y, 1)].append(i)
+        spread = list(arrows)
+        for indices in by_end.values():
+            indices.sort(key=lambda i: arrows[i].target.x)
+            font = self.theme.font(TextRole.ANNOTATION)
+            for k, i in enumerate(indices):
+                a = arrows[i]
+                width = self.measurer.width(a.label, font)
+                dx = -(6 + width / 2) if k == 0 and len(indices) > 1 else 6 + width / 2
+                at = Point(a.target.x + dx, a.target.y + size + 4 + (size + 4) * max(k - 1, 0))
+                spread[i] = dataclasses.replace(a, label_at=at)
+        return spread
 
     def _bounds(self, gid: str, boxes: dict[str, Box]) -> Box | None:
         """The box around a group's nodes (a group without a frame)."""
@@ -463,13 +572,17 @@ class _Run:
         return other in {a.id for a in self.g.ancestors(gid)}
 
     @staticmethod
-    def _clear_column(target: Box, lane: float, obstacles: list[Box]) -> float | None:
+    def _clear_column(
+        target: Box, lane: float, obstacles: list[Box], taken: Sequence[float] = ()
+    ) -> float | None:
         """An x under ``target``, nearest its middle, from which a line down to the lane
-        touches no obstacle."""
+        touches no obstacle and no other training arrow."""
 
         def clear(x: float) -> bool:
+            if any(abs(x - other) < 10 for other in taken):
+                return False
             return not any(
-                b.x - 8 < x < b.right + 8 and b.bottom > target.bottom + 0.5 and b.y < lane
+                b.x - 12 < x < b.right + 12 and b.bottom > target.bottom + 0.5 and b.y < lane
                 for b in obstacles
             )
 
@@ -595,6 +708,15 @@ class _Run:
         scene.width = max(scene.width, legend.box.right + m)
         scene.height = legend.box.bottom + m
         add_legend(scene, self.theme, Point(m, top), columns, text=self.text)
+
+
+def _crosses(a: Point, b: Point, box: Box, pad: float = 2.0) -> bool:
+    """An axis-aligned segment passes through ``box`` (grown by ``pad``)."""
+    if abs(a.x - b.x) < 0.5:
+        low, high = sorted((a.y, b.y))
+        return box.x - pad < a.x < box.right + pad and low < box.bottom + pad and high > box.y - pad
+    low, high = sorted((a.x, b.x))
+    return box.y - pad < a.y < box.bottom + pad and low < box.right + pad and high > box.x - pad
 
 
 def _simplify(points: list[Point]) -> list[Point]:

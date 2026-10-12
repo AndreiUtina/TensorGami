@@ -69,7 +69,8 @@ print(graph.summary())                    # every operation, its module and shap
 print(simplify(graph, level=2).summary())  # layers: activations folded, repeats ×N
 ```
 
-See the automatically drawn [gallery](docs/gallery/README.md).
+See the [acceptance gallery](docs/gallery/README.md): every model family in every view and
+style, drawn automatically and checked by tests.
 
 ## Drawing a scene today
 
