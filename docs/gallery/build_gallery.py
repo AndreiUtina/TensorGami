@@ -51,6 +51,53 @@ def gallery_dir(style: str) -> Path:
     return HERE if style == "default" else HERE / style
 
 
+def cgan(**options: object) -> tg.Figure:
+    """Generator and discriminator in one figure, with the adversarial loop (step 11e)."""
+    (make_g, example_g), (make_d, example_d) = (
+        MODELS["cgan_generator"],
+        MODELS["cgan_discriminator"],
+    )
+    (z, labels), (image, _) = example_g(), example_d()
+    return tg.draw(
+        {"generator": make_g(), "discriminator": make_d()},
+        {
+            "generator": {"z": z, "labels": labels},
+            "discriminator": {"image": image, "labels": labels},
+        },
+        links=[
+            ("generator", "discriminator.image", "fake image"),
+            ("generator.labels", "discriminator.labels"),
+        ],
+        annotations=[
+            tg.Input("real image", to="discriminator.image"),
+            tg.Loss("adversarial loss", "discriminator", trains=["generator", "discriminator"]),
+        ],
+        **options,
+    )
+
+
+def vae_losses(**options: object) -> tg.Figure:
+    """The VAE with its two loss terms (step 11e)."""
+    make, example = MODELS["vae"]
+    return tg.draw(
+        make(),
+        example(),
+        overrides={"mu": {"label": "μ"}, "logvar": {"label": "log σ²"}},
+        annotations=[
+            tg.Loss("reconstruction", "output 0", "input"),
+            tg.Loss("KL divergence", "mu", "logvar"),
+        ],
+        **options,
+    )
+
+
+COMPOSED = {  # file name: (figure, tg.draw options besides the style)
+    "cgan": (cgan, {"level": 0}),  # the overview: each model one box
+    "cgan-layers": (cgan, {"direction": "TB"}),
+    "vae-losses": (vae_losses, {}),
+}
+
+
 def build(style: str = "default") -> list[Path]:
     out_dir = gallery_dir(style)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -59,6 +106,8 @@ def build(style: str = "default") -> list[Path]:
         make, example = MODELS[model]
         fig = tg.draw(make(), example(), style=style, **options)
         paths.append(fig.save(out_dir / f"{name}.svg"))
+    for name, (figure, options) in COMPOSED.items():
+        paths.append(figure(style=style, **options).save(out_dir / f"{name}.svg"))
     return paths
 
 
