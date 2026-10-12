@@ -1,8 +1,7 @@
 [project]
 name = "tensorgami"
-dynamic = ["version"]  # from src/tensorgami/__init__.py: one place to change it
+dynamic = ["version", "readme"]  # version: src/tensorgami/__init__.py; readme: README.md, below
 description = "Draw the architecture and information flow of PyTorch models: figures for papers, reports and slides"
-readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Andrei Utina" }]
@@ -56,11 +55,27 @@ torch = [
 ]
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-fancy-pypi-readme>=24"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
 path = "src/tensorgami/__init__.py"
+
+# README.md links to the repository's files by relative paths, which GitHub resolves in a
+# private repository and on every branch; on PyPI they become absolute (images: the raw files)
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '(!\[[^\]]*\]\()(?!https?://)([^)\s]+)\)'
+replacement = '\1https://raw.githubusercontent.com/AndreiUtina/TensorGami/main/\2)'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '(\]\()(?!https?://|#)([^)\s]+)\)'
+replacement = '\1https://github.com/AndreiUtina/TensorGami/blob/main/\2)'
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/tensorgami"]

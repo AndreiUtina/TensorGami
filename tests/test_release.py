@@ -1,7 +1,7 @@
 """Release consistency (roadmap step 15): what a release reads must agree before a tag is
 pushed. The version in the package, the citation and the changelog; the license in the
-metadata and in LICENSE; the README's absolute links (PyPI shows the README with them, so a
-moved file breaks the project page); the supported Pythons in the classifiers and in CI.
+metadata and in LICENSE; the README's links (relative on GitHub, made absolute for PyPI); the
+supported Pythons in the classifiers and in CI.
 """
 
 from __future__ import annotations
@@ -53,24 +53,40 @@ def test_sdist_includes_exist():
         assert (ROOT / path.lstrip("/")).exists(), path
 
 
-def test_readme_links_into_the_repository_exist():
-    readme = (ROOT / "README.md").read_text()
-    raw = re.findall(rf"https://raw\.githubusercontent\.com/{REPO}/main/([^)\s\"]+)", readme)
-    blob = re.findall(rf"https://github\.com/{REPO}/(?:blob|tree)/main/([^)\s\"#]+)", readme)
-    assert raw and blob
-    missing = [p for p in [*raw, *blob] if not (ROOT / p).exists()]
+def _links(markdown: str) -> list[str]:
+    return re.findall(r"\]\(([^)\s]+)\)", markdown)
+
+
+def _pypi_readme() -> str:
+    """README.md as PyPI shows it: the substitutions of hatch-fancy-pypi-readme applied."""
+    hook = PYPROJECT["tool"]["hatch"]["metadata"]["hooks"]["fancy-pypi-readme"]
+    text = (ROOT / "README.md").read_text()
+    for sub in hook["substitutions"]:
+        text = re.sub(sub["pattern"], sub["replacement"], text)
+    return text
+
+
+def test_readme_links_to_files_that_exist():
+    """Relative, so GitHub shows the images in a private repository and on every branch."""
+    relative = [t for t in _links((ROOT / "README.md").read_text()) if "://" not in t]
+    assert relative
+    missing = [t for t in relative if not (ROOT / t.partition("#")[0]).exists()]
     assert not missing, missing
 
 
-def test_readme_has_no_relative_links():
-    """PyPI cannot resolve them: every link and image must be absolute."""
-    readme = (ROOT / "README.md").read_text()
-    relative = [
-        target
-        for target in re.findall(r"\]\(([^)]+)\)", readme)
-        if not target.startswith(("https://", "http://", "#"))
-    ]
+def test_pypi_readme_links_are_absolute_and_exist():
+    """PyPI cannot resolve relative links: the build makes them absolute."""
+    links = _links(_pypi_readme())
+    relative = [t for t in links if not t.startswith(("https://", "http://", "#"))]
     assert not relative, relative
+    raw = f"https://raw.githubusercontent.com/{REPO}/main/"
+    blob = f"https://github.com/{REPO}/blob/main/"
+    files = [t.removeprefix(raw).removeprefix(blob) for t in links if t.startswith((raw, blob))]
+    assert files
+    missing = [f for f in files if not (ROOT / f).exists()]
+    assert not missing, missing
+    images = re.findall(r"!\[[^\]]*\]\(([^)\s]+)\)", _pypi_readme())
+    assert all(not i.startswith(blob) for i in images)  # images load from the raw files
 
 
 def test_classifiers_match_the_python_versions_tested_in_ci():

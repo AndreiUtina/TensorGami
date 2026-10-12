@@ -384,8 +384,9 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   Publishing: no tokens); a GitHub Release with the files. Steps in
   [`docs/RELEASING.md`](docs/RELEASING.md); `tests/test_release.py` keeps version, citation,
   changelog, licence, classifiers and the README's absolute links consistent.
-- README rewritten for PyPI: install, quick start, what can be drawn, gallery figures (absolute
-  links, so they show on the project page).
+- README rewritten for PyPI: install, quick start, what can be drawn, gallery figures. Its
+  links are relative (GitHub shows them in a private repository too); the build makes them
+  absolute for the PyPI page (`hatch-fancy-pypi-readme`).
 - Left to the user: make the repository public, register the pending publishers on PyPI and
   TestPyPI, create the `testpypi` / `pypi` environments, set `PUBLISH_TO_PYPI`, push the tag.
 
