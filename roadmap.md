@@ -214,7 +214,7 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 
 ## Phase C — Your model families
 
-### 11) Views 🔶 (11a unrolled ✅, 11b U-shape ✅)
+### 11) Views 🔶 (11a unrolled ✅, 11b U-shape ✅, 11c volume ✅)
 - Plan, in parts: **11a** unrolled time view ✅ · 11b U-shape layout for encoder–decoder skips
   and folding activations that come *before* a layer · 11c tensor-volume view for CNNs ·
   11d cell view (LSTM/GRU gates) · 11e generative figures (below).
@@ -250,6 +250,17 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
     when that makes a figure ≥ 20 % narrower (no row for a lone pill).
   - Specialised layouts are now block layouts registered by group type in the layered
     engine (ADR-0004); pix2pix generator and discriminator joined the reference models.
+- **11c Volume view** ✅ (2026-10-11): `view="volume"` draws every layer whose output is an
+  image tensor (N, C, H, W) as a volume (face height ∝ √H, oblique depth ∝ √W, thickness ∝
+  √C), the input image too, and flat vectors (Flatten, Linear) as thin bars; each named with
+  its shape below, as in the AlexNet paper. Normalisation, activations and dropout fold into
+  the layer before them (across modules too: a volume is a layer's output); merges keep their
+  circles; always left → right, no shapes on the wires. `MarkVolumes` (transform) +
+  `params["volume"]` read by the layered layout, which reserves the volume's footprint and
+  centres its front face so wires stay level.
+- Examples: `examples/` holds only scripts and notebooks; the notebooks (`alexnet`,
+  `pix2pix`, `tour`) are run and keep their figures. AlexNet's figures moved to the gallery
+  (`docs/gallery/alexnet*.svg`, every style, with the volume view).
 - Views: block (default), tensor-volume view for CNNs, cell view (LSTM/GRU gates), unrolled
   time view (RNN, LSTM, ConvLSTM).
 - Generative models: VAE (sampling node, μ/σ, loss terms) and cGAN (generator +

@@ -75,11 +75,16 @@ From [`examples/alexnet.py`](../../examples/alexnet.py): torchvision's AlexNet t
 224×224 image, at the layer level, top to bottom, and at the stage level. The collapsed
 blocks are named after their attributes and coloured by their contents.
 
-![AlexNet](../../examples/alexnet.svg)
+![AlexNet](alexnet.svg)
 
-![AlexNet, stage level](../../examples/alexnet-stages.svg)
+![AlexNet, stage level](alexnet-stages.svg)
 
-<img src="../../examples/alexnet-vertical.svg" alt="AlexNet, top to bottom" width="320">
+<img src="alexnet-vertical.svg" alt="AlexNet, top to bottom" width="320">
+
+With `view="volume"`, every layer is drawn as the tensor it produces, C × H × W, as in the
+original paper; the dense layers are bars.
+
+![AlexNet, volume view](alexnet-volume.svg)
 
 ## Origami style
 
@@ -96,7 +101,7 @@ page](../style/origami.md)).
 
 <img src="origami/transformer.svg" alt="Transformer, origami" width="360">
 
-![AlexNet, origami](../../examples/alexnet-origami.svg)
+![AlexNet, origami](origami/alexnet.svg)
 
 ## Origami-extended style
 

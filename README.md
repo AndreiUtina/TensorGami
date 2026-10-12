@@ -38,13 +38,20 @@ tg.draw(model, x, level="stages")                  # less detail: 0 system … 3
 tg.draw(model, x, style="origami")                 # or "origami-extended", or a path
 tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
 tg.draw(model, x, view="unrolled")                 # recurrence as a time × layer grid
+tg.draw(model, x, view="volume")                   # CNN layers as tensor volumes
 tg.draw(unet, x, u_shape=False)                    # keep a U-Net on one line (default: a U)
 tg.draw(model, x, overrides={"classifier.6": {"label": "logits"}})  # rename a box
 ```
 
 The example input is what the model is called with: a tensor, a tuple of positional
-arguments, or a dict of keyword arguments, including the batch dimension. See
-[`examples/alexnet.ipynb`](examples/alexnet.ipynb) for a notebook.
+arguments, or a dict of keyword arguments, including the batch dimension.
+
+Notebooks with every option, already run, in [`examples/`](examples/):
+[`alexnet.ipynb`](examples/alexnet.ipynb) (levels, views, styles, layout options, saving,
+panels), [`pix2pix.ipynb`](examples/pix2pix.ipynb) (a U-Net generator and a PatchGAN) and
+[`tour.ipynb`](examples/tour.ipynb) (one model per family: CNN, LSTM, ConvLSTM, VAE, cGAN,
+Transformer). To run them again:
+`cd examples && uv run --with nbclient --with nbformat jupyter execute --inplace *.ipynb`.
 
 The stages are also usable one by one, e.g. to inspect what was captured:
 
