@@ -94,16 +94,40 @@ def test_cnn_residual_merges_and_groups():
     assert conv.params["kernel_size"] == (3, 3) and conv.params["out_channels"] == 16
 
 
-def test_lstm_and_recovered_index():
+def test_lstm_and_its_last_hidden_state():
     _, g = run("lstm")
     (lstm,) = ops(g, "LSTM")
     assert lstm.category is OpCategory.RECURRENT
     assert lstm.params["hidden_size"] == 32 and lstm.params["num_layers"] == 2
-    (view,) = ops(g, "getitem")  # h[-1] is invisible to __torch_function__ in torch 2.2
-    assert view.params["recovered"] is True
+    (view,) = ops(g, "getitem")  # h[-1]: traced, or recovered where torch 2.2 hides it
     (edge,) = g.in_edges(view.id)
     assert edge.source == lstm.id and edge.source_port == 1  # h, not the sequence output
     assert view.output_shapes == ((1, 32),)
+
+
+class _HiddenView(nn.Module):
+    """Indexes a tensor where tracing cannot see it, as torch 2.2 hides ``h[-1]``."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.fc = nn.Linear(4, 8)
+        self.out = nn.Linear(8, 2)
+
+    def forward(self, x):
+        y = self.fc(x)
+        with torch._C.DisableTorchFunction():
+            first = y[0]
+        return self.out(first)
+
+
+def test_a_view_hidden_from_tracing_is_recovered_from_its_storage():
+    g = trace(_HiddenView(), torch.randn(3, 4))
+    (view,) = ops(g, "getitem")
+    assert view.params["recovered"] is True
+    (edge,) = g.in_edges(view.id)
+    assert g.node(edge.source).module == "fc"
+    assert view.output_shapes == ((8,),)
+    assert [g.node(e.target).module for e in g.out_edges(view.id)] == ["out"]
 
 
 def test_cgan_generator_has_two_inputs_merged_with_the_condition():
