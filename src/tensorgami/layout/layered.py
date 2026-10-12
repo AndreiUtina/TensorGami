@@ -24,9 +24,11 @@ import math
 from collections import defaultdict
 from dataclasses import dataclass, field
 
-from tensorgami.ir import ROOT, Graph, Group
+from tensorgami.ir import ROOT, VOLUME, Graph, Group
+from tensorgami.ir import Node as GraphNode
 from tensorgami.layout.base import Direction, LayoutOptions
 from tensorgami.layout.labels import GENERIC_CONTAINERS, Labeler, NodeText
+from tensorgami.layout.volume import volume_geometry, volume_label
 from tensorgami.render.legend import add_legend, build_legend
 from tensorgami.render.text import HeuristicTextMeasurer, TextMeasurer
 from tensorgami.scene import Box, Edge, Node, Note, Point, Scene, Side, TextAnchor
@@ -141,6 +143,9 @@ class _Run:
         self.text = theme.boxes.text(vertical=not self.lr)  # the arrangement in this flow
         self.exec = {n.id: i for i, n in enumerate(graph.nodes)}
         self.texts: dict[str, NodeText] = {n.id: labeler.describe(n) for n in graph.nodes}
+        for n in graph.nodes:  # a tensor volume is named, and shows its shape below
+            if VOLUME in n.params:
+                self.texts[n.id] = NodeText(self.texts[n.id].label, volume_label(n.params[VOLUME]))
         self.sizes = self._uniform({n.id: self._node_size(n.id) for n in graph.nodes})
         self.loops: dict[str, list[int]] = defaultdict(list)
         for i, e in enumerate(graph.edges):
@@ -173,6 +178,8 @@ class _Run:
         node = self.g.node(node_id)
         text = self.texts[node_id]
         shape = self._shape(node_id)
+        if VOLUME in node.params:
+            return self._volume_size(node, text)
         if shape is Shape.CIRCLE:  # a note (e.g. a folded ReLU) sits above the circle, or
             if not text.detail:  # beside it in a top → bottom flow, where wires come from above
                 return 24.0, 24.0
@@ -203,12 +210,36 @@ class _Run:
             return thickness, length
         return length, thickness
 
+    def _volume_geometry(self, node_id: str) -> tuple[float, float, float, float]:
+        """(face width, face height, oblique depth, its horizontal part) of a volume."""
+        fw, fh, depth = volume_geometry(self.g.node(node_id).params[VOLUME])
+        return fw, fh, depth, depth * math.cos(math.radians(self.theme.metrics.cuboid_angle))
+
+    def _volume_size(self, node: GraphNode, text: NodeText) -> tuple[float, float]:
+        """A volume's footprint: its face and oblique depth, with room for the name and shape
+        below and as much above, so the face sits in the middle and wires stay level."""
+        fw, fh, depth, dx = self._volume_geometry(node.id)
+        dy = depth * math.sin(math.radians(self.theme.metrics.cuboid_angle))
+        label_font = self.theme.node_font(node.category)
+        detail_font = self.theme.font(TextRole.DETAIL)
+        below = 6 + label_font.size * 1.15
+        widths = [self.measurer.width(text.label, label_font)]
+        if text.detail:
+            below += self.theme.metrics.line_gap + detail_font.size * 1.15
+            widths.append(self.measurer.width(text.detail, detail_font))
+        return _ceil(max(fw + dx, *widths) + 8), _ceil(fh + 2 * max(dy, below))
+
     def _uniform(self, sizes: dict[str, tuple[float, float]]) -> dict[str, tuple[float, float]]:
         """With ``uniform_width``, single-line boxes all take the longest one's length (pills
         and circles keep theirs): a column (or row of upright boxes) reads like a table."""
         if not (self.boxes.uniform_width and self.text.single_line):
             return sizes
-        boxes = [i for i in sizes if self._shape(i) not in (Shape.CIRCLE, Shape.PILL)]
+        boxes = [
+            i
+            for i in sizes
+            if self._shape(i) not in (Shape.CIRCLE, Shape.PILL)
+            and VOLUME not in self.g.node(i).params
+        ]
         if not boxes:
             return sizes
         axis = 1 if self.text is TextLayout.ROTATED else 0  # the length runs along y upright
@@ -338,8 +369,24 @@ class _Run:
             x, y = self.xy(*block.nodes[node.id])
             w, h = self.sizes[node.id]
             box = Box(m + x, m + y, w, h)
-            boxes[node.id] = box
             text = self.texts[node.id]
+            if VOLUME in node.params:  # the front face, centred in the footprint
+                fw, fh, depth, dx = self._volume_geometry(node.id)
+                face = Box(box.cx - (fw + dx) / 2, box.cy - fh / 2, fw, fh)
+                boxes[node.id] = face
+                scene_nodes.append(
+                    Node(
+                        node.id,
+                        face,
+                        node.category,
+                        text.label,
+                        text.detail,
+                        shape=Shape.CUBOID,
+                        depth=depth,
+                    )
+                )
+                continue
+            boxes[node.id] = box
             scene_nodes.append(
                 Node(
                     node.id, box, node.category, text.label, text.detail, text=self.text_of(node.id)

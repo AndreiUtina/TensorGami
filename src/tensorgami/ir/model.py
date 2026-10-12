@@ -123,6 +123,10 @@ STEP, LAYER, ROLE = "time_step", "time_layer", "time_role"
 USHAPE = "u-shape"
 U_LEVEL, U_SIDE = "u_level", "u_side"
 
+# The volume view: a node with params[VOLUME] = (C, H, W) is drawn as a tensor volume, one with
+# (F,) as a flat vector (a thin bar).
+VOLUME = "volume"
+
 
 class RepeatKind(StrEnum):
     LAYERS = "layers"  # different modules with identical structure (Transformer layers)

@@ -1,15 +1,26 @@
-"""The block and unrolled views, and the automatic choice between them."""
+"""The block, unrolled and volume views, and the automatic choice of a view."""
 
 from __future__ import annotations
 
+import dataclasses
+
 from tensorgami.ir import Graph, RepeatKind
-from tensorgami.layout import LayoutOptions, layout
+from tensorgami.layout import Direction, LayoutOptions, layout
 from tensorgami.scene import Scene
 from tensorgami.style import Theme
-from tensorgami.transforms import DetectRecurrence, Level, Pipeline, pipeline_for, simplify
+from tensorgami.transforms import (
+    DetectRecurrence,
+    FoldIntoPrevious,
+    Level,
+    Pipeline,
+    pipeline_for,
+    simplify,
+)
 from tensorgami.transforms.unroll import UnrollRecurrence
 from tensorgami.transforms.ushape import FoldUShape
+from tensorgami.transforms.volume import MarkVolumes
 from tensorgami.views.base import View
+from tensorgami.vocabulary import OpCategory
 
 
 class BlockView:
@@ -43,6 +54,26 @@ class UnrolledView:
     ) -> tuple[Graph, Scene]:
         steps = [pipeline_for(level, fold_time=False), UnrollRecurrence(self.max_steps)]
         shown = Pipeline(steps).apply(graph)
+        return shown, layout(shown, theme, options)
+
+
+class VolumeView:
+    """CNN layers as tensor volumes, as in the AlexNet and LeNet figures: every image tensor a
+    box of C × H × W (the input image too), flat vectors thin bars, each named with its shape
+    below. Normalisation, activations and dropout fold into the layer before them. Always
+    drawn left → right, without shapes on the wires (the volumes carry them)."""
+
+    name = "volume"
+
+    def draw(
+        self, graph: Graph, theme: Theme, *, level: Level, options: LayoutOptions
+    ) -> tuple[Graph, Scene]:
+        layer_parts = (OpCategory.ACTIVATION, OpCategory.REGULARIZATION, OpCategory.NORM)
+        fold = FoldIntoPrevious(layer_parts, across=layer_parts)  # a volume is a layer's output
+        shown = Pipeline([pipeline_for(level), fold, MarkVolumes()]).apply(graph)
+        options = dataclasses.replace(
+            options, direction=Direction.LEFT_RIGHT, shapes_on_edges=False
+        )
         return shown, layout(shown, theme, options)
 
 

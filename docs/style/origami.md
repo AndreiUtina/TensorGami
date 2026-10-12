@@ -30,15 +30,15 @@ room a figure needs:
 
 AlexNet, `origami` (1047 × 390 px; a layer takes about 60 px of width):
 
-![AlexNet, origami](../../examples/alexnet-origami.svg)
+![AlexNet, origami](../gallery/origami/alexnet.svg)
 
 AlexNet, `origami-extended` (535 × 1151 px; `origami` top → bottom looks the same):
 
-<img src="../../examples/alexnet-origami-extended.svg" alt="AlexNet, origami-extended" width="400">
+<img src="../gallery/origami-extended/alexnet.svg" alt="AlexNet, origami-extended" width="400">
 
 `origami-extended` left → right (1492 × 360 px):
 
-![AlexNet, origami-extended, left to right](../../examples/alexnet-origami-extended-horizontal.svg)
+![AlexNet, origami-extended, left to right](../gallery/origami-extended/alexnet-horizontal.svg)
 
 Use `origami` for horizontal figures that must fit a slide or a page width, especially deep
 sequential networks; `origami-extended` for figures in a notebook or a column (they scroll

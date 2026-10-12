@@ -48,9 +48,9 @@ def draw(
             model's direct sub-modules), 2 ``"layers"`` (default), 3 ``"operators"``
             (everything traced), 4 ``"cells"``.
         view: ``"block"`` (boxes and wires), ``"unrolled"`` (recurrence as a time × layer
-            grid, with per-step inputs x_t), or ``"auto"`` (default: unrolled when a module
-            is called step after step with state passed along, block otherwise);
-            ``"volume"`` and ``"cell"`` follow in roadmap step 11.
+            grid, with per-step inputs x_t), ``"volume"`` (CNN layers as tensor volumes), or
+            ``"auto"`` (default: unrolled when a module is called step after step with state
+            passed along, block otherwise); ``"cell"`` follows in roadmap step 11.
         style: a built-in style (``"default"``, ``"origami"``), the path of a ``.toml``
             style, or a loaded :class:`~tensorgami.style.Theme`.
         overrides: category, label or leaf-ness per module path or class name, e.g.

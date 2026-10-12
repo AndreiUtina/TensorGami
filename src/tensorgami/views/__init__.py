@@ -7,7 +7,7 @@ API looks them up by name with :func:`get_view`.
 from __future__ import annotations
 
 from tensorgami.views.base import View
-from tensorgami.views.block import AutoView, BlockView, UnrolledView
+from tensorgami.views.block import AutoView, BlockView, UnrolledView, VolumeView
 
 _BLOCK, _UNROLLED = BlockView(), UnrolledView()
 
@@ -15,11 +15,11 @@ VIEWS: dict[str, View] = {
     "auto": AutoView(_BLOCK, _UNROLLED),
     "block": _BLOCK,
     "unrolled": _UNROLLED,
+    "volume": VolumeView(),
 }
 
 #: views that are designed but not built yet (roadmap step 11)
 PLANNED = {
-    "volume": "CNN layers as tensor volumes",
     "cell": "LSTM/GRU cells drawn as their gates",
 }
 
@@ -47,6 +47,7 @@ __all__ = [
     "AutoView",
     "BlockView",
     "UnrolledView",
+    "VolumeView",
     "View",
     "available_views",
     "get_view",

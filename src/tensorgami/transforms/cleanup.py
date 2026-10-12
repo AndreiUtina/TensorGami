@@ -78,10 +78,10 @@ class FoldIntoPrevious:
     them, when that operation feeds nothing else: ``Linear → ReLU → Dropout`` becomes one
     ``Linear`` node with ``params["folded"] == ("ReLU", "Dropout")``.
 
-    An *activation* may join a layer of another module: one that opens a module (pix2pix's
-    ``LeakyReLU → Conv``) joins the layer before it, which then carries the activated tensor
-    to every consumer, as the trace did. Regularisation (a ``Dropout`` opening a classifier)
-    stays in its own module."""
+    Categories in ``across`` (activations, by default) may join a layer of another module: an
+    activation that opens a module (pix2pix's ``LeakyReLU → Conv``) joins the layer before it,
+    which then carries the activated tensor to every consumer, as the trace did; a ``Dropout``
+    opening a classifier stays in its module unless regularisation is in ``across``."""
 
     name = "fold-into-previous"
 
@@ -90,9 +90,11 @@ class FoldIntoPrevious:
         categories: Iterable[OpCategory] = (OpCategory.ACTIVATION, OpCategory.REGULARIZATION),
         *,
         arithmetic: bool = True,
+        across: Iterable[OpCategory] = (OpCategory.ACTIVATION,),
     ) -> None:
         self.categories = frozenset(categories)
         self.arithmetic = arithmetic
+        self.across = frozenset(across)  # categories that may join a layer of another module
 
     def _foldable(self, graph: Graph, n: Node) -> bool:
         if len(n.output_shapes) != 1 or _single_data_input(graph, n) is None:
@@ -119,7 +121,7 @@ class FoldIntoPrevious:
             t = graph.node(target)
             if (
                 t.category is OpCategory.IO
-                or (t.group != n.group and n.category is not OpCategory.ACTIVATION)
+                or (t.group != n.group and n.category not in self.across)
                 or len(t.output_shapes) != 1
                 or consumers[target] != {n.id}
             ):
