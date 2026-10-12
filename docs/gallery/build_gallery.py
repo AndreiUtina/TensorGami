@@ -33,6 +33,8 @@ FIGURES = {  # file name: (model, tg.draw options besides the style)
     "vae": ("vae", {"level": 2}),
     "convlstm": ("convlstm", {"level": 2}),  # view="auto": unrolled (a loop over time)
     "convlstm-folded": ("convlstm", {"level": 2, "view": "block"}),
+    "convlstm-cell": ("convlstm", {"view": "cell"}),  # the cell, as its gates
+    "lstm-cell": ("lstm", {"view": "cell"}),
     "transformer": ("transformer", {"level": 2, "direction": "TB"}),
     "pix2pix-generator": ("pix2pix_generator", {"level": 2}),  # nested skips: a U
     "pix2pix-discriminator": ("pix2pix_discriminator", {"level": 2}),

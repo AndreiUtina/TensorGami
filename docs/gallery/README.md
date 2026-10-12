@@ -54,6 +54,15 @@ With `view="block"` each layer is one cell, drawn once with its recurrent h/c st
 
 ![ConvLSTM, folded](convlstm-folded.svg)
 
+With `view="cell"`, the cell itself, as its gates: the LSTM is recognised from the traced
+operations, and its gates are coloured as the convolution that computes them.
+
+![ConvLSTM cell](convlstm-cell.svg)
+
+The fused `nn.LSTM` of the LSTM classifier, the same way:
+
+![LSTM cell](lstm-cell.svg)
+
 ## pix2pix: U-Net generator and PatchGAN discriminator
 
 The generator's skip connections nest inside each other, so it is drawn as a U: one row per
