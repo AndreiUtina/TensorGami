@@ -133,6 +133,15 @@ VOLUME = "volume"
 LSTM_CELL = "lstm-cell"
 CELL_ROLE, CAPTION = "cell_role", "caption"
 
+# A loss term's params[TRAINS]: the groups (models, modules) its gradient updates; the layout
+# draws a dashed training arrow from the loss to each of their frames.
+TRAINS = "trains"
+
+# Graph.metadata[MODELS]: the comma-separated model names of a figure of several models; each
+# model is a top-level group, and levels of detail count from the models (level 0: each model
+# one box).
+MODELS = "models"
+
 
 class RepeatKind(StrEnum):
     LAYERS = "layers"  # different modules with identical structure (Transformer layers)

@@ -116,11 +116,11 @@ class ShapeConsistencyRule:
 
 @dataclass(frozen=True)
 class AcyclicDataFlowRule:
-    """Data flow is acyclic. Only ``state`` edges (folded recurrence) and undirected ``tied``
-    edges may close a loop."""
+    """Data flow is acyclic. Only ``state`` edges (folded recurrence), undirected ``tied``
+    edges and ``training`` signals (gradients flow backwards) may close a loop."""
 
     name: str = "acyclic"
-    cycle_kinds: frozenset[EdgeKind] = frozenset({EdgeKind.STATE, EdgeKind.TIED})
+    cycle_kinds: frozenset[EdgeKind] = frozenset({EdgeKind.STATE, EdgeKind.TIED, EdgeKind.TRAINING})
 
     def check(self, graph: Graph) -> Iterable[Issue]:
         successors: dict[str, list[str]] = {n.id: [] for n in graph.nodes}

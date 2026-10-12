@@ -24,7 +24,7 @@ import math
 from collections import defaultdict
 from dataclasses import dataclass, field
 
-from tensorgami.ir import ROOT, VOLUME, Graph, Group
+from tensorgami.ir import ROOT, TRAINS, VOLUME, Graph, Group
 from tensorgami.ir import Node as GraphNode
 from tensorgami.layout.base import Direction, LayoutOptions
 from tensorgami.layout.labels import GENERIC_CONTAINERS, Labeler, NodeText
@@ -394,7 +394,8 @@ class _Run:
             )
 
         frames = []
-        for gid, (f, c, fs, cs) in block.frames.items():
+        outer_first = sorted(block.frames.items(), key=lambda kv: self.g.depth(kv[0]))
+        for gid, (f, c, fs, cs) in outer_first:  # painted in order: inner frames on top
             x, y = self.xy(f, c)
             w, h = self.xy(fs, cs)
             group = self.g.group(gid)
@@ -411,11 +412,73 @@ class _Run:
         for (f, c), text in block.notes:
             x, y = self.xy(f, c)
             notes.append(Note(Point(m + x, m + y), text, TextAnchor.MIDDLE, TextRole.LABEL))
+        training = self._training_arrows(boxes, frames, bottom=m + height)
+        edges += training
+        height += 16 + 10 * len(training) if training else 0
         scene = Scene(width + 2 * m, height + 2 * m, title=self.g.name)
         scene.add(*frames, *scene_nodes, *edges, *notes)
         if self.opts.legend:
             self._add_legend(scene, m + height + 28)
         return scene
+
+    def _training_arrows(self, boxes: dict[str, Box], frames: list, bottom: float) -> list[Edge]:
+        """A loss's dashed arrows to the models or modules it trains (``params[TRAINS]``): down
+        from the loss to a lane under the figure, along it, and up into the frame through a
+        clear column (or, if every column is blocked, up a gutter on the left and in from the
+        side)."""
+        frame_of = {f.id: f.box for f in frames}
+        arrows: list[Edge] = []
+        for node in self.g.nodes:
+            for gid in node.params.get(TRAINS, ()):
+                target = frame_of.get(gid) or self._bounds(gid, boxes)
+                if target is None:
+                    continue
+                lane = bottom + 16 + 10 * len(arrows)
+                source = boxes[node.id]
+                others = [f.box for f in frames if f.id != gid and not self._inside(gid, f.id)]
+                x = self._clear_column(target, lane, [*boxes.values(), *others])
+                if x is not None:
+                    via = (Point(source.cx, lane), Point(x, lane))
+                    end = Point(x, target.bottom)
+                else:
+                    every = [*boxes.values(), *frame_of.values()]
+                    gutter = max(min(b.x for b in every) - 12 - 6 * len(arrows), 4.0)
+                    via = (Point(source.cx, lane), Point(gutter, lane), Point(gutter, target.cy))
+                    end = Point(target.x, target.cy)
+                arrows.append(Edge(node.id, end, EdgeKind.TRAINING, Side.BOTTOM, via=via))
+        return arrows
+
+    def _bounds(self, gid: str, boxes: dict[str, Box]) -> Box | None:
+        """The box around a group's nodes (a group without a frame)."""
+        under = [boxes[n.id] for n in self.g.nodes_under(gid) if n.id in boxes]
+        if not under:
+            return None
+        left, top = min(b.x for b in under), min(b.y for b in under)
+        return Box(
+            left, top, max(b.right for b in under) - left, max(b.bottom for b in under) - top
+        )
+
+    def _inside(self, gid: str, other: str) -> bool:
+        """``other`` contains ``gid`` (an enclosing frame is no obstacle)."""
+        return other in {a.id for a in self.g.ancestors(gid)}
+
+    @staticmethod
+    def _clear_column(target: Box, lane: float, obstacles: list[Box]) -> float | None:
+        """An x under ``target``, nearest its middle, from which a line down to the lane
+        touches no obstacle."""
+
+        def clear(x: float) -> bool:
+            return not any(
+                b.x - 8 < x < b.right + 8 and b.bottom > target.bottom + 0.5 and b.y < lane
+                for b in obstacles
+            )
+
+        steps = int((target.w / 2 - 12) // 8)
+        for k in range(steps + 1):
+            for x in (target.cx - 8 * k, target.cx + 8 * k):
+                if clear(x):
+                    return x
+        return None
 
     def _place_notes(self, nodes: list[Node], edges: list[Edge]) -> list[Node]:
         """A merge circle's note goes on a side no wire uses: above or below a tall box,

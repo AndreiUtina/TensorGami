@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable
 from functools import partial
 
-from tensorgami.ir import Graph, Group, Node
+from tensorgami.ir import MODELS, Graph, Group, Node
 from tensorgami.transforms.base import collapse, summary_node
 from tensorgami.vocabulary import OpCategory
 
@@ -105,15 +105,19 @@ class CollapseGroups:
         self.depth = depth
 
     def apply(self, graph: Graph) -> Graph:
-        return _collapse_groups(graph, [g for g in graph.groups if graph.depth(g.id) == self.depth])
+        depth = self.depth + (1 if MODELS in graph.metadata else 0)  # counted inside each model
+        return _collapse_groups(graph, [g for g in graph.groups if graph.depth(g.id) == depth])
 
 
 class CollapseToSystem:
-    """Level 0: inputs → the whole model as one node → outputs."""
+    """Level 0: inputs → the whole model as one node → outputs. In a figure of several models,
+    each model becomes one node (the classic overview: z → generator → discriminator)."""
 
     name = "collapse-to-system"
 
     def apply(self, graph: Graph) -> Graph:
+        if MODELS in graph.metadata:
+            return _collapse_groups(graph, [g for g in graph.groups if graph.depth(g.id) == 1])
         members = {n.id for n in graph.nodes if not (n.is_input or n.is_output)}
         if not members:
             return graph
