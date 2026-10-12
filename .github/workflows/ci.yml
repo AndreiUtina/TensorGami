@@ -22,6 +22,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           enable-cache: true
+          cache-suffix: py${{ matrix.python }}  # one cache per job, not three racing for one
       - name: Install (CPU torch from the PyTorch index, as locked)
         run: uv sync --locked --no-group docs
       - name: Lint
