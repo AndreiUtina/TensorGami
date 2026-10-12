@@ -4,8 +4,11 @@ from __future__ import annotations
 
 from tensorgami.ir.builder import GraphBuilder, invocation_id
 from tensorgami.ir.model import (
+    CAPTION,
+    CELL_ROLE,
     INPUT_OP,
     LAYER,
+    LSTM_CELL,
     OUTPUT_OP,
     ROLE,
     ROOT,
@@ -30,8 +33,11 @@ from tensorgami.ir.summary import summarize
 from tensorgami.ir.validation import GraphError, GraphValidator, Issue
 
 __all__ = [
+    "CAPTION",
+    "CELL_ROLE",
     "INPUT_OP",
     "LAYER",
+    "LSTM_CELL",
     "OUTPUT_OP",
     "ROLE",
     "ROOT",

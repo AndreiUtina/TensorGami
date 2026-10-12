@@ -127,6 +127,12 @@ U_LEVEL, U_SIDE = "u_level", "u_side"
 # (F,) as a flat vector (a thin bar).
 VOLUME = "volume"
 
+# The cell view: a group of type LSTM_CELL is drawn as the classic LSTM figure; its nodes
+# carry their part in params[CELL_ROLE] ("f", "i", "g", "o", "mul_f", "add_c", "c_prev", …).
+# params[CAPTION] replaces a node's computed detail line (e.g. "forget" under a σ gate).
+LSTM_CELL = "lstm-cell"
+CELL_ROLE, CAPTION = "cell_role", "caption"
+
 
 class RepeatKind(StrEnum):
     LAYERS = "layers"  # different modules with identical structure (Transformer layers)
