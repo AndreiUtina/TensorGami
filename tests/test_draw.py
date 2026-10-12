@@ -209,3 +209,91 @@ def test_cell_view_draws_each_kind_of_cell_once():
     make, example = REFERENCE["lstm"]
     fig = tg.draw(make(), example(), view="cell")
     assert [g.title for g in fig.scene.groups] == ["LSTM cell · 8 → 32"]
+
+
+# --------------------------------------------------------------------------- several models (11e)
+
+
+def cgan():
+    (make_g, example_g), (make_d, example_d) = (
+        REFERENCE["cgan_generator"],
+        REFERENCE["cgan_discriminator"],
+    )
+    (z, labels), (image, _) = example_g(), example_d()
+    models = {"generator": make_g(), "discriminator": make_d()}
+    inputs = {
+        "generator": {"z": z, "labels": labels},
+        "discriminator": {"image": image, "labels": labels},
+    }
+    return models, inputs
+
+
+GAN = dict(
+    links=[
+        ("generator", "discriminator.image", "fake image"),
+        ("generator.labels", "discriminator.labels"),
+    ],
+    annotations=[
+        tg.Input("real image", to="discriminator.image"),
+        tg.Loss("adversarial loss", "discriminator", trains=["generator", "discriminator"]),
+    ],
+)
+
+
+def test_a_gan_in_one_figure():
+    models, inputs = cgan()
+    fig = tg.draw(models, inputs, **GAN)
+    assert fig.graph.name == "generator + discriminator"
+    assert {f.title for f in fig.scene.groups} >= {"generator", "discriminator"}
+    inputs_drawn = {n.label for n in fig.graph.nodes if n.is_input}
+    assert inputs_drawn == {"z", "labels", "real image"}  # one condition feeds both
+    arrows = [
+        e for e in fig.scene.edges if e.kind.value == "training" and isinstance(e.source, str)
+    ]
+    assert len(arrows) == 2  # the adversarial loop
+    overview = tg.draw(models, inputs, level=0, **GAN)  # each model one box
+    assert len([n for n in overview.graph.nodes if n.group in ("generator", "discriminator")]) == 2
+
+
+def test_vae_losses():
+    make, example = REFERENCE["vae"]
+    fig = tg.draw(
+        make(),
+        example(),
+        overrides={"mu": {"label": "μ"}, "logvar": {"label": "log σ²"}},
+        annotations=[
+            tg.Loss("reconstruction", "output 0", "input"),
+            tg.Loss("KL divergence", "mu", "logvar"),
+            tg.Note("the latent code", at="mu"),
+        ],
+    )
+    losses = {n.label for n in fig.graph.nodes if n.category.value == "loss"}
+    assert losses == {"reconstruction", "KL divergence"}
+    assert "the latent code" in {n.detail for n in fig.scene.nodes}
+
+
+@pytest.mark.parametrize(
+    ("args", "error", "message"),
+    [
+        ({"links": [("a",)]}, TypeError, "each entry is"),
+        ({"annotations": ["loss"]}, TypeError, "tg.Loss, tg.Input or tg.Note"),
+    ],
+)
+def test_bad_extras_fail_before_the_model_runs(args, error, message):
+    with pytest.raises(error, match=message):
+        tg.draw(MustNotRun(), torch.randn(1, 4), **args)
+
+
+def test_several_models_need_named_inputs():
+    with pytest.raises(ValueError, match="dict of example inputs with the same names"):
+        tg.draw({"a": MustNotRun(), "b": MustNotRun()}, {"a": torch.randn(1, 4)})
+    with pytest.raises(ValueError, match="names without dots"):
+        tg.draw({"a.b": MustNotRun()}, {"a.b": torch.randn(1, 4)})
+
+
+def test_unknown_references_list_the_names_there_are():
+    make, example = REFERENCE["vae"]
+    with pytest.raises(ValueError, match="nothing called 'mean'; try one of: input"):
+        tg.draw(make(), example(), annotations=[tg.Loss("KL", "mean")])
+    with pytest.raises(ValueError, match="needs the tensors it compares"):
+        tg.Loss("empty")
