@@ -107,7 +107,7 @@ def test_overrides_reach_the_importer(cnn, x):
 
 
 def test_views(cnn, x):
-    assert available_views() == ["auto", "block", "unrolled", "volume"]
+    assert available_views() == ["auto", "block", "unrolled", "volume", "cell"]
     assert VIEWS["auto"].choose(trace(cnn, x)) is get_view("block")
     assert tg.draw(cnn, x, view="block").to_svg() == tg.draw(cnn, x).to_svg()
 
@@ -163,7 +163,6 @@ class MustNotRun(nn.Module):
         ({"style": "origamy"}, ThemeError, "built-in styles: default, origami"),
         ({"level": 9}, ValueError, "level must be one of 0 system"),
         ({"direction": "XY"}, ValueError, "direction must be 'LR'"),
-        ({"view": "cell"}, NotImplementedError, "planned for roadmap step 11"),
         ({"view": "fancy"}, ValueError, "unknown view 'fancy'"),
         ({"wrap_width": "wide"}, TypeError, None),
     ],
@@ -201,3 +200,12 @@ def test_recurrent_models_get_the_unrolled_view():
     fig = tg.draw(make(), example(), view="unrolled")  # a fused nn.LSTM, on request
     cells = [n for n in fig.graph.nodes if n.op == "LSTMCell"]
     assert len(cells) == 2 * 4  # 2 layers × 4 of the 5 steps (1, 2, 3, ⋯, 5)
+
+
+def test_cell_view_draws_each_kind_of_cell_once():
+    make, example = REFERENCE["convlstm"]
+    fig = tg.draw(make(), example(), view="cell")  # two layers of one cell type
+    assert [g.title for g in fig.scene.groups] == ["ConvLSTMCell · gates: Conv2d"]
+    make, example = REFERENCE["lstm"]
+    fig = tg.draw(make(), example(), view="cell")
+    assert [g.title for g in fig.scene.groups] == ["LSTM cell · 8 → 32"]
