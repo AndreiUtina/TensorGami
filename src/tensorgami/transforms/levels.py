@@ -22,7 +22,7 @@ class Level(IntEnum):
     STAGES = 1  # the model's direct sub-modules
     LAYERS = 2  # every layer; activations folded, repeats ×N, cells as one box (default)
     OPERATORS = 3  # everything the trace recorded
-    CELLS = 4  # operators, with recurrent cells expanded to gates by the cell view (step 11)
+    CELLS = 4  # operators (a cell's gates are drawn by view="cell")
 
     @classmethod
     def parse(cls, value: int | str) -> Level:
