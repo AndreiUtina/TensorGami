@@ -1,4 +1,4 @@
-"""The block, unrolled and volume views, and the automatic choice of a view."""
+"""The block, unrolled, volume and cell views, and the automatic choice of a view."""
 
 from __future__ import annotations
 
@@ -16,6 +16,7 @@ from tensorgami.transforms import (
     pipeline_for,
     simplify,
 )
+from tensorgami.transforms.cells import cell_figure
 from tensorgami.transforms.unroll import UnrollRecurrence
 from tensorgami.transforms.ushape import FoldUShape
 from tensorgami.transforms.volume import MarkVolumes
@@ -71,6 +72,30 @@ class VolumeView:
         layer_parts = (OpCategory.ACTIVATION, OpCategory.REGULARIZATION, OpCategory.NORM)
         fold = FoldIntoPrevious(layer_parts, across=layer_parts)  # a volume is a layer's output
         shown = Pipeline([pipeline_for(level), fold, MarkVolumes()]).apply(graph)
+        options = dataclasses.replace(
+            options, direction=Direction.LEFT_RIGHT, shapes_on_edges=False
+        )
+        return shown, layout(shown, theme, options)
+
+
+class CellView:
+    """A model's recurrent cells drawn as their gates, one framed cell per distinct cell: the
+    classic LSTM figure (cell state along the top, the four gates, the hidden state along the
+    bottom) for fused ``nn.LSTM``/``LSTMCell`` and for custom cells recognised as LSTMs (e.g.
+    ConvLSTM, whose gates are a convolution); the textbook gates of GRU and RNN cells; the traced
+    operations of any other cell. ``level`` does not apply; always left → right."""
+
+    name = "cell"
+
+    def draw(
+        self, graph: Graph, theme: Theme, *, level: Level, options: LayoutOptions
+    ) -> tuple[Graph, Scene]:
+        shown = cell_figure(graph)
+        if shown is None:
+            raise ValueError(
+                f"{graph.name} has no recurrent cell to draw: view='cell' shows LSTM, GRU and "
+                "RNN cells (PyTorch's or your own); use view='block' or 'auto'"
+            )
         options = dataclasses.replace(
             options, direction=Direction.LEFT_RIGHT, shapes_on_edges=False
         )

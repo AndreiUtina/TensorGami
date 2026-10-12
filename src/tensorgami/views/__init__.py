@@ -7,7 +7,7 @@ API looks them up by name with :func:`get_view`.
 from __future__ import annotations
 
 from tensorgami.views.base import View
-from tensorgami.views.block import AutoView, BlockView, UnrolledView, VolumeView
+from tensorgami.views.block import AutoView, BlockView, CellView, UnrolledView, VolumeView
 
 _BLOCK, _UNROLLED = BlockView(), UnrolledView()
 
@@ -16,12 +16,11 @@ VIEWS: dict[str, View] = {
     "block": _BLOCK,
     "unrolled": _UNROLLED,
     "volume": VolumeView(),
+    "cell": CellView(),
 }
 
-#: views that are designed but not built yet (roadmap step 11)
-PLANNED = {
-    "cell": "LSTM/GRU cells drawn as their gates",
-}
+#: views that are designed but not built yet
+PLANNED: dict[str, str] = {}
 
 
 def available_views() -> list[str]:
@@ -38,7 +37,8 @@ def get_view(name: str) -> View:
             f"view={name!r} ({PLANNED[name]}) is planned for roadmap step 11; "
             f"available now: {known}"
         )
-    raise ValueError(f"unknown view {name!r}; available: {known} (planned: {', '.join(PLANNED)})")
+    planned = f" (planned: {', '.join(PLANNED)})" if PLANNED else ""
+    raise ValueError(f"unknown view {name!r}; available: {known}{planned}")
 
 
 __all__ = [
@@ -46,6 +46,7 @@ __all__ = [
     "VIEWS",
     "AutoView",
     "BlockView",
+    "CellView",
     "UnrolledView",
     "VolumeView",
     "View",
