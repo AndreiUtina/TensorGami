@@ -5,11 +5,11 @@
     <g class="tg-group" data-id="stem">
       <rect x="121" y="24" width="113" height="194" rx="3" fill="#ffffff" fill-opacity="0" stroke="#868b94" stroke-width="0.8" stroke-linejoin="round"/>
     </g>
-    <g class="tg-group" data-id="blocks.0">
-      <rect x="256" y="93" width="272" height="226" rx="3" fill="#ffffff" fill-opacity="0" stroke="#868b94" stroke-width="0.8" stroke-linejoin="round"/>
-    </g>
     <g class="tg-group" data-id="classifier">
       <rect x="609" y="74.5" width="113" height="194" rx="3" fill="#ffffff" fill-opacity="0" stroke="#868b94" stroke-width="0.8" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-group" data-id="blocks.0">
+      <rect x="256" y="93" width="272" height="226" rx="3" fill="#ffffff" fill-opacity="0" stroke="#868b94" stroke-width="0.8" stroke-linejoin="round"/>
     </g>
   </g>
   <g class="tg-edges">
@@ -204,12 +204,12 @@
   <g class="tg-labels">
     <rect x="122" y="30.1" width="31.57" height="14.8" rx="2" fill="#ffffff"/>
     <text x="124" y="40.65" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9" font-weight="600" fill="#5b616b">STEM</text>
+    <rect x="610" y="80.6" width="61.62" height="14.8" rx="2" fill="#ffffff"/>
+    <text x="612" y="91.15" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9" font-weight="600" fill="#5b616b">CLASSIFIER</text>
     <rect x="257" y="99.1" width="84.71" height="14.8" rx="2" fill="#ffffff"/>
     <text x="259" y="109.65" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9" font-weight="600" fill="#5b616b">RESIDUALBLOCK</text>
     <rect x="499.82" y="84.25" width="25.18" height="17.5" rx="8.75" fill="#ffffff" stroke="#868b94" stroke-width="0.8" stroke-linejoin="round"/>
     <text x="512.41" y="96.33" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9.5" font-weight="600" text-anchor="middle" fill="#4b5563">×2</text>
-    <rect x="610" y="80.6" width="61.62" height="14.8" rx="2" fill="#ffffff"/>
-    <text x="612" y="91.15" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9" font-weight="600" fill="#5b616b">CLASSIFIER</text>
     <rect x="170.1" y="85.86" width="14.8" height="44.14" rx="2" fill="#ffffff"/>
     <text x="177.5" y="111.08" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9" transform="rotate(-90 177.5 107.93)" text-anchor="middle" fill="#5b616b">16×32×32</text>
     <rect x="658.1" y="156.34" width="14.8" height="24.16" rx="2" fill="#ffffff"/>

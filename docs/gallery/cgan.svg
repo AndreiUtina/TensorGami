@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="838.6" height="310.67" viewBox="0 0 838.6 310.67" role="img">
+  <title>generator + discriminator</title>
+  <rect x="0" y="0" width="838.6" height="310.67" fill="#ffffff"/>
+  <g class="tg-groups">
+  </g>
+  <g class="tg-edges">
+    <g class="tg-edge tg-edge-data">
+      <polyline points="96,92 127.4,92 127.4,66 151.6,66" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polygon points="158.8,66 150.8,69.5 150.8,62.5" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="92,40 127.4,40 127.4,66 151.6,66" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polygon points="158.8,66 150.8,69.5 150.8,62.5" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="254.8,66 314.7,66 314.7,110.33 367.4,110.33" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polygon points="374.6,110.33 366.6,113.83 366.6,106.83" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="96,92 127.4,92 127.4,97 314.7,97 314.7,139.33 502.6,139.33 502.6,102.67 519.4,102.67" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polygon points="526.6,102.67 518.6,106.17 518.6,99.17" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="478.6,110.33 502.6,110.33 502.6,102.67 519.4,102.67" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polygon points="526.6,102.67 518.6,106.17 518.6,99.17" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="638.6,102.67 707.4,102.67" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polygon points="714.6,102.67 706.6,106.17 706.6,99.17" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="474.6,58.33 502.6,58.33 502.6,102.67 519.4,102.67" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polygon points="526.6,102.67 518.6,106.17 518.6,99.17" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="638.6,102.67 662.6,102.67 662.6,156.67 679.4,156.67" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polygon points="686.6,156.67 678.6,160.17 678.6,153.17" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-training">
+      <polyline points="750.6,174.67 750.6,190.67 206.8,190.67 206.8,84" fill="none" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round" stroke-dasharray="6 4"/>
+      <polyline points="210.3,92 206.8,84 203.3,92" fill="none" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-training">
+      <polyline points="750.6,174.67 750.6,200.67 582.6,200.67 582.6,120.67" fill="none" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round" stroke-dasharray="6 4"/>
+      <polyline points="586.1,128.67 582.6,120.67 579.1,128.67" fill="none" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="441.58,250.67 464.38,250.67" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polygon points="471.58,250.67 463.58,254.17 463.58,247.17" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-training">
+      <polyline points="441.58,274.67 471.58,274.67" fill="none" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round" stroke-dasharray="6 4"/>
+      <polyline points="463.58,278.17 471.58,274.67 463.58,271.17" fill="none" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+  </g>
+  <g class="tg-nodes">
+    <g class="tg-node tg-io" data-id="in:real image">
+      <rect x="378.6" y="42.33" width="96" height="32" rx="16" fill="#e2e8f0" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+      <text x="426.6" y="62.53" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">real image</text>
+    </g>
+    <g class="tg-node tg-io" data-id="generator/n0">
+      <rect x="28" y="24" width="64" height="32" rx="16" fill="#e2e8f0" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+      <text x="60" y="44.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">z</text>
+    </g>
+    <g class="tg-node tg-io" data-id="generator/n1">
+      <rect x="24" y="76" width="72" height="32" rx="16" fill="#e2e8f0" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+      <text x="60" y="96.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">labels</text>
+    </g>
+    <g class="tg-node tg-module" data-id="&lt;generator&gt;">
+      <rect x="158.8" y="48" width="96" height="36" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+      <text x="206.8" y="70.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">generator</text>
+    </g>
+    <g class="tg-node tg-tensor" data-id="generator/n12">
+      <rect x="374.6" y="94.33" width="104" height="32" rx="16" fill="#ffffff" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+      <text x="426.6" y="114.53" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">fake image</text>
+    </g>
+    <g class="tg-node tg-module" data-id="&lt;discriminator&gt;">
+      <rect x="526.6" y="84.67" width="112" height="36" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+      <text x="582.6" y="106.87" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">discriminator</text>
+    </g>
+    <g class="tg-node tg-io" data-id="discriminator/n12">
+      <rect x="714.6" y="86.67" width="72" height="32" rx="16" fill="#e2e8f0" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+      <text x="750.6" y="106.87" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">output</text>
+    </g>
+    <g class="tg-node tg-loss" data-id="loss:adversarial loss">
+      <rect x="686.6" y="138.67" width="128" height="36" rx="6" fill="#fecaca" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round"/>
+      <text x="750.6" y="160.87" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">adversarial loss</text>
+    </g>
+    <g class="tg-node tg-io" data-id="legend:0:io">
+      <rect x="24" y="242.67" width="30" height="16" rx="8" fill="#e2e8f0" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-module" data-id="legend:1:module">
+      <rect x="24" y="266.67" width="30" height="16" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-tensor" data-id="legend:2:tensor">
+      <rect x="232.79" y="242.67" width="30" height="16" rx="8" fill="#ffffff" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-loss" data-id="legend:3:loss">
+      <rect x="232.79" y="266.67" width="30" height="16" rx="6" fill="#fecaca" stroke="#b91c1c" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+  </g>
+  <g class="tg-labels">
+    <rect x="106.35" y="75.05" width="10.7" height="16.4" rx="2" fill="#ffffff"/>
+    <text x="111.7" y="86.58" font-family="'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace" font-size="9.5" text-anchor="middle" fill="#475569">1</text>
+    <rect x="101.5" y="23.05" width="16.4" height="16.4" rx="2" fill="#ffffff"/>
+    <text x="109.7" y="34.58" font-family="'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace" font-size="9.5" text-anchor="middle" fill="#475569">16</text>
+    <rect x="262.3" y="49.05" width="44.9" height="16.4" rx="2" fill="#ffffff"/>
+    <text x="284.75" y="60.58" font-family="'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace" font-size="9.5" text-anchor="middle" fill="#475569">1×16×16</text>
+    <rect x="671.25" y="85.72" width="10.7" height="16.4" rx="2" fill="#ffffff"/>
+    <text x="676.6" y="97.24" font-family="'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace" font-size="9.5" text-anchor="middle" fill="#475569">1</text>
+    <text x="62" y="254.34" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Input / output</text>
+    <text x="62" y="278.34" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Composite block</text>
+    <text x="270.79" y="254.34" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Tensor / state</text>
+    <text x="270.79" y="278.34" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Loss / objective</text>
+    <text x="479.58" y="254.34" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Data flow</text>
+    <text x="479.58" y="278.34" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Training signal (loss, gradient)</text>
+  </g>
+</svg>

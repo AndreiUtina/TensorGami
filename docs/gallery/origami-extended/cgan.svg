@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="433" height="439" viewBox="0 0 433 439" role="img">
+  <title>generator + discriminator</title>
+  <rect x="0" y="0" width="433" height="439" fill="#ffffff"/>
+  <g class="tg-groups">
+  </g>
+  <g class="tg-edges">
+    <g class="tg-edge tg-edge-data">
+      <polyline points="146,46 146,64.5 101,64.5 101,77.6" fill="none" stroke="#6a707a" stroke-width="0.9" stroke-linejoin="round"/>
+      <polygon points="101,83 98.75,77 103.25,77" fill="#6a707a" stroke="#6a707a" stroke-width="0.5" stroke-linejoin="round"/>
+      <circle cx="146" cy="46" r="2.2" fill="#6a707a"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="56,46 56,64.5 101,64.5 101,77.6" fill="none" stroke="#6a707a" stroke-width="0.9" stroke-linejoin="round"/>
+      <polygon points="101,83 98.75,77 103.25,77" fill="#6a707a" stroke="#6a707a" stroke-width="0.5" stroke-linejoin="round"/>
+      <circle cx="56" cy="46" r="2.2" fill="#6a707a"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="101,109 101,127.5 233,127.5 233,140.6" fill="none" stroke="#6a707a" stroke-width="0.9" stroke-linejoin="round"/>
+      <polygon points="233,146 230.75,140 235.25,140" fill="#6a707a" stroke="#6a707a" stroke-width="0.5" stroke-linejoin="round"/>
+      <circle cx="101" cy="109" r="2.2" fill="#6a707a"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="146,46 146,64.5 185,64.5 185,127.5 293,127.5 293,179 215,179 215,184.6" fill="none" stroke="#6a707a" stroke-width="0.9" stroke-linejoin="round"/>
+      <polygon points="215,190 212.75,184 217.25,184" fill="#6a707a" stroke="#6a707a" stroke-width="0.5" stroke-linejoin="round"/>
+      <circle cx="146" cy="46" r="2.2" fill="#6a707a"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="233,168 233,179 215,179 215,184.6" fill="none" stroke="#6a707a" stroke-width="0.9" stroke-linejoin="round"/>
+      <polygon points="215,190 212.75,184 217.25,184" fill="#6a707a" stroke="#6a707a" stroke-width="0.5" stroke-linejoin="round"/>
+      <circle cx="233" cy="168" r="2.2" fill="#6a707a"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="215,216 215,249.6" fill="none" stroke="#6a707a" stroke-width="0.9" stroke-linejoin="round"/>
+      <polygon points="215,255 212.75,249 217.25,249" fill="#6a707a" stroke="#6a707a" stroke-width="0.5" stroke-linejoin="round"/>
+      <circle cx="215" cy="216" r="2.2" fill="#6a707a"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="119,168 119,179 215,179 215,184.6" fill="none" stroke="#6a707a" stroke-width="0.9" stroke-linejoin="round"/>
+      <polygon points="215,190 212.75,184 217.25,184" fill="#6a707a" stroke="#6a707a" stroke-width="0.5" stroke-linejoin="round"/>
+      <circle cx="119" cy="168" r="2.2" fill="#6a707a"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="215,216 215,234.5 341,234.5 341,247.6" fill="none" stroke="#6a707a" stroke-width="0.9" stroke-linejoin="round"/>
+      <polygon points="341,253 338.75,247 343.25,247" fill="#6a707a" stroke="#6a707a" stroke-width="0.5" stroke-linejoin="round"/>
+      <circle cx="215" cy="216" r="2.2" fill="#6a707a"/>
+    </g>
+    <g class="tg-edge tg-edge-training">
+      <polyline points="341,279 341,295 61,295 61,109" fill="none" stroke="#b54a3a" stroke-width="0.9" stroke-linejoin="round" stroke-dasharray="5 3"/>
+      <polyline points="63.25,115 61,109 58.75,115" fill="none" stroke="#b54a3a" stroke-width="0.9" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-training">
+      <polyline points="341,279 341,305 175,305 175,216" fill="none" stroke="#b54a3a" stroke-width="0.9" stroke-linejoin="round" stroke-dasharray="5 3"/>
+      <polyline points="177.25,222 175,216 172.75,222" fill="none" stroke="#b54a3a" stroke-width="0.9" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="225.8,379 250.4,379" fill="none" stroke="#6a707a" stroke-width="0.9" stroke-linejoin="round"/>
+      <polygon points="255.8,379 249.8,381.25 249.8,376.75" fill="#6a707a" stroke="#6a707a" stroke-width="0.5" stroke-linejoin="round"/>
+      <circle cx="225.8" cy="379" r="2.2" fill="#6a707a"/>
+    </g>
+    <g class="tg-edge tg-edge-training">
+      <polyline points="225.8,403 255.8,403" fill="none" stroke="#b54a3a" stroke-width="0.9" stroke-linejoin="round" stroke-dasharray="5 3"/>
+      <polyline points="249.8,405.25 255.8,403 249.8,400.75" fill="none" stroke="#b54a3a" stroke-width="0.9" stroke-linejoin="round"/>
+    </g>
+  </g>
+  <g class="tg-nodes">
+    <g class="tg-node tg-io" data-id="in:real image">
+      <rect x="75" y="146" width="88" height="22" rx="11" fill="#f1f0ec" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="119" y="161.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">real image</text>
+    </g>
+    <g class="tg-node tg-io" data-id="generator/n0">
+      <rect x="24" y="24" width="64" height="22" rx="11" fill="#f1f0ec" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="56" y="39.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">z</text>
+    </g>
+    <g class="tg-node tg-io" data-id="generator/n1">
+      <rect x="114" y="24" width="64" height="22" rx="11" fill="#f1f0ec" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="146" y="39.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">labels</text>
+    </g>
+    <g class="tg-node tg-module" data-id="&lt;generator&gt;">
+      <polygon points="33,83 163.5,83 159,109 33,109" fill="#f2f2ef"/>
+      <polygon points="163.5,83 169,83 169,109 159,109" fill="#dfdfdc"/>
+      <polyline points="163.5,83 159,109" fill="none" stroke="#a3a7ac" stroke-width="0.64" stroke-linejoin="round"/>
+      <rect x="33" y="83" width="136" height="26" fill="none" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="45" y="100.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" fill="#262a31">generator</text>
+    </g>
+    <g class="tg-node tg-tensor" data-id="generator/n12">
+      <rect x="189" y="146" width="88" height="22" rx="11" fill="#ffffff" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="233" y="161.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">fake image</text>
+    </g>
+    <g class="tg-node tg-module" data-id="&lt;discriminator&gt;">
+      <polygon points="147,190 277.5,190 273,216 147,216" fill="#f2f2ef"/>
+      <polygon points="277.5,190 283,190 283,216 273,216" fill="#dfdfdc"/>
+      <polyline points="277.5,190 273,216" fill="none" stroke="#a3a7ac" stroke-width="0.64" stroke-linejoin="round"/>
+      <rect x="147" y="190" width="136" height="26" fill="none" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="159" y="207.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" fill="#262a31">discriminator</text>
+    </g>
+    <g class="tg-node tg-io" data-id="discriminator/n12">
+      <rect x="183" y="255" width="64" height="22" rx="11" fill="#f1f0ec" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="215" y="270.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" text-anchor="middle" fill="#262a31">output</text>
+    </g>
+    <g class="tg-node tg-loss" data-id="loss:adversarial loss">
+      <polygon points="273,253 403.5,253 399,279 273,279" fill="#f9c9c2" fill-opacity="0.92"/>
+      <polygon points="403.5,253 409,253 409,279 399,279" fill="#e5b9b2" fill-opacity="0.92"/>
+      <polyline points="403.5,253 399,279" fill="none" stroke="#cf897f" stroke-width="0.64" stroke-linejoin="round"/>
+      <rect x="273" y="253" width="136" height="26" fill="none" stroke="#b54a3a" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="285" y="270.38" font-family="'Source Serif 4', 'Source Serif Pro', 'Georgia', 'Libertinus Serif', 'DejaVu Serif', serif" font-size="12.5" fill="#262a31">adversarial loss</text>
+    </g>
+    <g class="tg-node tg-io" data-id="legend:0:io">
+      <rect x="24" y="347" width="30" height="16" rx="8" fill="#f1f0ec" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-module" data-id="legend:1:module">
+      <polygon points="24,371 48.5,371 44,387 24,387" fill="#f2f2ef"/>
+      <polygon points="48.5,371 54,371 54,387 44,387" fill="#dfdfdc"/>
+      <polyline points="48.5,371 44,387" fill="none" stroke="#a3a7ac" stroke-width="0.64" stroke-linejoin="round"/>
+      <rect x="24" y="371" width="30" height="16" fill="none" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-tensor" data-id="legend:2:tensor">
+      <rect x="24" y="395" width="30" height="16" rx="8" fill="#ffffff" stroke="#727780" stroke-width="0.8" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-loss" data-id="legend:3:loss">
+      <polygon points="225.8,347 250.3,347 245.8,363 225.8,363" fill="#f9c9c2" fill-opacity="0.92"/>
+      <polygon points="250.3,347 255.8,347 255.8,363 245.8,363" fill="#e5b9b2" fill-opacity="0.92"/>
+      <polyline points="250.3,347 245.8,363" fill="none" stroke="#cf897f" stroke-width="0.64" stroke-linejoin="round"/>
+      <rect x="225.8" y="347" width="30" height="16" fill="none" stroke="#b54a3a" stroke-width="0.8" stroke-linejoin="round"/>
+    </g>
+  </g>
+  <g class="tg-labels">
+    <rect x="150" y="47.85" width="9.04" height="14.8" rx="2" fill="#ffffff"/>
+    <text x="154.52" y="58.4" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9" text-anchor="middle" fill="#5b616b">1</text>
+    <rect x="60" y="47.85" width="14.08" height="14.8" rx="2" fill="#ffffff"/>
+    <text x="67.04" y="58.4" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9" text-anchor="middle" fill="#5b616b">16</text>
+    <rect x="105" y="110.85" width="39.1" height="14.8" rx="2" fill="#ffffff"/>
+    <text x="124.55" y="121.4" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9" text-anchor="middle" fill="#5b616b">1×16×16</text>
+    <rect x="219" y="228.1" width="9.04" height="14.8" rx="2" fill="#ffffff"/>
+    <text x="223.52" y="238.65" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="9" text-anchor="middle" fill="#5b616b">1</text>
+    <text x="62" y="358.5" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" fill="#374151">Input / output</text>
+    <text x="62" y="382.5" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" fill="#374151">Composite block</text>
+    <text x="62" y="406.5" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" fill="#374151">Tensor / state</text>
+    <text x="263.8" y="358.5" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" fill="#374151">Loss / objective</text>
+    <text x="263.8" y="382.5" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" fill="#374151">Data flow</text>
+    <text x="263.8" y="406.5" font-family="'Avenir Next', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" fill="#374151">Training signal (loss, gradient)</text>
+  </g>
+</svg>

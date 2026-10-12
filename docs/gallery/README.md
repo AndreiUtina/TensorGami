@@ -34,12 +34,28 @@ The 5-step sequence shows steps 1–3, "⋯" and step 5.
 
 ![cGAN discriminator](cgan-discriminator.svg)
 
+Both in one figure (`tg.draw({"generator": G, "discriminator": D}, …)`): the generator's output
+linked to the image input of the discriminator, one condition feeding both, the real images as
+an extra input, and the adversarial loss with dashed training arrows back to both models. At
+`level=0` each model is one box:
+
+![cGAN](cgan.svg)
+
+Layer by layer, top to bottom:
+
+<img src="cgan-layers.svg" alt="cGAN, layers" width="420">
+
 ## VAE
 
 The noise ε is a dashed source with a dotted arrow, kept separate from μ (the
 reparameterisation trick).
 
 ![VAE](vae.svg)
+
+With its loss terms (`annotations=[tg.Loss("reconstruction", "output 0", "input"),
+tg.Loss("KL divergence", "mu", "logvar")]`) and μ, log σ² named through `overrides`:
+
+![VAE with losses](vae-losses.svg)
 
 ## ConvLSTM encoder
 
