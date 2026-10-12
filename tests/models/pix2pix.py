@@ -1,7 +1,8 @@
 """pix2pix (Isola et al. 2017): the U-Net generator and the PatchGAN discriminator, as in the
 authors' official implementation (junyanz/pytorch-CycleGAN-and-pix2pix, models/networks.py,
-BSD licence); the same code as ``examples/pix2pix.ipynb``. The generator's skips nest inside
-each other (a U-Net), and each level opens with a LeakyReLU applied in place.
+BSD licence, see THIRD_PARTY_NOTICES.md); the same code as ``examples/pix2pix.ipynb``. The
+generator's skips nest inside each other (a U-Net), and each level opens with a LeakyReLU
+applied in place.
 """
 
 from __future__ import annotations

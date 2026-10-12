@@ -1,7 +1,8 @@
 """AlexNet (Krizhevsky et al. 2012) drawn by Tensorgami, end to end.
 
 The model is defined exactly as in ``torchvision.models.alexnet`` (so torchvision is not
-needed) and drawn with one call, ``tg.draw(model, example_input)``. The notebook
+needed; BSD-3-Clause, see THIRD_PARTY_NOTICES.md) and drawn with one call,
+``tg.draw(model, example_input)``. The notebook
 ``alexnet.ipynb`` shows the figures inline, in every style and view::
 
     uv run python examples/alexnet.py           # open the figure in a window

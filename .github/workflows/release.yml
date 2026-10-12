@@ -1,0 +1,99 @@
+name: Release
+
+# Push a tag vX.Y.Z matching tensorgami.__version__ to release. The distributions are built and
+# checked; with the repository variable PUBLISH_TO_PYPI set to "true" they go to TestPyPI, then
+# PyPI (Trusted Publishing: no tokens; the `pypi` environment can ask for an approval first);
+# finally they are attached to a GitHub Release. See docs/RELEASING.md.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.0
+      - name: The tag matches the package version
+        run: |
+          version=$(sed -n 's/^__version__ = "\(.*\)"/\1/p' src/tensorgami/__init__.py)
+          echo "package $version, tag $GITHUB_REF_NAME"
+          test "v$version" = "$GITHUB_REF_NAME"
+      - name: Build
+        run: uv build
+      - name: The metadata renders on PyPI
+        run: uvx twine check --strict dist/*
+      - name: Install the wheel alone in a fresh environment and draw
+        run: |
+          uv venv --python 3.12 "$RUNNER_TEMP/fresh"
+          uv pip install --python "$RUNNER_TEMP/fresh/bin/python" dist/*.whl
+          "$RUNNER_TEMP/fresh/bin/python" .github/scripts/smoke_test.py
+        env:
+          MPLBACKEND: Agg
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/
+
+  testpypi:
+    if: vars.PUBLISH_TO_PYPI == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/tensorgami
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true  # a rehearsal: re-running a release after a fix is fine
+
+  pypi:
+    if: vars.PUBLISH_TO_PYPI == 'true'
+    needs: testpypi
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/tensorgami
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    # after PyPI when publishing there, else straight after the build
+    needs: [build, testpypi, pypi]
+    if: >-
+      !cancelled() && needs.build.result == 'success'
+      && contains(fromJSON('["success", "skipped"]'), needs.testpypi.result)
+      && contains(fromJSON('["success", "skipped"]'), needs.pypi.result)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+      - name: Create the GitHub Release with the distributions
+        run: >
+          gh release create "$GITHUB_REF_NAME" dist/*
+          --title "Tensorgami $GITHUB_REF_NAME"
+          --notes "Changes: https://github.com/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/CHANGELOG.md"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}

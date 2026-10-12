@@ -878,7 +878,6 @@ wheels = [
 
 [[package]]
 name = "tensorgami"
-version = "0.1.0"
 source = { editable = "." }
 default-groups = ["dev", "docs", "torch"]
 dependencies = [

@@ -70,6 +70,7 @@ Answers (2026-10-09):
    step 13) and a third one to be decided (ADR-0008).
 6. **Models to support first:** CNNs, LSTMs, cGANs, VAEs, ConvLSTMs, Transformers (and others).
 7. **Distribution:** private install from GitHub first; public PyPI package later (step 15).
+   → 2026-10-12: public from the first release instead, MIT licence, on PyPI (step 15).
 
 Target usage that drives Phases B–D:
 
@@ -364,11 +365,29 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 - Outputs: GIF/MP4 for presentations (`matplotlib.animation`) and interactive playback in
   Jupyter; optionally show real activations (feature maps) from the example input.
 
-### 15) Packaging, docs & CI ⬜
-- Private install from GitHub first:
-  `uv add git+https://github.com/AndreiUtina/Tensorgami` (or `pip install git+…`).
-- GitHub Actions (ruff + pytest), version tags, changelog, README with the gallery.
-- Later: public PyPI release (name check, trusted publishing).
+### 15) Packaging, docs & CI 🔶 (prepared 2026-10-12; the first release waits for the PyPI setup)
+- Decided with the user: a public package on PyPI as `pip install tensorgami` (the name is
+  free on PyPI and TestPyPI), **MIT licence**; PyTorch stays an optional extra
+  (`tensorgami[torch]`), matplotlib the only dependency.
+- Licences: `LICENSE` (MIT); `THIRD_PARTY_NOTICES.md` keeps the BSD notices of the code
+  adapted from torchvision (AlexNet, `examples/alexnet.py`) and from
+  pytorch-CycleGAN-and-pix2pix (`tests/models/pix2pix.py`, `examples/pix2pix.ipynb`).
+- Metadata: one version source (`__version__`, read by hatch), classifiers, project URLs; the
+  sdist holds the package and the top-level documents only; `CHANGELOG.md` (Keep a
+  Changelog), `CITATION.cff`.
+- CI (`.github/workflows/ci.yml`, every push and pull request): ruff, the tests on Python
+  3.11–3.13 with CPU PyTorch, and the built wheel installed alone (no PyTorch) drawing in
+  every style, with the newest dependencies and with the oldest accepted (matplotlib 3.7,
+  whose full test run also passes).
+- Release (`.github/workflows/release.yml`, a `vX.Y.Z` tag): the tag must match the version;
+  build, `twine check`, the same smoke test; TestPyPI, then PyPI after an approval (Trusted
+  Publishing: no tokens); a GitHub Release with the files. Steps in
+  [`docs/RELEASING.md`](docs/RELEASING.md); `tests/test_release.py` keeps version, citation,
+  changelog, licence, classifiers and the README's absolute links consistent.
+- README rewritten for PyPI: install, quick start, what can be drawn, gallery figures (absolute
+  links, so they show on the project page).
+- Left to the user: make the repository public, register the pending publishers on PyPI and
+  TestPyPI, create the `testpypi` / `pypi` environments, set `PUBLISH_TO_PYPI`, push the tag.
 
 ## Phase E — Backlog
 

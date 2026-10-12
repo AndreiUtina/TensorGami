@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use Tensorgami for figures in your work, please cite it as below."
+title: "Tensorgami: draw the architecture and information flow of PyTorch models"
+type: software
+authors:
+  - family-names: "Utina"
+    given-names: "Andrei"
+version: "0.1.0"
+license: MIT
+repository-code: "https://github.com/AndreiUtina/TensorGami"
+keywords:
+  - pytorch
+  - neural networks
+  - architecture diagrams
+  - visualization

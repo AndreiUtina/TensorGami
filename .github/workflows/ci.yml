@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: tests · Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          python-version: ${{ matrix.python }}
+          enable-cache: true
+      - name: Install (CPU torch from the PyTorch index, as locked)
+        run: uv sync --locked --no-group docs
+      - name: Lint
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+      - name: Tests (including the acceptance gallery)
+        run: uv run pytest -q
+        env:
+          MPLBACKEND: Agg
+
+  package:
+    name: package · installs and draws without torch
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: "3.13"
+            pin: ""
+          - python: "3.11"  # the oldest Python with the oldest matplotlib we accept (>=3.7)
+            pin: matplotlib==3.7.5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.0
+      - name: Build the wheel and the source distribution
+        run: uv build
+      - name: The metadata renders on PyPI
+        run: uvx twine check --strict dist/*
+      - name: Install the wheel alone in a fresh environment and draw
+        run: |
+          uv venv --python ${{ matrix.python }} "$RUNNER_TEMP/fresh"
+          uv pip install --python "$RUNNER_TEMP/fresh/bin/python" dist/*.whl ${{ matrix.pin }}
+          "$RUNNER_TEMP/fresh/bin/python" .github/scripts/smoke_test.py
+        env:
+          MPLBACKEND: Agg

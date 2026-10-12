@@ -1,8 +1,30 @@
 [project]
 name = "tensorgami"
-version = "0.1.0"
-description = "Draw the architecture and information flow of deep-learning / machine-learning models"
+dynamic = ["version"]  # from src/tensorgami/__init__.py: one place to change it
+description = "Draw the architecture and information flow of PyTorch models: figures for papers, reports and slides"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Andrei Utina" }]
+keywords = [
+    "pytorch", "neural network", "architecture", "diagram", "visualization", "deep learning",
+    "figure", "matplotlib",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: Jupyter",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Multimedia :: Graphics :: Presentation",
+]
 requires-python = ">=3.11"
 dependencies = [
     "matplotlib>=3.7",  # figures, PNG, Jupyter display (ADR-0005); the only runtime dependency
@@ -10,6 +32,13 @@ dependencies = [
 
 [project.optional-dependencies]
 torch = ["torch>=2.2"]  # never a hard dependency: users keep their own CPU/CUDA build (ADR-0006)
+
+[project.urls]
+Homepage = "https://github.com/AndreiUtina/TensorGami"
+Repository = "https://github.com/AndreiUtina/TensorGami"
+Issues = "https://github.com/AndreiUtina/TensorGami/issues"
+Changelog = "https://github.com/AndreiUtina/TensorGami/blob/main/CHANGELOG.md"
+Gallery = "https://github.com/AndreiUtina/TensorGami/blob/main/docs/gallery/README.md"
 
 [dependency-groups]
 dev = [
@@ -30,8 +59,22 @@ torch = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.version]
+path = "src/tensorgami/__init__.py"
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/tensorgami"]
+
+[tool.hatch.build.targets.sdist]  # the package and what describes it; docs and examples stay on GitHub
+include = [
+    "/src/tensorgami",
+    "/README.md",
+    "/LICENSE",
+    "/THIRD_PARTY_NOTICES.md",
+    "/CHANGELOG.md",
+    "/CITATION.cff",
+    "/pyproject.toml",
+]
 
 [tool.uv]
 default-groups = ["dev", "docs", "torch"]
@@ -54,3 +97,6 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.format]
+exclude = ["*.md", "docs/survey/*"]  # prose code blocks and the survey's build scripts stay as written

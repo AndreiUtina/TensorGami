@@ -1,97 +1,137 @@
-![TensorGami](docs/brand/logo-banner.png)
+![TensorGami](https://raw.githubusercontent.com/AndreiUtina/TensorGami/main/docs/brand/logo-banner.png)
 
 # Tensorgami
 
-Draw the architecture and information flow of deep-learning / machine-learning models,
-locally, in Python.
+[![CI](https://github.com/AndreiUtina/TensorGami/actions/workflows/ci.yml/badge.svg)](https://github.com/AndreiUtina/TensorGami/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/tensorgami)](https://pypi.org/project/tensorgami/)
+[![Python](https://img.shields.io/pypi/pyversions/tensorgami)](https://pypi.org/project/tensorgami/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/AndreiUtina/TensorGami/blob/main/LICENSE)
 
-Status: in development; the pipeline works end to end (see [roadmap.md](roadmap.md)).
+Draw the architecture and information flow of PyTorch models, locally, in Python: figures
+for papers, reports and slides. Call `tg.draw` on a loaded model in a script or a notebook,
+see the figure inline in Jupyter, and save it as PNG, SVG or PDF.
 
-- Literature survey: [docs/survey/tensorgami-literature-survey.pdf](docs/survey/tensorgami-literature-survey.pdf)
-- Drawing styles: [`default`](docs/style/style-baseline.md), [`origami` and `origami-extended`](docs/style/origami.md)
+![AlexNet in the origami style](https://raw.githubusercontent.com/AndreiUtina/TensorGami/main/docs/gallery/origami/alexnet.svg)
 
-![Visual vocabulary](docs/style/specimens/vocabulary.svg)
+![pix2pix: U-Net generator and PatchGAN discriminator as tensor volumes](https://raw.githubusercontent.com/AndreiUtina/TensorGami/main/docs/gallery/pix2pix-system.svg)
 
-## Development
+## Install
 
 ```sh
-uv sync                                        # create the environment
-uv run pytest                                  # run the tests
-uv run ruff check . && uv run ruff format .    # lint / format
-uv run python docs/style/build_specimens.py    # rebuild the style specimens
-uv run python docs/survey/build.py             # rebuild the survey PDF
+pip install tensorgami
 ```
 
-## Drawing a PyTorch model
+Tensorgami needs Python ≥ 3.11 and matplotlib. To draw a model it runs the model once with
+PyTorch (≥ 2.2), which it does not install itself, so your CPU or CUDA build stays as it is.
+If PyTorch isn't installed yet, install it first
+([pytorch.org](https://pytorch.org/get-started/locally/)), or let pip pick the default build
+with `pip install "tensorgami[torch]"`.
 
-In a script or a notebook, after the model is loaded:
+The latest development version: `pip install "git+https://github.com/AndreiUtina/TensorGami"`.
+
+## Quick start
 
 ```python
 import torch
+from torch import nn
 import tensorgami as tg
 
-fig = tg.draw(model, torch.randn(1, 3, 224, 224))  # runs the model once, leaves it untouched
-fig                                                # shows inline in Jupyter
-fig.save("model.png", dpi=300)                     # or .svg / .pdf; nothing is saved before
+model = nn.Sequential(
+    nn.Conv2d(3, 16, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+    nn.Conv2d(16, 32, 3, padding=1), nn.ReLU(), nn.AdaptiveAvgPool2d(1),
+    nn.Flatten(), nn.Linear(32, 10),
+)
 
+fig = tg.draw(model, torch.randn(1, 3, 32, 32))  # runs the model once, leaves it untouched
+fig                                              # shows inline in Jupyter
+fig.save("model.png", dpi=300)                   # or .svg / .pdf; nothing is saved before
+```
+
+The example input is what the model is called with: a tensor, a tuple of positional
+arguments, or a dict of keyword arguments, including the batch dimension.
+
+## What you can draw
+
+```python
 tg.draw(model, x, level="stages")                  # less detail: 0 system … 3 operators
-tg.draw(model, x, style="origami")                 # or "origami-extended", or a path
+tg.draw(model, x, style="origami")                 # or "origami-extended", or a path to a TOML
 tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
 tg.draw(model, x, view="unrolled")                 # recurrence as a time × layer grid
 tg.draw(model, x, view="volume")                   # CNN layers as tensor volumes
 tg.draw(model, x, view="cell")                     # an LSTM / GRU cell as its gates
 tg.draw(unet, x, u_shape=False)                    # keep a U-Net on one line (default: a U)
-tg.draw(model, x, overrides={"classifier.6": {"label": "logits"}})  # rename a box
+tg.draw(model, x, overrides={"classifier.6": {"label": "logits"}})       # rename a box
 tg.draw(vae, x, annotations=[tg.Loss("KL divergence", "mu", "logvar")])  # a loss term
 tg.draw({"generator": G, "discriminator": D}, {"generator": (z, y), "discriminator": (x, y)},
         links=[("generator", "discriminator.input 0")],     # several models, wired together
         annotations=[tg.Loss("adversarial", "discriminator", trains=["generator", "discriminator"])])
 ```
 
-The example input is what the model is called with: a tensor, a tuple of positional
-arguments, or a dict of keyword arguments, including the batch dimension.
+- **Levels of detail**: the whole system, stages, layers or single operators. Repeated blocks
+  fold into one frame marked ×N, activations fold into the layer before them, and shapes
+  appear on the wires where they change.
+- **Views**: block diagrams (`view="block"`), recurrent networks unrolled over time
+  (`"unrolled"`), CNNs as 3-D tensor volumes (`"volume"`) and recurrent cells as their gates
+  (`"cell"`). Encoder–decoders with nested skips (U-Net, pix2pix) fold into a U.
+- **Styles**: [`default`](https://github.com/AndreiUtina/TensorGami/blob/main/docs/style/style-baseline.md),
+  and [`origami` and `origami-extended`](https://github.com/AndreiUtina/TensorGami/blob/main/docs/style/origami.md)
+  (narrow boxes in the style of the survey figures). A style is a TOML file; your own can be
+  passed by path.
+- **Several models in one figure**: GANs, VAEs and other training set-ups, with links between
+  the models, extra inputs, loss terms with dashed training arrows, and notes.
 
-Notebooks with every option, already run, in [`examples/`](examples/):
-[`alexnet.ipynb`](examples/alexnet.ipynb) (levels, views, styles, layout options, saving,
-panels), [`pix2pix.ipynb`](examples/pix2pix.ipynb) (a U-Net generator and a PatchGAN) and
-[`tour.ipynb`](examples/tour.ipynb) (one model per family: CNN, LSTM, ConvLSTM, VAE, cGAN,
-Transformer). To run them again:
-`cd examples && uv run --with nbclient --with nbformat jupyter execute --inplace *.ipynb`.
+Model families covered by the tests: CNN, LSTM, ConvLSTM, cGAN, VAE, Transformer and
+pix2pix. The [acceptance gallery](https://github.com/AndreiUtina/TensorGami/blob/main/docs/gallery/README.md)
+shows each of them in every view and style. Every figure there is drawn automatically, and
+the tests check it.
 
-The stages are also usable one by one, e.g. to inspect what was captured:
+## Examples
+
+Notebooks with every option, already run, are in
+[`examples/`](https://github.com/AndreiUtina/TensorGami/tree/main/examples):
+
+- [`alexnet.ipynb`](https://github.com/AndreiUtina/TensorGami/blob/main/examples/alexnet.ipynb):
+  levels, views, styles, layout options, saving, panels;
+- [`pix2pix.ipynb`](https://github.com/AndreiUtina/TensorGami/blob/main/examples/pix2pix.ipynb):
+  a U-Net generator, a PatchGAN discriminator and both together;
+- [`tour.ipynb`](https://github.com/AndreiUtina/TensorGami/blob/main/examples/tour.ipynb):
+  one model per family.
+
+The pipeline's stages can also be used one by one, e.g. to inspect what was captured:
 
 ```python
 from tensorgami.importers.torch import trace
 from tensorgami.transforms import simplify
 
 graph = trace(model, torch.randn(1, 3, 32, 32))
-print(graph.summary())                    # every operation, its module and shape
+print(graph.summary())                     # every operation, its module and shape
 print(simplify(graph, level=2).summary())  # layers: activations folded, repeats ×N
 ```
 
-See the [acceptance gallery](docs/gallery/README.md): every model family in every view and
-style, drawn automatically and checked by tests.
+Background: the
+[literature survey](https://github.com/AndreiUtina/TensorGami/blob/main/docs/survey/tensorgami-literature-survey.pdf)
+on how neural-network architectures are drawn, and the
+[architecture](https://github.com/AndreiUtina/TensorGami/blob/main/docs/architecture.md)
+of Tensorgami itself.
 
-## Drawing a scene today
+## Development
 
-Automatic layout is a later roadmap step; today a hand-positioned scene can be rendered in
-the baseline style:
-
-```python
-from tensorgami.render import add_legend, render_svg
-from tensorgami.scene import Box, Edge, Node, Point, Scene
-from tensorgami.style import load_theme
-from tensorgami.vocabulary import OpCategory
-
-theme = load_theme()  # the baseline theme, validated
-scene = Scene(420, 140)
-scene.add(
-    Node("x", Box.centered(50, 40, 70, 32), OpCategory.IO, "image"),
-    Node("c", Box.centered(190, 40, 120, 46), OpCategory.CONV, "Conv 3×3", "64, ReLU"),
-    Node("y", Box.centered(350, 40, 90, 32), OpCategory.IO, "features"),
-    Edge("x", "c"),
-    Edge("c", "y", label="64×32×32"),
-)
-add_legend(scene, theme, Point(16, 84), columns=3)
-open("conv.svg", "w").write(render_svg(scene, theme))
+```sh
+git clone https://github.com/AndreiUtina/TensorGami && cd TensorGami
+uv sync                                        # the environment, with CPU PyTorch
+uv run pytest                                  # the tests, including the gallery
+uv run ruff check . && uv run ruff format .    # lint / format
+uv run python docs/gallery/build_gallery.py    # accept changed drawings: rebuild the gallery
+cd examples && uv run --with nbclient --with nbformat --with ipykernel jupyter execute --inplace *.ipynb
 ```
+
+Releases are described in [docs/RELEASING.md](https://github.com/AndreiUtina/TensorGami/blob/main/docs/RELEASING.md),
+changes in the [changelog](https://github.com/AndreiUtina/TensorGami/blob/main/CHANGELOG.md).
+
+## License
+
+MIT, see [LICENSE](https://github.com/AndreiUtina/TensorGami/blob/main/LICENSE). The example
+and test models adapted from torchvision and pytorch-CycleGAN-and-pix2pix keep their BSD
+licenses, see [THIRD_PARTY_NOTICES.md](https://github.com/AndreiUtina/TensorGami/blob/main/THIRD_PARTY_NOTICES.md).
+To cite Tensorgami, use [CITATION.cff](https://github.com/AndreiUtina/TensorGami/blob/main/CITATION.cff)
+(GitHub's "Cite this repository").
