@@ -39,6 +39,7 @@ tg.draw(model, x, style="origami")                 # or "origami-extended", or a
 tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
 tg.draw(model, x, view="unrolled")                 # recurrence as a time × layer grid
 tg.draw(model, x, view="volume")                   # CNN layers as tensor volumes
+tg.draw(model, x, view="cell")                     # an LSTM / GRU cell as its gates
 tg.draw(unet, x, u_shape=False)                    # keep a U-Net on one line (default: a U)
 tg.draw(model, x, overrides={"classifier.6": {"label": "logits"}})  # rename a box
 ```

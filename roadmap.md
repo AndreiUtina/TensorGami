@@ -214,7 +214,7 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 
 ## Phase C — Your model families
 
-### 11) Views 🔶 (11a unrolled ✅, 11b U-shape ✅, 11c volume ✅)
+### 11) Views 🔶 (11a unrolled ✅, 11b U-shape ✅, 11c volume ✅, 11d cell ✅)
 - Plan, in parts: **11a** unrolled time view ✅ · 11b U-shape layout for encoder–decoder skips
   and folding activations that come *before* a layer · 11c tensor-volume view for CNNs ·
   11d cell view (LSTM/GRU gates) · 11e generative figures (below).
@@ -258,6 +258,21 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   circles; always left → right, no shapes on the wires. `MarkVolumes` (transform) +
   `params["volume"]` read by the layered layout, which reserves the volume's footprint and
   centres its front face so wires stay level.
+- **11d Cell view** ✅ (2026-10-12): `view="cell"` draws a model's recurrent cells as their
+  gates, one framed cell per distinct cell type (`cell_figure`, a new graph):
+  - LSTMs as the classic figure (a block layout, `lstm-cell`): the cell state along the top
+    (× forget, + input), the four gates in a row (σ forget, σ input, tanh candidate, σ
+    output), tanh(c) and the output × on the right, the hidden state along the bottom where
+    h_{t-1} joins x_t; shapes on the state and input pills.
+  - Fused `nn.LSTM`/`LSTMCell` from the module's settings; custom cells recognised as LSTMs
+    from their data flow (the σ multiplied with the incoming state is the forget gate, the σ
+    with the tanh candidate the input gate, the σ with tanh(c) the output gate), their gates
+    coloured as the layer computing them (ConvLSTM: a convolution).
+  - GRU (reset, update, candidate, 1−z) and RNN cells: their textbook gates, laid out by the
+    layered engine (a GRU template would be tidier: its h_{t-1} feeds three places); any
+    other cell (a module called in a loop with state): its traced operations.
+  - Block layouts can keep their frame (`framed = True`); `params["caption"]` sets a node's
+    second line.
 - Examples: `examples/` holds only scripts and notebooks; the notebooks (`alexnet`,
   `pix2pix`, `tour`) are run and keep their figures. AlexNet's figures moved to the gallery
   (`docs/gallery/alexnet*.svg`, every style, with the volume view).
