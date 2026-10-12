@@ -107,7 +107,7 @@ def test_overrides_reach_the_importer(cnn, x):
 
 
 def test_views(cnn, x):
-    assert available_views() == ["auto", "block", "unrolled"]
+    assert available_views() == ["auto", "block", "unrolled", "volume"]
     assert VIEWS["auto"].choose(trace(cnn, x)) is get_view("block")
     assert tg.draw(cnn, x, view="block").to_svg() == tg.draw(cnn, x).to_svg()
 
@@ -163,7 +163,7 @@ class MustNotRun(nn.Module):
         ({"style": "origamy"}, ThemeError, "built-in styles: default, origami"),
         ({"level": 9}, ValueError, "level must be one of 0 system"),
         ({"direction": "XY"}, ValueError, "direction must be 'LR'"),
-        ({"view": "volume"}, NotImplementedError, "planned for roadmap step 11"),
+        ({"view": "cell"}, NotImplementedError, "planned for roadmap step 11"),
         ({"view": "fancy"}, ValueError, "unknown view 'fancy'"),
         ({"wrap_width": "wide"}, TypeError, None),
     ],
