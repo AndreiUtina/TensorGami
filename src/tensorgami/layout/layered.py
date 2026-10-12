@@ -41,7 +41,7 @@ DUMMY_CROSS = 6.0
 PORT_GAP = 28.0
 
 #: group type → layout of such a group as one block (e.g. the unrolled view's time × layer
-#: grid); registered by the modules that define them, laid out without a frame
+#: grid); registered by the modules that define them, framed only if the class says so
 BLOCK_LAYOUTS: dict[str, type] = {}
 
 FC = tuple[float, float]  # (flow, cross)
@@ -278,8 +278,8 @@ class _Run:
     def framed(self, group: Group) -> bool:
         """Frame a group unless it is a lone collapsed node (count 1), a pass-through
         container holding exactly one sub-group, or laid out by a block layout."""
-        if group.type_name in BLOCK_LAYOUTS:
-            return False
+        if group.type_name in BLOCK_LAYOUTS:  # framed only if the block layout asks for it
+            return getattr(BLOCK_LAYOUTS[group.type_name], "framed", False)
         nodes = self.g.members(group.id)
         children = self.g.children(group.id)
         if group.count > 1:

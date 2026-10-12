@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from tensorgami.ir import Edge, Graph, Node, ParamValue, format_shape
+from tensorgami.ir import CAPTION, Edge, Graph, Node, ParamValue, format_shape
 from tensorgami.vocabulary import EdgeKind, OpCategory
 
 TIMES = "×"
@@ -164,6 +164,8 @@ class Labeler:
             )
         if node.label:  # set by the user (overrides) or a transform: it names the box
             text = NodeText(node.label, text.detail)
+        if CAPTION in node.params:  # a transform's own second line (e.g. "forget")
+            text = NodeText(text.label, str(node.params[CAPTION]))
         if node.count > 1:
             text = NodeText(text.label, self._join([text.detail, f"{TIMES}{node.count} steps"]))
         return text

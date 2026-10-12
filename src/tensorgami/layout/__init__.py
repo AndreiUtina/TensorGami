@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from tensorgami.ir import Graph
-from tensorgami.layout import unrolled, ushape  # noqa: F401  (register block layouts)
+from tensorgami.layout import cell, unrolled, ushape  # noqa: F401  (block layouts)
 from tensorgami.layout.base import Direction, LayoutEngine, LayoutOptions
 from tensorgami.layout.labels import Labeler, NodeText
 from tensorgami.layout.layered import LayeredLayout
