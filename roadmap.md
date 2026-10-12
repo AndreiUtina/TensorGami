@@ -214,7 +214,7 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 
 ## Phase C — Your model families
 
-### 11) Views 🔶 (11a unrolled ✅, 11b U-shape ✅, 11c volume ✅, 11d cell ✅)
+### 11) Views ✅ (11a unrolled, 11b U-shape, 11c volume, 11d cell, 11e generative; 2026-10-12)
 - Plan, in parts: **11a** unrolled time view ✅ · 11b U-shape layout for encoder–decoder skips
   and folding activations that come *before* a layer · 11c tensor-volume view for CNNs ·
   11d cell view (LSTM/GRU gates) · 11e generative figures (below).
@@ -273,6 +273,22 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
     other cell (a module called in a loop with state): its traced operations.
   - Block layouts can keep their frame (`framed = True`); `params["caption"]` sets a node's
     second line.
+- **11e Generative figures** ✅ (2026-10-12): what no `nn.Module` contains (FR11).
+  - Several models in one figure: `tg.draw({"generator": G, "discriminator": D}, {name:
+    example input}, links=[…])`; each model traced, framed and named (`compose`), ids and
+    module paths prefixed with its name; levels count from the models (level 0: each model
+    one box, the classic GAN overview).
+  - `links=[(source, target[, label])]`: a tensor feeds another model's input, which
+    disappears (the generator's output becomes the image its discriminator judges; one
+    condition feeds both).
+  - `annotations=[…]`: `tg.Loss(name, *tensors, trains=[…])` (a loss box; dashed training
+    arrows from it, along a lane under the figure, into the frames of the models it trains,
+    through a clear column or round the left), `tg.Input(name, to=…)` (e.g. the real images),
+    `tg.Note(text, at=…)` (a second line). References: input/output names, keyword names,
+    module paths, `model.name`; unknown ones list the names there are.
+  - Training edges may close a loop (gradients flow backwards). Fixed on the way: nested
+    frames are painted outermost first (an outer frame no longer covers an inner one).
+  - Gallery: the cGAN (overview and layers), the VAE with its reconstruction and KL losses.
 - Examples: `examples/` holds only scripts and notebooks; the notebooks (`alexnet`,
   `pix2pix`, `tour`) are run and keep their figures. AlexNet's figures moved to the gallery
   (`docs/gallery/alexnet*.svg`, every style, with the volume view).

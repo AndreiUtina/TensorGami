@@ -42,6 +42,10 @@ tg.draw(model, x, view="volume")                   # CNN layers as tensor volume
 tg.draw(model, x, view="cell")                     # an LSTM / GRU cell as its gates
 tg.draw(unet, x, u_shape=False)                    # keep a U-Net on one line (default: a U)
 tg.draw(model, x, overrides={"classifier.6": {"label": "logits"}})  # rename a box
+tg.draw(vae, x, annotations=[tg.Loss("KL divergence", "mu", "logvar")])  # a loss term
+tg.draw({"generator": G, "discriminator": D}, {"generator": (z, y), "discriminator": (x, y)},
+        links=[("generator", "discriminator.input 0")],     # several models, wired together
+        annotations=[tg.Loss("adversarial", "discriminator", trains=["generator", "discriminator"])])
 ```
 
 The example input is what the model is called with: a tensor, a tuple of positional

@@ -47,8 +47,9 @@ Rules:
   Implemented in step 11a: a traced loop over time (TIME repeat) gives the unrolled view; a
   fused `nn.LSTM` is one call, so it stays a block unless `view="unrolled"` is asked for.
 
-Extension points (not part of the first release): `annotations=` for loss terms and
-condition inputs (FR11), a mapping of several models for cGANs, and `tg.animate(...)` for the
+Extension points: `annotations=` for loss terms and extra inputs (FR11) and a mapping of
+several models with `links=` for cGANs — both implemented in step 11e (`tg.Loss`, `tg.Input`,
+`tg.Note`; `tg.draw({name: model}, {name: input}, links=[…])`) — and `tg.animate(...)` for the
 dynamic figures (FR13).
 
 ## Alternatives considered
