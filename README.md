@@ -56,6 +56,7 @@ arguments, or a dict of keyword arguments, including the batch dimension.
 tg.draw(model, x, level="stages")                  # less detail: 0 system … 3 operators
 tg.draw(model, x, style="origami")                 # or "origami-extended", or a path to a TOML
 tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
+tg.draw(model, x, wrap_width=1600)                 # fold into rows beyond 1600 px (None: never)
 tg.draw(model, x, view="unrolled")                 # recurrence as a time × layer grid
 tg.draw(model, x, view="volume")                   # CNN layers as tensor volumes
 tg.draw(model, x, view="cell")                     # an LSTM / GRU cell as its gates
@@ -80,8 +81,8 @@ tg.draw({"generator": G, "discriminator": D}, {"generator": (z, y), "discriminat
 - **Several models in one figure**: GANs, VAEs and other training set-ups, with links between
   the models, extra inputs, loss terms with dashed training arrows, and notes.
 
-Model families covered by the tests: CNN, LSTM, ConvLSTM, cGAN, VAE, Transformer and
-pix2pix. The [acceptance gallery](docs/gallery/README.md)
+Model families covered by the tests: CNN (AlexNet, ResNet), LSTM, ConvLSTM, cGAN, VAE,
+Transformer and pix2pix. The [acceptance gallery](docs/gallery/README.md)
 shows each of them in every view and style. Every figure there is drawn automatically, and
 the tests check it.
 
@@ -92,6 +93,8 @@ Notebooks with every option, already run, are in
 
 - [`alexnet.ipynb`](examples/alexnet.ipynb):
   levels, views, styles, layout options, saving, panels;
+- [`resnet.ipynb`](examples/resnet.ipynb):
+  ResNet-18/34/50, how to read the figure, wide figures folded into rows;
 - [`pix2pix.ipynb`](examples/pix2pix.ipynb):
   a U-Net generator, a PatchGAN discriminator and both together;
 - [`tour.ipynb`](examples/tour.ipynb):

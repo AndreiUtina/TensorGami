@@ -5,10 +5,12 @@ model definitions adapted from other projects, used as examples and test models.
 part of the installed package (`src/tensorgami`); their licenses are reproduced here, as those
 licenses require.
 
-## AlexNet — torchvision
+## AlexNet and ResNet — torchvision
 
-`examples/alexnet.py` defines AlexNet exactly as `torchvision.models.alexnet` does
-(<https://github.com/pytorch/vision>), so that torchvision is not needed.
+`examples/alexnet.py` defines AlexNet exactly as `torchvision.models.alexnet` does, and
+`examples/resnet.py` ResNet-18/34/50 as `torchvision.models.resnet` does (without its options
+for grouped and dilated convolutions), from <https://github.com/pytorch/vision>, so that
+torchvision is not needed.
 
 ```text
 BSD 3-Clause License

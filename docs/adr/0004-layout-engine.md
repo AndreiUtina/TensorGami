@@ -33,6 +33,12 @@ engine, registered by group type (`BLOCK_LAYOUTS`): a transform gathers the node
 of that type (`unrolled`: the time × layer grid, 11a; `u-shape`: the U, 11b) and the layered
 engine places the group as one block, so the rest of the model is laid out around it.
 
+*Row wrapping (2026-10-13):* every level of the recursion, not only the top, wraps into rows
+when it is longer than its room (`wrap_width` less the padding of the frames around it), so a
+frame too wide for the page folds inside (AlexNet's `features`, a ResNet stage). Rows read
+like lines of text; a row ends only where a single wire continues, so a residual block is
+never split.
+
 All engines are deterministic: ties are broken by execution order, never by hash or set
 order.
 

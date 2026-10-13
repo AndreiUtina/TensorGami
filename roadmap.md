@@ -387,6 +387,12 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 - README rewritten for PyPI: install, quick start, what can be drawn, gallery figures. Its
   links are relative (GitHub shows them in a private repository too); the build makes them
   absolute for the PyPI page (`hatch-fancy-pypi-readme`).
+- Before the first release (2026-10-13, with the user): a ResNet example
+  (`examples/resnet.py`: ResNet-18/34/50 as in torchvision; `resnet.ipynb`, with how to read
+  the figure) and ResNet-18 in the gallery; wide figures fold into rows inside frames too
+  (every layout level wraps when longer than `wrap_width` less the frames around it; rows
+  read like lines of text, chosen over a snake fold; a pill stays beside a frame that nearly
+  fills the width): AlexNet at the operator level 2248 → 1278 px wide, ResNet-50 9239 → 1850.
 - Left to the user: make the repository public, register the pending publishers on PyPI and
   TestPyPI, create the `testpypi` / `pypi` environments, set `PUBLISH_TO_PYPI`, push the tag.
 
