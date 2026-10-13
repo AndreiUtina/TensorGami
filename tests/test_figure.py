@@ -128,7 +128,9 @@ def test_png_matches_the_scene_geometry(figure, tmp_path):
 
 
 def test_save_formats(figure, tmp_path):
-    assert figure.save(tmp_path / "a.svg").read_text() == render_svg(figure.scene, figure.style)
+    assert figure.save(tmp_path / "a.svg").read_text(encoding="utf-8") == render_svg(
+        figure.scene, figure.style
+    )
     assert figure.save(tmp_path / "a.pdf").read_bytes().startswith(b"%PDF")
     assert figure.save(tmp_path / "a.jpg", dpi=96).read_bytes()[:2] == b"\xff\xd8"
     with pytest.raises(ValueError, match="use .png, .svg"):
