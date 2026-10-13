@@ -6,6 +6,7 @@ authors:
   - family-names: "Utina"
     given-names: "Andrei"
 version: "0.1.0"
+date-released: "2026-10-13"
 license: MIT
 repository-code: "https://github.com/AndreiUtina/TensorGami"
 keywords:

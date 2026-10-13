@@ -7,7 +7,7 @@ versions).
 
 ## [Unreleased]
 
-## [0.1.0] — first public release
+## [0.1.0] — 2026-10-13
 
 The first release: a PyTorch model to a figure in one call.
 
@@ -28,6 +28,8 @@ The first release: a PyTorch model to a figure in one call.
   block is never split.
 - Several models in one figure (`tg.draw({"generator": G, "discriminator": D}, …,
   links=[…])`) and annotations: `tg.Loss` (with training arrows), `tg.Input`, `tg.Note`.
+- Models on PyTorch's `meta` device (`model.to("meta")`) are traced without allocating
+  memory for weights or activations (#2, @HarrisonKramer).
 - `overrides` set the label, category or leaf-ness of a module; clear errors before the
   model runs (misspelt options, unknown styles, levels, views, references).
 
@@ -48,3 +50,5 @@ The first release: a PyTorch model to a figure in one call.
   layouts (unrolled grid, U-shape, LSTM cell), SVG and matplotlib renderers.
 - An acceptance gallery (`docs/gallery/`) of every model family in every view and style,
   checked against committed SVGs and layout invariants by the test suite.
+- Development on Windows: `uv sync` (CPU PyTorch) and the tests work there too (#1,
+  @HarrisonKramer).
