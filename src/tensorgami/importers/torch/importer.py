@@ -109,7 +109,7 @@ def _call(model: nn.Module, example_input: Any) -> Any:
 
 
 def _to_device(obj: Any, device: torch.device | None) -> Any:
-    if device is None or device.type == "meta":
+    if device is None:
         return obj
     if isinstance(obj, torch.Tensor):
         return obj if obj.device == device else obj.to(device)

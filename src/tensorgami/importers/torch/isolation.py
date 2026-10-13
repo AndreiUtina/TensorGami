@@ -10,8 +10,10 @@ from torch import nn
 
 
 def model_device(model: nn.Module) -> torch.device | None:
-    for tensor in [*model.parameters(), *model.buffers()]:
-        return tensor.device
+    for param in model.parameters():
+        return param.device
+    for buffer in model.buffers():
+        return buffer.device
     return None
 
 
