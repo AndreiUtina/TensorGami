@@ -86,7 +86,10 @@ def test_level_by_number_or_name(cnn, x):
 def test_style_by_name_path_or_theme(cnn, x, tmp_path):
     expected = tg.draw(cnn, x, style="origami").to_svg()
     path = tmp_path / "mine.toml"
-    path.write_text((resources.files("tensorgami.style.themes") / "origami.toml").read_text())
+    path.write_text(
+        (resources.files("tensorgami.style.themes") / "origami.toml").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
     assert tg.draw(cnn, x, style=path).to_svg() == expected
     assert tg.draw(cnn, x, style=str(path)).to_svg() == expected
     assert tg.draw(cnn, x, style=load_style("origami")).to_svg() == expected

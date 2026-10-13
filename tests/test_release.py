@@ -13,12 +13,14 @@ from pathlib import Path
 import tensorgami
 
 ROOT = Path(__file__).parents[1]
-PYPROJECT = tomllib.loads((ROOT / "pyproject.toml").read_text())
+PYPROJECT = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
 REPO = "AndreiUtina/TensorGami"
 
 
 def _cff(key: str) -> str | None:
-    match = re.search(rf'^{key}:\s*"?([^"\n]+)"?\s*$', (ROOT / "CITATION.cff").read_text(), re.M)
+    match = re.search(
+        rf'^{key}:\s*"?([^"\n]+)"?\s*$', (ROOT / "CITATION.cff").read_text(encoding="utf-8"), re.M
+    )
     return match.group(1) if match else None
 
 
@@ -31,7 +33,7 @@ def test_citation_has_the_package_version():
 
 
 def test_changelog_has_a_section_for_the_version():
-    changelog = (ROOT / "CHANGELOG.md").read_text()
+    changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     heading = re.search(rf"^## \[{re.escape(tensorgami.__version__)}\](.*)$", changelog, re.M)
     assert heading, f"CHANGELOG.md has no '## [{tensorgami.__version__}]' section"
     released = _cff("date-released")
@@ -41,7 +43,7 @@ def test_changelog_has_a_section_for_the_version():
 
 def test_license_is_mit_everywhere():
     assert PYPROJECT["project"]["license"] == "MIT"
-    text = (ROOT / "LICENSE").read_text()
+    text = (ROOT / "LICENSE").read_text(encoding="utf-8")
     assert text.startswith("MIT License")
     for author in PYPROJECT["project"]["authors"]:
         assert author["name"] in text
@@ -60,7 +62,7 @@ def _links(markdown: str) -> list[str]:
 def _pypi_readme() -> str:
     """README.md as PyPI shows it: the substitutions of hatch-fancy-pypi-readme applied."""
     hook = PYPROJECT["tool"]["hatch"]["metadata"]["hooks"]["fancy-pypi-readme"]
-    text = (ROOT / "README.md").read_text()
+    text = (ROOT / "README.md").read_text(encoding="utf-8")
     for sub in hook["substitutions"]:
         text = re.sub(sub["pattern"], sub["replacement"], text)
     return text
@@ -68,7 +70,9 @@ def _pypi_readme() -> str:
 
 def test_readme_links_to_files_that_exist():
     """Relative, so GitHub shows the images in a private repository and on every branch."""
-    relative = [t for t in _links((ROOT / "README.md").read_text()) if "://" not in t]
+    relative = [
+        t for t in _links((ROOT / "README.md").read_text(encoding="utf-8")) if "://" not in t
+    ]
     assert relative
     missing = [t for t in relative if not (ROOT / t.partition("#")[0]).exists()]
     assert not missing, missing
@@ -95,7 +99,7 @@ def test_classifiers_match_the_python_versions_tested_in_ci():
         for c in PYPROJECT["project"]["classifiers"]
         if re.fullmatch(r"Programming Language :: Python :: 3\.\d+", c)
     }
-    ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text()
+    ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     matrix = re.search(r"python: \[(.*)\]", ci)
     assert matrix
     tested = set(re.findall(r'"(3\.\d+)"', matrix.group(1)))

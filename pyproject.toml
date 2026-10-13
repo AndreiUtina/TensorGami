@@ -93,10 +93,10 @@ include = [
 
 [tool.uv]
 default-groups = ["dev", "docs", "torch"]
-environments = ["sys_platform == 'darwin'", "sys_platform == 'linux'"]
+environments = ["sys_platform == 'darwin'", "sys_platform == 'linux'", "sys_platform == 'win32'"]
 
 [tool.uv.sources]
-torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]  # no CUDA in dev/CI
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]  # no CUDA in dev/CI
 
 [[tool.uv.index]]
 name = "pytorch-cpu"
