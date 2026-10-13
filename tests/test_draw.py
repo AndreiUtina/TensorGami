@@ -300,3 +300,11 @@ def test_unknown_references_list_the_names_there_are():
         tg.draw(make(), example(), annotations=[tg.Loss("KL", "mean")])
     with pytest.raises(ValueError, match="needs the tensors it compares"):
         tg.Loss("empty")
+
+
+def test_draw_meta_device_model():
+    """Verify that a model on the meta device draws end-to-end without computation."""
+    model = SmallCNN().to("meta")
+    fig = tg.draw(model, torch.randn(1, 3, 32, 32))
+    assert isinstance(fig, tg.Figure)
+    assert fig.scene.nodes

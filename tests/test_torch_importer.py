@@ -333,3 +333,20 @@ def test_core_package_does_not_import_torch():
         [sys.executable, "-c", code], capture_output=True, text=True, check=True
     )
     assert result.stdout.strip() == "False"
+
+
+def test_meta_device_model_traces_without_real_computation():
+    """Verify that models on the meta device trace cleanly with regular example inputs (NFR5)."""
+    make_cnn, example = REFERENCE["cnn"]
+    model = make_cnn().to("meta")
+    graph = trace(model, example())
+    assert graph.nodes
+    assert ops(graph, "Conv2d")
+
+
+def test_meta_device_multi_input_model():
+    """Verify that multi-input models on the meta device trace with tuple inputs."""
+    make_g, example_g = REFERENCE["cgan_generator"]
+    model = make_g().to("meta")
+    graph = trace(model, example_g())
+    assert [n.label for n in graph.inputs] == ["input 0", "input 1"]
