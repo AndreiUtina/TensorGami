@@ -33,7 +33,7 @@ class LayoutOptions:
     group_padding: float = 14
     title_height: float = 20  # space for a frame title
     margin: float = 24
-    wrap_width: float | None = 1100  # LR only: wrap the top level into rows beyond this
+    wrap_width: float | None = 1100  # LR only: wrap into rows beyond this (inside frames too)
     row_gap: float = 56
     legend: bool = True
     shapes_on_edges: bool = True

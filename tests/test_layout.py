@@ -229,6 +229,81 @@ def test_long_chains_wrap_into_rows(theme):
     check_scene(wrapped, graph, theme)
 
 
+def _framed_chain(length: int, *, skip: bool = False):
+    """input → a framed group of ``length`` layers (optionally with a skip from its input to
+    a final ``+``, as in a residual block) → output."""
+    b = GraphBuilder()
+    x = b.input((1, 8))
+    group = b.group("features", "Sequential")
+    prev = x
+    for _ in range(length):
+        n = b.node("Linear", category=C.LINEAR, group=group, outputs=[(1, 8)])
+        b.edge(prev, n)
+        prev = n
+    if skip:
+        add = b.node("add", category=C.MERGE, group=group, outputs=[(1, 8)])
+        b.edge(prev, add)
+        b.edge(x, add)
+        prev = add
+    b.output(prev)
+    return b.build()
+
+
+def _rows(scene, ids) -> set[int]:
+    return {round(n.box.cy) for n in scene.nodes if n.id in ids}
+
+
+def test_a_frame_wider_than_the_page_wraps_inside(theme):
+    graph = _framed_chain(14)
+    layers = {n.id for n in graph.members("features")}
+    flat = layout(graph, theme, NO_WRAP)
+    wrapped = layout(graph, theme, LayoutOptions(wrap_width=900))
+    assert len(_rows(flat, layers)) == 1
+    assert len(_rows(wrapped, layers)) >= 2  # rows inside the frame
+    (frame,) = wrapped.groups
+    assert frame.box.w <= 900 < flat.width
+    check_scene(wrapped, graph, theme)  # every layer inside the frame, no wire through a box
+
+
+def test_frames_inside_frames_wrap_to_fit_the_outer_padding(theme):
+    b = GraphBuilder()
+    prev = b.input((1, 8))
+    outer = b.group("model", "Model")
+    inner = b.group("model.block", "Block", parent=outer)
+    for _ in range(14):
+        n = b.node("Linear", category=C.LINEAR, group=inner, outputs=[(1, 8)])
+        b.edge(prev, n)
+        prev = n
+    head = b.node("Linear", category=C.LINEAR, group=outer, outputs=[(1, 8)])
+    b.edge(prev, head)
+    b.output(head)
+    graph = b.build()
+    scene = layout(graph, theme, LayoutOptions(wrap_width=900, legend=False))
+    frames = {g.id: g.box for g in scene.groups}
+    assert len(_rows(scene, {n.id for n in graph.members("model.block")})) >= 2
+    assert frames["model.block"].w <= 900 - 2 * 14  # the outer frame's padding comes off
+    check_scene(scene, graph, theme)
+
+
+def test_a_residual_block_is_never_split_across_rows(theme):
+    """Its skip runs alongside every layer: no place where a single wire continues."""
+    graph = _framed_chain(14, skip=True)
+    scene = layout(graph, theme, LayoutOptions(wrap_width=900))
+    assert len(_rows(scene, {n.id for n in graph.nodes if n.op == "Linear"})) == 1
+    check_scene(scene, graph, theme)
+
+
+def test_a_pill_stays_beside_a_frame_that_nearly_fills_the_width():
+    from tensorgami.layout.layered import _best_cuts
+
+    # AlexNet, every operation: input, `features` wrapped to just under the width, avgpool,
+    # flatten, `classifier`, output — the pills join the frames (15 % over at most)
+    levels = [0, 1, 2, 3, 4, 5]
+    sizes = {0: 64.0, 1: 1080.0, 2: 150.0, 3: 120.0, 4: 1000.0, 5: 72.0}
+    gaps = dict.fromkeys(levels, 48.0)
+    assert _best_cuts(levels, levels[:-1], sizes, gaps, 1100) == [1, 3]  # not [0, 1, 3, 4]
+
+
 def test_top_bottom_direction_stacks_vertically(theme):
     graph = simplify(transformer(), 2)
     scene = layout(graph, theme, LayoutOptions(direction=Direction.TOP_BOTTOM))

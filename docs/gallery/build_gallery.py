@@ -1,4 +1,4 @@
-"""The acceptance gallery (roadmap step 12): the reference models, AlexNet and the composed
+"""The acceptance gallery (roadmap step 12): the reference models, AlexNet, ResNet and the composed
 figures (a cGAN, a VAE with its losses, pix2pix whole), drawn with ``tg.draw`` in every view
 that suits them, once per built-in style.
 
@@ -17,17 +17,22 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 ROOT = HERE.parents[1]
-sys.path[:0] = [str(ROOT / "tests"), str(ROOT / "examples")]  # reference models, AlexNet
+sys.path[:0] = [str(ROOT / "tests"), str(ROOT / "examples")]  # reference models, examples
 
 import torch  # noqa: E402
 from alexnet import AlexNet  # noqa: E402
 from models import REFERENCE  # noqa: E402
 from models.pix2pix import ConditionalDiscriminator  # noqa: E402
+from resnet import resnet18  # noqa: E402
 
 import tensorgami as tg  # noqa: E402
 from tensorgami.style import available_styles  # noqa: E402
 
-MODELS = {**REFERENCE, "alexnet": (AlexNet, lambda: torch.randn(1, 3, 224, 224))}
+MODELS = {
+    **REFERENCE,
+    "alexnet": (AlexNet, lambda: torch.randn(1, 3, 224, 224)),
+    "resnet18": (resnet18, lambda: torch.randn(1, 3, 224, 224)),
+}
 
 FIGURES = {  # file name: (model, tg.draw options besides the style)
     "cnn": ("cnn", {"level": 2}),
@@ -49,6 +54,7 @@ FIGURES = {  # file name: (model, tg.draw options besides the style)
     "alexnet-vertical": ("alexnet", {"level": 2, "direction": "TB"}),
     "alexnet-stages": ("alexnet", {"level": 1}),
     "alexnet-volume": ("alexnet", {"level": 2, "view": "volume"}),
+    "resnet18": ("resnet18", {"level": 2}),  # frames wrapped into rows inside frames
 }
 
 

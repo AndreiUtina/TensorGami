@@ -40,6 +40,7 @@ from tensorgami.vocabulary import EdgeKind
 GRID = 8.0
 DUMMY_CROSS = 6.0
 PORT_GAP = 28.0
+WRAP_GUTTER = 16.0  # beside rows wrapped inside a frame: where wires turn into the next row
 
 #: group type → layout of such a group as one block (e.g. the unrolled view's time × layer
 #: grid); registered by the modules that define them, framed only if the class says so
@@ -327,6 +328,18 @@ class _Run:
         if self.lr:
             return pad, pad, top, pad, min_w
         return top, pad, pad, pad, min_w
+
+    def room(self, group_id: str) -> float | None:
+        """How long a group's content may run along the flow before it wraps into rows: the
+        ``wrap_width`` less the padding of its own frame and of every frame around it."""
+        width = self.opts.wrap_width
+        if width is None:
+            return None
+        for group in [self.g.group(group_id), *self.g.ancestors(group_id)]:
+            if group.id != ROOT and self.framed(group):
+                before, after, *_ = self._frame_pads(group)
+                width -= before + after
+        return width
 
     # ------------------------------------------------------------------ recursion
 
@@ -740,8 +753,8 @@ def _best_cuts(
     levels: list[int], cuts: list[int], sizes: dict, gaps: dict, width: float
 ) -> list[int]:
     """Row breaks (after the given ranks) for wrapping: the fewest rows whose widest row is
-    no wider than ``width`` (or than the widest unbreakable block + 15 %, when that block alone
-    is wider), balanced so that the widest row is as narrow as possible.
+    no wider than ``width`` (or than the widest unbreakable block + 15 %, when that block is
+    nearly as wide or wider), balanced so that the widest row is as narrow as possible.
 
     The legal cuts split the ranks into unbreakable units; greedy packing finds the fewest
     rows, then a small dynamic programme balances them (O(units² × rows))."""
@@ -763,8 +776,9 @@ def _best_cuts(
         return end[units[j][1]] - start[units[i][0]]
 
     widest_unit = max(span(i, i) for i in range(len(units)))
-    # a block wider than ``width`` sets the pace; 15 % slack beats a row holding a lone pill
-    limit = width if widest_unit <= width else widest_unit * 1.15
+    # a block (nearly) as wide as ``width`` sets the pace — e.g. a frame that wrapped itself
+    # to fit: 15 % slack beats a row holding a lone pill
+    limit = max(width, widest_unit * 1.15)
     rows, i = 0, 0
     while i < len(units):  # greedy: as many units per row as fit → fewest rows
         j = i
@@ -1014,14 +1028,18 @@ class _Level:
         return gap
 
     def _rows(self) -> list[list[int]]:
-        """Split the top level into balanced rows when it is wider than ``wrap_width``.
+        """Split the level into balanced rows when it is longer than its room (``wrap_width``
+        less the frames around it): a frame too wide for the page wraps inside, and its rows
+        read like lines of text.
 
-        A row may only end where exactly one connection continues into the next row, and no
-        row may be left nearly empty (e.g. a lone output)."""
+        A row may only end where exactly one connection continues into the next row (so a
+        residual block, with its skip alongside, stays whole), and no row may be left nearly
+        empty (e.g. a lone output)."""
         levels = sorted(self.ranks)
         run = self.run
-        width = run.opts.wrap_width
-        if self.gid != ROOT or not run.lr or width is None or len(levels) < 2:
+        width = run.room(self.gid)
+        nested = self.gid != ROOT
+        if not run.lr or width is None or len(levels) < 2 or (nested and self.back):
             return [levels]
         sizes = {r: max(self.items[k].flow_size for k in self.ranks[r]) for r in levels}
         ends, flow = {}, 0.0
@@ -1052,9 +1070,12 @@ class _Level:
         self.gaps: dict[int, float] = {}
         self.row_of: dict[int, int] = {}
         self.row_bounds: list[tuple[float, float]] = []  # cross extent of each row
+        # wrapped inside a frame: room on both sides for the wires turning into the next row
+        # (at the top level the figure's margin gives it)
+        self.gutter = WRAP_GUTTER if len(rows) > 1 and self.gid != ROOT else 0.0
         cross_offset = 0.0
         for row_index, row in enumerate(rows):
-            flow = 0.0
+            flow = self.gutter
             for i, r in enumerate(row):
                 size = max(self.items[k].flow_size for k in self.ranks[r])
                 self.rank_span[r] = (flow, flow + size)
@@ -1097,7 +1118,7 @@ class _Level:
             group_id = it.key[2:]
             if run.framed(run.g.group(group_id)):
                 block.frames[group_id] = (it.flow, it.cross, it.flow_size, it.cross_size)
-        block.flow = max(it.flow + it.flow_size for it in self.items.values())
+        block.flow = max(it.flow + it.flow_size for it in self.items.values()) + self.gutter
         block.cross = max(it.cross + it.cross_size for it in self.items.values())
 
         for index, a, b in self.forward:

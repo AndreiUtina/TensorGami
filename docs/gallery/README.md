@@ -129,6 +129,17 @@ original paper; the dense layers are bars.
 
 ![AlexNet, volume view](alexnet-volume.svg)
 
+## ResNet-18: rows inside frames
+
+From [`examples/resnet.py`](../../examples/resnet.py): torchvision's ResNet-18 at the layer
+level. A figure wider than `wrap_width` (1100 px by default) wraps into rows that read like
+lines of text, and so does a frame wider than the room it has: each stage holds its two
+residual blocks one above the other. A row only ends where a single wire continues, so a
+residual block, with its skip alongside, is never split. (Above, AlexNet's `features` wraps
+the same way.)
+
+![ResNet-18](resnet18.svg)
+
 ## Origami style
 
 The same models drawn with `style="origami"`: upright cards, left → right (see [the style
