@@ -37,6 +37,26 @@ when running Tensorgami (`style="default"`), with more styles added over time: a
 | `origami-extended` | ✅ ([style page](../style/origami.md)) | the origami look with level text: flat single-line cards top → bottom (default), stacked cards left → right |
 | third | to be decided | — |
 
+## Variants (2026-10-14, step 13a)
+
+A *variant* recolours a style for where the figure goes, without a TOML file of its own:
+`tg.draw(model, x, style="origami", variant="dark")`, or `load_style("origami", "dark")`.
+A variant is a function `Theme → Theme`, so it works for every style, built-in or not, and
+several apply in order (`variant=["dark", "greyscale"]`). The result is validated like any
+style.
+
+- `dark`: a dark board; cards keep their fills and dark text (made opaque), while wires,
+  outlines, frames and the text on the background are lightened just enough to pass the
+  contrast rules, so each keeps its hue.
+- `greyscale`: every colour becomes the grey of the same luminance (every contrast ratio is
+  kept); the category pastels, nearly equally light, are spread over a wider range of greys
+  in the same order, and wire kinds that differed only by hue are kept apart.
+
+Text drawn beside a node on the background (a volume's name, the note beside a merge circle)
+uses `Theme.outside_font`: the node's font, or the background text colour where the node's
+would be too faint. The contrast rule judges a translucent card by the colour it shows on the
+background.
+
 ## Consequences
 
 - `layout(graph, style)` without explicit options uses the style's layout preferences.
