@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from pathlib import Path
 
 from tensorgami.style.color import BLACK, WHITE, Color
@@ -20,6 +21,7 @@ from tensorgami.style.glyphs import (
 from tensorgami.style.loader import available_themes, parse_theme, read_theme
 from tensorgami.style.theme import Theme, ThemeError
 from tensorgami.style.validation import Issue, ThemeValidator
+from tensorgami.style.variants import apply_variants, available_variants
 
 DEFAULT_STYLE = "default"
 
@@ -34,10 +36,17 @@ def load_theme(source: str | Path = DEFAULT_STYLE, *, validate: bool = True) -> 
     return ThemeValidator().ensure_valid(theme) if validate else theme
 
 
-def load_style(style: str | Path = DEFAULT_STYLE) -> Theme:
-    """The user-facing name for :func:`load_theme`: ``load_style("default")``, a future
-    ``load_style("origami")``, or ``load_style("path/to/my-style.toml")`` (ADR-0008)."""
-    return load_theme(style)
+def load_style(
+    style: str | Path | Theme = DEFAULT_STYLE, variant: str | Sequence[str] | None = None
+) -> Theme:
+    """The user-facing name for :func:`load_theme`: ``load_style("origami")``, or
+    ``load_style("path/to/my-style.toml")`` (ADR-0008); ``variant`` recolours it for where the
+    figure goes (``"dark"``, ``"greyscale"``; several apply in order). A loaded theme is
+    passed through (with its variants). The result is validated like every style."""
+    theme = style if isinstance(style, Theme) else load_theme(style)
+    if not variant:
+        return theme
+    return ThemeValidator().ensure_valid(apply_variants(theme, variant))
 
 
 def available_styles() -> list[str]:
@@ -64,8 +73,10 @@ __all__ = [
     "Theme",
     "ThemeError",
     "ThemeValidator",
+    "apply_variants",
     "available_styles",
     "available_themes",
+    "available_variants",
     "load_style",
     "load_theme",
     "parse_theme",

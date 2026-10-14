@@ -63,3 +63,15 @@ class Theme:
         if role is TextRole.DETAIL:
             return font
         return replace(font, color=self.nodes[category].text)
+
+    def outside_font(self, category: OpCategory, role: TextRole = TextRole.LABEL) -> Font:
+        """Font for a node's text drawn beside it, on the background (a volume's name and
+        shape below it, the note beside a merge circle): the node's own font — unless that
+        is too faint on the background (dark text on a dark variant), then in the colour of
+        the text printed on the background (the legend's for names, the shapes' for details).
+        """
+        font = self.node_font(category, role)
+        if font.color.contrast_ratio(self.background) >= 4.5:
+            return font
+        on_background = TextRole.LEGEND if role is TextRole.LABEL else TextRole.ANNOTATION
+        return replace(font, color=self.fonts[on_background].color)

@@ -41,8 +41,10 @@ class TextContrastRule:
     def check(self, theme: Theme) -> Iterable[Issue]:
         detail = theme.font(TextRole.DETAIL).color
         for category, style in theme.nodes.items():
-            yield from self._pair(style.text, style.fill, f"label on '{category}'")
-            yield from self._pair(detail, style.fill, f"detail text on '{category}'")
+            # a translucent card shows the background through: judge the colour the eye sees
+            seen = style.fill.mix(theme.background, 1 - style.opacity)
+            yield from self._pair(style.text, seen, f"label on '{category}'")
+            yield from self._pair(detail, seen, f"detail text on '{category}'")
         on_background = (TextRole.ANNOTATION, TextRole.NOTE, TextRole.LEGEND, TextRole.GROUP_TITLE)
         for role in on_background:
             yield from self._pair(theme.font(role).color, theme.background, f"{role} text")
