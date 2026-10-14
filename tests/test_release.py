@@ -56,7 +56,12 @@ def test_sdist_includes_exist():
 
 
 def _links(markdown: str) -> list[str]:
-    return re.findall(r"\]\(([^)\s]+)\)", markdown)
+    """Markdown links and images, and the images of HTML ``<picture>`` (src, srcset)."""
+    return re.findall(r"\]\(([^)\s]+)\)", markdown) + _html_images(markdown)
+
+
+def _html_images(markdown: str) -> list[str]:
+    return re.findall(r"\s(?:src|srcset)=\"([^\"]+)\"", markdown)
 
 
 def _pypi_readme() -> str:
@@ -89,8 +94,20 @@ def test_pypi_readme_links_are_absolute_and_exist():
     assert files
     missing = [f for f in files if not (ROOT / f).exists()]
     assert not missing, missing
-    images = re.findall(r"!\[[^\]]*\]\(([^)\s]+)\)", _pypi_readme())
+    readme = _pypi_readme()
+    images = re.findall(r"!\[[^\]]*\]\(([^)\s]+)\)", readme) + _html_images(readme)
     assert all(not i.startswith(blob) for i in images)  # images load from the raw files
+
+
+def test_readme_figures_follow_the_viewers_theme():
+    """On GitHub, each figure in a <picture> has a dark version for the dark theme."""
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    pictures = re.findall(r"<picture>(.*?)</picture>", readme, re.S)
+    assert pictures
+    for picture in pictures:
+        (dark,) = re.findall(r'media="\(prefers-color-scheme: dark\)" srcset="([^"]+)"', picture)
+        (light,) = re.findall(r'<img [^>]*src="([^"]+)"', picture)
+        assert dark == light.replace(".svg", "-dark.svg")
 
 
 def test_classifiers_match_the_python_versions_tested_in_ci():

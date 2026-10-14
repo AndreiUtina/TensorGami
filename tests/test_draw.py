@@ -162,6 +162,8 @@ class MustNotRun(nn.Module):
     [
         ({"directon": "TB"}, TypeError, "did you mean 'direction'"),
         ({"theme": "origami"}, TypeError, "did you mean 'style'"),
+        ({"varient": "dark"}, TypeError, "did you mean 'variant'"),
+        ({"variant": "night"}, ValueError, "unknown variant 'night'; available: dark"),
         ({"colour": "red"}, TypeError, "layout options are: direction"),
         ({"style": "origamy"}, ThemeError, "built-in styles: default, origami"),
         ({"level": 9}, ValueError, "level must be one of 0 system"),
