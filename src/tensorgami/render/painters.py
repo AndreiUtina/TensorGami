@@ -137,8 +137,8 @@ class CirclePainter:
         if node.label:
             font = theme.node_font(node.category, TextRole.SYMBOL)
             canvas.text(node.box.center, node.label, font)
-        if node.detail:
-            font = theme.node_font(node.category, TextRole.DETAIL)
+        if node.detail:  # beside the circle, on the background
+            font = theme.outside_font(node.category, TextRole.DETAIL)
             side = node.note_side or (Side.RIGHT if node.box.w > node.box.h else Side.TOP)
             c, away = node.box.center, r + font.size * 0.8
             at, anchor = {
@@ -222,14 +222,14 @@ class CuboidPainter:
         canvas.polygon(side, Paint(style.fill.darken(0.14), style.stroke, width, style.dash))
         canvas.polygon(top, Paint(style.fill.lighten(0.45), style.stroke, width, style.dash))
         canvas.rect(b, outline(style, theme))
-        label_font = theme.node_font(node.category, TextRole.LABEL)
+        label_font = theme.outside_font(node.category, TextRole.LABEL)  # below, on the background
         y = b.bottom + 6 + label_font.size / 2
         if node.label:
             canvas.text(Point(b.cx, y), node.label, label_font)
             y += label_font.size * 1.15 + theme.metrics.line_gap
         if node.detail:
             canvas.text(
-                Point(b.cx, y), node.detail, theme.node_font(node.category, TextRole.DETAIL)
+                Point(b.cx, y), node.detail, theme.outside_font(node.category, TextRole.DETAIL)
             )
 
     def anchor(self, node: Node, side: Side, theme: Theme) -> Point:
