@@ -55,6 +55,11 @@ FIGURES = {  # file name: (model, tg.draw options besides the style)
     "alexnet-stages": ("alexnet", {"level": 1}),
     "alexnet-volume": ("alexnet", {"level": 2, "view": "volume"}),
     "resnet18": ("resnet18", {"level": 2}),  # frames wrapped into rows inside frames
+    # variants (step 13): recoloured for slides and for black-and-white print
+    "alexnet-dark": ("alexnet", {"level": 2, "variant": "dark"}),
+    "alexnet-greyscale": ("alexnet", {"level": 2, "variant": "greyscale"}),
+    "alexnet-volume-dark": ("alexnet", {"level": 2, "view": "volume", "variant": "dark"}),
+    "pix2pix-generator-dark": ("pix2pix_generator", {"level": 2, "variant": "dark"}),
 }
 
 
@@ -129,6 +134,7 @@ COMPOSED = {  # file name: (figure, tg.draw options besides the style)
     "cgan-layers": (cgan, {"direction": "TB"}),
     "vae-losses": (vae_losses, {}),
     "pix2pix-system": (pix2pix_system, {"view": "volume"}),
+    "pix2pix-system-dark": (pix2pix_system, {"view": "volume", "variant": "dark"}),
 }
 
 

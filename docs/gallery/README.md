@@ -140,6 +140,31 @@ the same way.)
 
 ![ResNet-18](resnet18.svg)
 
+## Variants: dark and greyscale
+
+`variant="dark"` recolours any style for slides with a dark background: the cards keep their
+fills and dark text, while wires, outlines, frames and the text on the background are
+lightened just enough to stand out. `variant="greyscale"` is for black-and-white print: every
+colour becomes the grey of the same luminance, so every contrast is kept, and the category
+fills are spread over a wider range of greys so they stay apart. Both pass the same checks as
+every style.
+
+![AlexNet, dark](alexnet-dark.svg)
+
+![AlexNet, greyscale](alexnet-greyscale.svg)
+
+![AlexNet, volume view, dark](alexnet-volume-dark.svg)
+
+![pix2pix generator, dark](pix2pix-generator-dark.svg)
+
+![pix2pix, the whole system, dark](pix2pix-system-dark.svg)
+
+The origami styles too:
+
+![AlexNet, origami, dark](origami/alexnet-dark.svg)
+
+![AlexNet, origami, greyscale](origami/alexnet-greyscale.svg)
+
 ## Origami style
 
 The same models drawn with `style="origami"`: upright cards, left → right (see [the style
