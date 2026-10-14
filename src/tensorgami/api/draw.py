@@ -25,6 +25,7 @@ _PARAMETERS = (
     "level",
     "view",
     "style",
+    "variant",
     "overrides",
     "links",
     "annotations",
@@ -41,6 +42,7 @@ def draw(
     level: int | str = Level.LAYERS,
     view: str = "auto",
     style: str | Path | Theme = DEFAULT_STYLE,
+    variant: str | Sequence[str] | None = None,
     overrides: Mapping[str, Mapping[str, Any]] | None = None,
     links: Sequence[tuple[str, ...]] = (),
     annotations: Sequence[Annotation] = (),
@@ -65,8 +67,11 @@ def draw(
             ``"cell"`` (the recurrent cells drawn as their gates), or ``"auto"`` (default:
             unrolled when a module is called step after step with state passed along, block
             otherwise).
-        style: a built-in style (``"default"``, ``"origami"``), the path of a ``.toml``
-            style, or a loaded :class:`~tensorgami.style.Theme`.
+        style: a built-in style (``"default"``, ``"origami"``, ``"origami-extended"``), the
+            path of a ``.toml`` style, or a loaded :class:`~tensorgami.style.Theme`.
+        variant: the style recoloured for where the figure goes: ``"dark"`` (a dark
+            background, for slides) or ``"greyscale"`` (black-and-white print); a list
+            applies several in order.
         overrides: category, label or leaf-ness per module path or class name, e.g.
             ``{"ConvLSTMCell": {"category": "recurrent", "label": "ConvLSTM cell"}}``.
         links: with several models (``model`` a dict of name → module, ``example_input`` a
@@ -95,7 +100,7 @@ def draw(
     # every argument is checked before the model runs, so a typo costs no forward pass
     _check_names(layout_options)
     _check_extras(model, example_input, links, annotations)
-    theme = style if isinstance(style, Theme) else load_style(style)
+    theme = load_style(style, variant)
     if direction is not None:
         layout_options["direction"] = direction
     options = LayoutOptions.for_style(theme, **layout_options)
