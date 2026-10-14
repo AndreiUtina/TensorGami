@@ -77,6 +77,10 @@ replacement = '\1https://raw.githubusercontent.com/AndreiUtina/TensorGami/main/\
 pattern = '(\]\()(?!https?://|#)([^)\s]+)\)'
 replacement = '\1https://github.com/AndreiUtina/TensorGami/blob/main/\2)'
 
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]  # <picture>: <img src>, <source srcset>
+pattern = '(\s(?:src|srcset)=")(?!https?://)([^"]+)"'
+replacement = '\1https://raw.githubusercontent.com/AndreiUtina/TensorGami/main/\2"'
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/tensorgami"]
 

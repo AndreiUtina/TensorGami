@@ -356,7 +356,17 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
     background patch; wrapped edges bend outside frames; rows wrap only when that makes a
     figure at least 20 % narrower.
 - **Third style:** to be decided.
-- Presentation variants: slide (16:9 sizing, larger fonts), dark, greyscale/print.
+- **Variants** ✅ (13a, 2026-10-14): `variant="dark"` and `variant="greyscale"`, for any
+  style (functions `Theme → Theme`, validated like every style; ADR-0008). Dark keeps the
+  pastel cards (made opaque) on a dark board and lightens wires, outlines, frames and the text
+  on the background only as far as the contrast rules need; greyscale keeps every luminance
+  (so every contrast) and spreads the category fills over a wider range of greys. Text beside
+  a node (a volume's name, a merge note) switches to the background text colour where it
+  would be too faint; the contrast rule now judges translucent cards on the background. Four
+  variant figures per style in the gallery. The dark board is GitHub's dark page colour
+  (#0d1117, as the logo banner): the README's figures switch with the reader's theme
+  (`<picture>`; PyPI shows the light ones), and the build makes their links absolute too.
+- Presentation sizing: slide (16:9 sizing, larger fonts).
 - Export for LaTeX reports (PDF/SVG at exact column widths).
 
 ### 14) Dynamic information flow ⬜

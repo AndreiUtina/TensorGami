@@ -11,9 +11,15 @@ Draw the architecture and information flow of PyTorch models, locally, in Python
 for papers, reports and slides. Call `tg.draw` on a loaded model in a script or a notebook,
 see the figure inline in Jupyter, and save it as PNG, SVG or PDF.
 
-![AlexNet in the origami style](docs/gallery/origami/alexnet.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/gallery/origami/alexnet-dark.svg">
+  <img alt="AlexNet in the origami style" src="docs/gallery/origami/alexnet.svg">
+</picture>
 
-![pix2pix: U-Net generator and PatchGAN discriminator as tensor volumes](docs/gallery/pix2pix-system.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/gallery/pix2pix-system-dark.svg">
+  <img alt="pix2pix: U-Net generator and PatchGAN discriminator as tensor volumes" src="docs/gallery/pix2pix-system.svg">
+</picture>
 
 ## Install
 
@@ -55,6 +61,7 @@ arguments, or a dict of keyword arguments, including the batch dimension.
 ```python
 tg.draw(model, x, level="stages")                  # less detail: 0 system … 3 operators
 tg.draw(model, x, style="origami")                 # or "origami-extended", or a path to a TOML
+tg.draw(model, x, variant="dark")                  # for dark slides; "greyscale" for print
 tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
 tg.draw(model, x, wrap_width=1600)                 # fold into rows beyond 1600 px (None: never)
 tg.draw(model, x, view="unrolled")                 # recurrence as a time × layer grid
@@ -77,7 +84,8 @@ tg.draw({"generator": G, "discriminator": D}, {"generator": (z, y), "discriminat
 - **Styles**: [`default`](docs/style/style-baseline.md),
   and [`origami` and `origami-extended`](docs/style/origami.md)
   (narrow boxes in the style of the survey figures). A style is a TOML file; your own can be
-  passed by path.
+  passed by path. Any style comes in a `dark` variant for slides and a `greyscale` one for
+  black-and-white print.
 - **Several models in one figure**: GANs, VAEs and other training set-ups, with links between
   the models, extra inputs, loss terms with dashed training arrows, and notes.
 

@@ -7,6 +7,19 @@ versions).
 
 ## [Unreleased]
 
+### Added
+
+- Style variants: `tg.draw(model, x, variant="dark")` for slides with a dark background and
+  `variant="greyscale"` for black-and-white print, for every style (also
+  `load_style("origami", "dark")`); several apply in order. The dark board is GitHub's dark
+  page colour, so dark figures blend into a dark-mode README.
+- The README's figures follow the reader's GitHub theme (light or dark versions).
+
+### Changed
+
+- The contrast check of a style judges translucent cards by the colour they show on the
+  background.
+
 ## [0.1.0] — 2026-10-13
 
 The first release: a PyTorch model to a figure in one call.
