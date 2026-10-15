@@ -19,10 +19,13 @@ from tensorgami.vocabulary import EdgeKind, OpCategory
 
 class FoldUShape:
     """Find at least ``min_levels`` skip connections nested inside each other (an encoder
-    tensor reaching the merge of its decoder level) and move the nodes from the outermost
-    skip's source to its merge into one group of type ``USHAPE``, each marked with its level
-    and side (``U_LEVEL``, ``U_SIDE``). The modules inside lose their frames: the U shows the
-    levels instead. Residual networks (skips one after another, not nested) are untouched.
+    tensor reaching the merge of its decoder level) and move the encoder–decoder — every node
+    of the group holding the outermost skip — into one group of type ``USHAPE``, each marked
+    with its level and side (``U_LEVEL``, ``U_SIDE``): the layers before the outermost skip
+    open the top encoder row, those after its merge close the top decoder row (U-Net's first
+    convolutions and its 1 × 1 output layer). The modules inside lose their frames: the U
+    shows the levels instead. Residual networks (skips one after another, not nested) are
+    untouched.
     """
 
     name = "fold-u-shape"
@@ -43,13 +46,7 @@ class FoldUShape:
         merges = [index[b] for _, b in skips]  # decreasing
         home = _common_group(graph, skips[0][0], skips[0][1])
         under = {n.id for n in graph.nodes_under(home)}
-        region = [
-            n
-            for n in graph.nodes
-            if n.id in under
-            and sources[0] <= index[n.id] <= merges[0]
-            and n.category is not OpCategory.IO
-        ]
+        region = [n for n in graph.nodes if n.id in under and n.category is not OpCategory.IO]
         gid = f"{USHAPE}:{home or 'model'}"
         place = {n.id: _place(index[n.id], sources, merges) for n in region}
         hidden = self._hidden(len(skips))
@@ -135,7 +132,8 @@ def _common_group(graph: Graph, a: str, b: str) -> str:
 
 def _place(i: int, sources: list[int], merges: list[int]) -> tuple[int, str]:
     """Level and side of the node at position ``i``: encoder level k runs up to its skip's
-    source, decoder level k from its merge; between the innermost pair is the bottleneck."""
+    source (level 0 from the start), decoder level k from its merge (level 0 to the end);
+    between the innermost pair is the bottleneck."""
     for k, source in enumerate(sources):
         if i <= source:
             return k, "enc"

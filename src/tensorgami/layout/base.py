@@ -28,13 +28,14 @@ class Direction(StrEnum):
 @dataclass(frozen=True)
 class LayoutOptions:
     direction: Direction = Direction.LEFT_RIGHT
-    rank_gap: float = 48  # minimum space between consecutive ranks
-    node_gap: float = 20  # minimum space between neighbours in a rank
-    group_padding: float = 14
-    title_height: float = 20  # space for a frame title
-    margin: float = 24
-    wrap_width: float | None = 1100  # LR only: wrap into rows beyond this (inside frames too)
-    row_gap: float = 56
+    rank_gap: float = 32  # minimum space between consecutive ranks
+    node_gap: float = 16  # minimum space between neighbours in a rank
+    group_padding: float = 10
+    title_height: float = 16  # space for a frame title
+    margin: float = 16
+    wrap_width: float | None = 1100  # left → right: wrap into rows beyond this (frames too)
+    wrap_height: float | None = 1100  # top → bottom: wrap into columns beyond this
+    row_gap: float = 40
     legend: bool = True
     shapes_on_edges: bool = True
     loop_clearance: float = 14  # height of a state self-loop above its node

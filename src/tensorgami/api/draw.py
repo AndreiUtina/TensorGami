@@ -87,7 +87,8 @@ def draw(
         direction: ``"LR"`` (left → right) or ``"TB"`` (top → bottom); by default the
             style's choice, else ``"LR"``.
         **layout_options: further :class:`~tensorgami.layout.LayoutOptions`, e.g.
-            ``legend=False``, ``wrap_width=None`` (one row) or ``rank_gap=64``.
+            ``legend=False``, ``rank_gap=64``, ``wrap_width`` (left → right: wrap into rows
+            beyond it; ``None``: one row) or ``wrap_height`` (top → bottom: columns).
 
     Example::
 

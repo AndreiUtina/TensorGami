@@ -161,11 +161,16 @@ def transformer(layers: int = 2) -> Graph:
     return b.build()
 
 
-def unet(levels: int = 3) -> Graph:
+def unet(levels: int = 3, *, stem: bool = False) -> Graph:
     """A small U-Net: per level, encoder Conv → ReLU → MaxPool (the skip leaves after the ReLU);
-    a bottleneck Conv; per level, decoder ConvTranspose → cat with the skip → Conv."""
+    a bottleneck Conv; per level, decoder ConvTranspose → cat with the skip → Conv; a 1×1 head.
+    ``stem``: a Conv before the first level, ahead of the outermost skip."""
     b = GraphBuilder("unet", root_type="UNet")
     x = b.input((1, 3, 64, 64), label="image")
+    if stem:
+        first = b.node("Conv2d", category=C.CONV, module="stem", outputs=[(1, 8, 64, 64)])
+        b.edge(x, first)
+        x = first
     size, channels, skips = 64, 16, []
     for k in range(levels):
         conv = b.node(

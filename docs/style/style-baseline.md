@@ -119,8 +119,10 @@ a comma ("64, ReLU").
 
 - **Grid:** 8 px. Node heights are 32–36 px for one line and 44–48 px with a detail line.
   Layer nodes are at least 96 px wide; gates, merges and short tensor pills can be narrower.
-- **Spacing:** at least 56 px between consecutive nodes when edges carry shape labels, so that
-  a label like `64×16×16` fits between the nodes.
+- **Spacing:** 32 px between consecutive layers, 16 px between neighbours; where a wire carries
+  a shape label, the gap is the label's width plus 16 px, so that `64×16×16` fits between the
+  nodes (twice that where the wire bends: the label sits on one half). Rows wrapped from a
+  long figure are 40 px apart; frames are padded by 10 px, with 16 px for a title.
 - **Direction:**
   - feed-forward chains run left → right (and wrap into rows when wider than the page);
   - deep stacks of identical blocks (Transformer, ResNet stage) run top → bottom;

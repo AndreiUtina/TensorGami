@@ -6,7 +6,7 @@ import dataclasses
 from collections import defaultdict
 from collections.abc import Iterable
 
-from tensorgami.ir import Graph, Node
+from tensorgami.ir import CAPTION, Graph, Node
 from tensorgami.transforms.base import rebuild
 from tensorgami.vocabulary import EdgeKind, OpCategory
 
@@ -35,10 +35,22 @@ def _single_data_input(graph: Graph, node: Node):
     return edges[0] if len(edges) == 1 and edges[0].kind is EdgeKind.DATA else None
 
 
+def _is_crop(before: tuple[int, ...], after: tuple[int, ...]) -> bool:
+    """A slice that keeps the batch, the channels and the rank and only shortens the spatial
+    sizes: a crop (U-Net's "copy and crop"). It changes what the next layer sees."""
+    return (
+        len(before) == len(after) >= 3
+        and before[:2] == after[:2]
+        and before != after
+        and all(b <= a for a, b in zip(before[2:], after[2:], strict=True))
+    )
+
+
 class RemoveLayoutOps:
     """Bypass layout operations (``view``, ``permute``, ``getitem``…) that have one input and
     one output. A layout op without inputs that reads a buffer (``self.pe[:, :T]``) becomes a
-    named tensor source (label ``pe``) instead."""
+    named tensor source (label ``pe``) instead. A ``getitem`` that crops a feature map stays,
+    as a box named Crop with the size it crops to."""
 
     name = "remove-layout-ops"
 
@@ -52,7 +64,11 @@ class RemoveLayoutOps:
             if n.op not in self.ops or len(n.output_shapes) != 1:
                 continue
             edge = _single_data_input(graph, n)
-            if edge is not None:
+            if edge is not None and n.op == "getitem" and self._crop(graph, edge, n):
+                size = "×".join(str(d) for d in n.output_shapes[0][2:])
+                params = {**n.params, CAPTION: f"→ {size}"}
+                renamed[n.id] = dataclasses.replace(n, label="Crop", params=params)
+            elif edge is not None:
                 resolve[n.id] = resolve.get(edge.source, (edge.source, edge.source_port))
             elif not graph.in_edges(n.id) and n.params.get("weights"):
                 label = n.label or ", ".join(n.params["weights"])
@@ -71,6 +87,13 @@ class RemoveLayoutOps:
             edges.append(e)
         nodes = [renamed.get(n.id, n) for n in graph.nodes if n.id not in resolve]
         return rebuild(graph, nodes=nodes, edges=edges)
+
+    @staticmethod
+    def _crop(graph: Graph, edge, node: Node) -> bool:
+        outputs = graph.node(edge.source).output_shapes
+        if edge.source_port >= len(outputs) or not outputs[edge.source_port]:
+            return False
+        return _is_crop(tuple(outputs[edge.source_port]), tuple(node.output_shapes[0]))
 
 
 class FoldIntoPrevious:

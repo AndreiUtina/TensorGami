@@ -80,9 +80,9 @@ fold_shade = 0.08
 [layout]
 direction = "TB"
 rank_gap = 22
-node_gap = 26
-group_padding = 14
-title_height = 22
+node_gap = 20
+group_padding = 10
+title_height = 18
 
 [boxes]
 text = { TB = "inline", LR = "stacked" }  # one line in columns; name above details in rows

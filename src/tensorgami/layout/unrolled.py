@@ -61,12 +61,12 @@ class _Grid:
         row_h = defaultdict(float)
         for n, (lvl, _) in self.place.items():
             row_h[lvl] = max(row_h[lvl], size[n][1])
-        col_gap = max(run.opts.rank_gap, 40.0)
+        col_gap = max(run.opts.rank_gap, 32.0)
         self.gaps = [
             col_gap + (ELIDED if b - a > 1 else 0.0)
             for a, b in zip(self.steps, self.steps[1:], strict=False)
         ]
-        row_gap = max(run.opts.node_gap + 14, 34.0)
+        row_gap = max(run.opts.node_gap + 10, 28.0)
         if not run.lr:  # layers side by side: a shape between them needs its width
             between = [run.labels[i] for i in self._layer_labels()]
             row_gap = max([row_gap, *(run.label_width(text) + 16 for text in between)])

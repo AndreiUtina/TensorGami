@@ -39,12 +39,12 @@ class _UShape:
     def _gap(self, a: str, b: str) -> float:
         """Space between two neighbours along the flow: room for the shape label between."""
         run = self.run
-        gap = max(run.opts.rank_gap, 28.0)
+        gap = max(run.opts.rank_gap, 24.0)
         for i, e in enumerate(run.g.edges):
             if e.source == a and e.target == b and i in run.labels:
                 font = run.theme.font(TextRole.ANNOTATION).size
                 along = font if run.upright_labels else run.label_width(run.labels[i])
-                gap = max(gap, along + 24)
+                gap = max(gap, along + 16)
         return gap
 
     def _segment(self, ids: list[str]) -> tuple[list[float], float]:
@@ -66,7 +66,7 @@ class _UShape:
             for side, ids in sides.items()
         }
         left = max((segments[k][1] for k in segments if k[1] == "enc"), default=0.0)
-        middle = max(run.opts.rank_gap, 40.0)
+        middle = max(run.opts.rank_gap, 32.0)
         for e_index, e in enumerate(run.g.edges):  # a skip's shape needs the middle's width
             if e.source in self.ids and e.target in self.ids and e_index in run.labels:
                 if self.where[e.source][1] == "enc" and self.where[e.target][1] == "dec":
@@ -99,7 +99,7 @@ class _UShape:
 
         volumes = any(VOLUME in run.g.node(n).params for n in self.ids)
         # volumes carry their name below and need no room for wire labels: tighter rows
-        row_gap = 22.0 if volumes else max(run.opts.node_gap + 26, 44.0)
+        row_gap = 18.0 if volumes else max(run.opts.node_gap + 18, 34.0)
         self.top, self.bottom, self.line, cross = {}, {}, {}, BUS if bus else 0.0
         for k, level in enumerate(self.levels):
             ids = [n for row in self.rows[level].values() for n in row]

@@ -28,15 +28,15 @@ room a figure needs:
 | Left → right | **upright cards**: one line of text reading bottom → top (name at the bottom, details at the top), the fold on top, all cards equally tall; the tensor shapes between them stand upright too | name above details, each card as wide as its own text |
 | Top → bottom | flat single-line cards of equal width: name on the left, details on the right, like a table | the same |
 
-AlexNet, `origami` (1047 × 390 px; a layer takes about 60 px of width):
+AlexNet, `origami` (927 × 354 px; a layer takes about 55 px of width):
 
 ![AlexNet, origami](../gallery/origami/alexnet.svg)
 
-AlexNet, `origami-extended` (535 × 1151 px; `origami` top → bottom looks the same):
+AlexNet, `origami-extended` (519 × 993 px; `origami` top → bottom looks the same):
 
 <img src="../gallery/origami-extended/alexnet.svg" alt="AlexNet, origami-extended" width="400">
 
-`origami-extended` left → right (1492 × 360 px):
+`origami-extended` left → right (978 × 376 px):
 
 ![AlexNet, origami-extended, left to right](../gallery/origami-extended/alexnet-horizontal.svg)
 

@@ -39,7 +39,7 @@ from tensorgami.vocabulary import EdgeKind
 
 GRID = 8.0
 DUMMY_CROSS = 6.0
-PORT_GAP = 28.0
+PORT_GAP = 20.0
 WRAP_GUTTER = 16.0  # beside rows wrapped inside a frame: where wires turn into the next row
 
 #: group type → layout of such a group as one block (e.g. the unrolled view's time × layer
@@ -157,6 +157,68 @@ class _Run:
         self.chain = {
             n.id: [n.group, *(a.id for a in graph.ancestors(n.group))] for n in graph.nodes
         }
+        self.side_inputs = self._side_inputs()
+        for index in self.side_inputs:  # its wire runs between two frames: no room for a label
+            self.labels.pop(index, None)
+
+    def _side_inputs(self) -> set[int]:
+        """Edges into a module *partway along it* from a branch independent of the module's
+        main input, e.g. the Transformer's encoder output into each decoder layer's second
+        attention. Such a module may stand beside that branch (both stacks in parallel, as in
+        the paper's figure) and the edge enters it from the side, level with its target.
+
+        Not a side input: an edge into where the module begins, one from a pure source (an
+        input or a buffer, placed next to its consumer anyway), one from a loose tensor rather
+        than another module (a generated image the discriminator judges), and one from
+        upstream of the module's main input (a residual skip leaves from the block's own
+        input)."""
+        g = self.g
+        preds: dict[str, set[str]] = defaultdict(set)
+        data = []
+        for i, e in enumerate(g.edges):
+            if e.kind is EdgeKind.DATA and e.source != e.target:
+                preds[e.target].add(e.source)
+                data.append(i)
+        upstream: dict[str, set[str]] = {}
+
+        def ancestors(node: str) -> set[str]:
+            if node not in upstream:
+                seen, stack = set(), [node]
+                while stack:
+                    for p in preds[stack.pop()]:
+                        if p not in seen:
+                            seen.add(p)
+                            stack.append(p)
+                upstream[node] = seen
+            return upstream[node]
+
+        side = set()
+        for i in data:
+            s, t = g.edges[i].source, g.edges[i].target
+            if not preds[s]:
+                continue
+            outside = set(self.chain[s])
+            holder = next(
+                (gid for gid in reversed(self.chain[t]) if gid != ROOT and gid not in outside),
+                None,
+            )
+            if holder is None:
+                continue
+            parent = g.group(holder).parent
+            if not any(gid != ROOT and g.group(gid).parent == parent for gid in self.chain[s]):
+                continue  # two stacks side by side: the source too comes out of a module
+            path = self.chain[t][: self.chain[t].index(holder) + 1]
+            if any(g.group(gid).type_name in BLOCK_LAYOUTS for gid in path):
+                continue  # a block layout of its own (U, grid, cell) places its entries
+            inside = {n.id for n in g.nodes_under(holder)}
+            if not preds[t] & inside:
+                continue  # it enters where the module begins
+            mains = {  # what enters where the module begins
+                p for n in inside if not preds[n] & inside for p in preds[n] if p not in inside
+            }
+            if mains and not any(s == m or s in ancestors(m) for m in mains):
+                side.add(i)
+        return side
 
     # ------------------------------------------------------------------ geometry helpers
 
@@ -330,9 +392,10 @@ class _Run:
         return top, pad, pad, pad, min_w
 
     def room(self, group_id: str) -> float | None:
-        """How long a group's content may run along the flow before it wraps into rows: the
-        ``wrap_width`` less the padding of its own frame and of every frame around it."""
-        width = self.opts.wrap_width
+        """How long a group's content may run along the flow before it wraps into rows (left
+        → right) or columns (top → bottom): ``wrap_width`` or ``wrap_height``, less the padding
+        of its own frame and of every frame around it."""
+        width = self.opts.wrap_width if self.lr else self.opts.wrap_height
         if width is None:
             return None
         for group in [self.g.group(group_id), *self.g.ancestors(group_id)]:
@@ -446,7 +509,7 @@ class _Run:
         scene = Scene(width + 2 * m, height + 2 * m, title=self.g.name)
         scene.add(*frames, *scene_nodes, *edges, *notes)
         if self.opts.legend:
-            self._add_legend(scene, m + height + 28)
+            self._add_legend(scene, m + height + 20)
         return scene
 
     def _training_arrows(self, boxes: dict[str, Box], frames: list, bottom: float) -> list[Edge]:
@@ -842,14 +905,21 @@ class _Level:
         self._place_flow(rows)
         return self._compose(rows)
 
+    def _side(self, index: int) -> bool:
+        return index in self.run.side_inputs
+
     def _rank(self) -> None:
-        preds, succs = defaultdict(set), defaultdict(set)
-        for _, a, b in self.forward:
-            preds[b].add(a)
+        preds: dict[str, dict[str, int]] = defaultdict(dict)  # item → predecessor → min. step
+        succs = defaultdict(set)
+        for index, a, b in self.forward:
+            step = 0 if self._side(index) else 1  # fed from the side: beside its source
+            preds[b][a] = max(preds[b].get(a, 0), step)
             succs[a].add(b)
         ordered = sorted(self.items.values(), key=lambda it: it.order)
         for it in ordered:
-            it.rank = max((self.items[p].rank + 1 for p in preds[it.key]), default=0)
+            it.rank = max(
+                (self.items[p].rank + step for p, step in preds[it.key].items()), default=0
+            )
         for it in ordered:  # pull pure sources next to their first consumer
             if not preds[it.key] and succs[it.key]:
                 it.rank = max(0, min(self.items[s].rank for s in succs[it.key]) - 1)
@@ -861,6 +931,8 @@ class _Level:
         last = max(it.rank for it in self.items.values())
         entering: dict[tuple[str, int], list[tuple[int, str]]] = defaultdict(list)
         for index, b in self.entering:
+            if self._side(index):
+                continue
             e = self.run.g.edges[index]
             entering[(e.source, e.source_port)].append((index, b))
         needs_in = {k: v for k, v in entering.items() if any(self.items[b].rank > 0 for _, b in v)}
@@ -920,6 +992,23 @@ class _Level:
             for x, y in zip(path, path[1:], strict=False):
                 up[y].append(x)
                 down[x].append(y)
+        # the source of a side input stands before the module it feeds (on the side its
+        # wire enters), in every sweep, so the ranks around follow that order
+        beside = [
+            (a, b)
+            for index, a, b in self.forward
+            if self._side(index) and self.items[a].rank == self.items[b].rank
+        ]
+
+        def keep_beside(keys: list[str]) -> None:
+            for a, b in beside:
+                if a in keys and keys.index(a) > keys.index(b):
+                    keys.remove(a)
+                    keys.insert(keys.index(b), a)
+
+        for keys in ranks.values():
+            keep_beside(keys)
+        self.beside = {k for pair in beside for k in pair}  # start level, as parallel stacks
         pos = {k: i for keys in ranks.values() for i, k in enumerate(keys)}
         levels = sorted(ranks)
         for sweep in range(4):
@@ -933,6 +1022,7 @@ class _Level:
                     return sum(pos[x] for x in linked) / len(linked) if linked else pos[k]
 
                 keys.sort(key=lambda k: (centre(k), pos[k]))
+                keep_beside(keys)
                 for i, k in enumerate(keys):
                     pos[k] = i
         self.ranks = ranks
@@ -957,6 +1047,8 @@ class _Level:
         """For each item: (neighbour, own offset, neighbour offset) along every link."""
         ups, downs = defaultdict(list), defaultdict(list)
         for index, a, b in self._pairs():
+            if self._side(index):
+                continue
             path = [a, *self.lanes[(a, b)], b]
             for x, y in zip(path, path[1:], strict=False):
                 off_x = self._offset(x, index, "out")
@@ -1021,16 +1113,17 @@ class _Level:
             )
             if run.lr:
                 font_size = run.theme.font(TextRole.ANNOTATION).size
-                need = (font_size if run.upright_labels else run.label_width(label)) + 24
-                gap = max(gap, need if straight else 2 * need - 8)
+                need = (font_size if run.upright_labels else run.label_width(label)) + 16
+                gap = max(gap, need if straight else 2 * need)  # bent: on one half of the gap
             else:
-                gap = max(gap, run.theme.font(TextRole.ANNOTATION).size + 28)
+                gap = max(gap, run.theme.font(TextRole.ANNOTATION).size + 18)
         return gap
 
     def _rows(self) -> list[list[int]]:
         """Split the level into balanced rows when it is longer than its room (``wrap_width``
         less the frames around it): a frame too wide for the page wraps inside, and its rows
-        read like lines of text.
+        read like lines of text. Top → bottom, the same with ``wrap_height``: a tall network
+        stands in columns side by side, like a newspaper's.
 
         A row may only end where exactly one connection continues into the next row (so a
         residual block, with its skip alongside, stays whole), and no row may be left nearly
@@ -1039,8 +1132,10 @@ class _Level:
         run = self.run
         width = run.room(self.gid)
         nested = self.gid != ROOT
-        if not run.lr or width is None or len(levels) < 2 or (nested and self.back):
+        if width is None or len(levels) < 2 or (nested and self.back):
             return [levels]
+        if nested:  # wrapped inside a frame, the rows get a gutter on both sides
+            width -= 2 * WRAP_GUTTER
         sizes = {r: max(self.items[k].flow_size for k in self.ranks[r]) for r in levels}
         ends, flow = {}, 0.0
         for i, r in enumerate(levels):
@@ -1082,7 +1177,8 @@ class _Level:
                 self.row_of[r] = row_index
                 for k in self.ranks[r]:
                     it = self.items[k]
-                    it.flow = flow + (size - it.flow_size) / 2
+                    centred = k not in self.beside
+                    it.flow = flow + ((size - it.flow_size) / 2 if centred else 0.0)
                 gap = self._gap(r)
                 self.gaps[r] = gap
                 flow += size + (gap if i < len(row) - 1 else 0)
@@ -1092,7 +1188,40 @@ class _Level:
                 self.items[k].cross += cross_offset - low
             high = max(self.items[k].cross + self.items[k].cross_size for k in keys)
             self.row_bounds.append((cross_offset, high))
-            cross_offset = high + self.run.opts.row_gap
+            cross_offset = high + self._row_gap(rows, row_index)
+        if len(rows) > 1:
+            self._centre_rows(rows)
+
+    def _row_gap(self, rows: list[list[int]], index: int) -> float:
+        """Space before the next row. Between columns (top → bottom) the wire into the next
+        column runs up the middle of the gap with its shape beside it: room for that label."""
+        gap = self.run.opts.row_gap
+        if self.run.lr or index + 1 >= len(rows):
+            return gap
+        here, there = set(rows[index]), set(rows[index + 1])
+        for edge, a, b in self.forward:
+            label = self.run.labels.get(edge)
+            if label and self.items[a].rank in here and self.items[b].rank in there:
+                gap = max(gap, 2 * (self.run.label_width(label) + 10))
+        return gap
+
+    def _centre_rows(self, rows: list[list[int]]) -> None:
+        """A row shorter than the longest is centred under it: the wire from the row before
+        comes back to the middle, and the white space is shared on both sides."""
+        spans = []
+        for row in rows:
+            keys = [k for r in row for k in self.ranks[r]]
+            spans.append(max(self.items[k].flow + self.items[k].flow_size for k in keys))
+        longest = max(spans)
+        for row, end in zip(rows, spans, strict=True):
+            shift = (longest - end) / 2
+            if shift < 0.5:
+                continue
+            for r in row:
+                start, stop = self.rank_span[r]
+                self.rank_span[r] = (start + shift, stop + shift)
+                for k in self.ranks[r]:
+                    self.items[k].flow += shift
 
     # ------------------------------------------------------------------ result
 
@@ -1123,6 +1252,15 @@ class _Level:
 
         for index, a, b in self.forward:
             start = self._exit_cross(a, index)
+            if self._side(index):  # beside its source: along the gap before it, in from the side
+                points = (
+                    child_out.get(index, [])
+                    + self._side_route(a, b, index, start, child_in)
+                    + child_in.get(index, [])
+                )
+                exit_side = block.sides.get(index, (None, None))[0]
+                block.routes.append(_Route(index, points, exit_side or "flow_end", "cross_before"))
+                continue
             end = self._entry_cross(b, index)
             if self.row_of.get(self.items[a].rank) != self.row_of.get(self.items[b].rank):
                 middle = self._wrap(a, b, index, start, end, block, child_out, child_in)
@@ -1135,6 +1273,12 @@ class _Level:
             )
 
         for index, b in self.entering:
+            if self._side(index):  # in through the side border, level with its target
+                level = self._side_level(b, index, child_in)
+                block.in_paths[index] = [(level, 0.0)] + child_in.get(index, [])
+                if index not in child_in:
+                    block.sides[index] = (block.sides.get(index, (None, None))[0], "cross_before")
+                continue
             if index in self.port_of:
                 port = self.items[self.port_of[index]]
                 cross = port.cross + port.cross_size / 2
@@ -1165,6 +1309,29 @@ class _Level:
         if self.back:
             block.cross = lane + 10 * len(self.back)
         return block
+
+    def _side_level(self, item_key: str, edge: int, child_in: dict) -> float:
+        """Where along the flow a side input reaches ``item_key``: level with its target
+        (a node's middle, or the side entry of the module holding it)."""
+        it = self.items[item_key]
+        if edge in child_in:
+            return child_in[edge][0][0]
+        return it.flow + it.inner[0] + self.run.node_fc(it.node)[0] / 2
+
+    def _side_route(self, a: str, b: str, edge: int, start: float, child_in: dict) -> list[FC]:
+        """From ``a``'s end to ``b``'s side: just past ``a``, across into the gap before
+        ``b``, along it (forwards or back) to the level of the target, then in."""
+        source, target = self.items[a], self.items[b]
+        channel = target.cross - self.run.opts.node_gap / 2
+        if source.rank == target.rank:
+            end = self.rank_span[source.rank][1]
+            last = source.rank == max(self.rank_span)
+            past = end + (8.0 if last else self.gaps[source.rank] / 2)
+            points = [(past, start), (past, channel)]
+        else:
+            points = self._lanes(a, b, start, channel)
+        points.append((self._side_level(b, edge, child_in), channel))
+        return points
 
     def _exit_cross(self, item_key: str, edge: int) -> float:
         return self.items[item_key].cross + self._offset(item_key, edge, "out")

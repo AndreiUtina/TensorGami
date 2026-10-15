@@ -84,9 +84,9 @@ fold_shade = 0.08
 [layout]
 direction = "LR"       # upright cards in a row; "TB" gives a column of flat cards
 rank_gap = 22
-node_gap = 26
-group_padding = 14
-title_height = 22
+node_gap = 20
+group_padding = 10
+title_height = 18
 
 [boxes]
 text = { TB = "inline", LR = "rotated" }  # one line: level in columns, upright in rows
