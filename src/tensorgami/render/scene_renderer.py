@@ -68,12 +68,15 @@ class SceneRenderer:
         canvas.end_group()
 
 
-def render_svg(scene: Scene, theme: Theme | None = None) -> str:
-    """Render ``scene`` to an SVG document (the ``default`` style unless given)."""
+def render_svg(
+    scene: Scene, theme: Theme | None = None, *, inches: tuple[float, float] | None = None
+) -> str:
+    """Render ``scene`` to an SVG document (the ``default`` style unless given); ``inches``:
+    the printed size, when it is not the natural one (a slide, a paper's column)."""
     if theme is None:
         from tensorgami.style import load_theme
 
         theme = load_theme()
-    canvas = SvgCanvas(scene.width, scene.height, scene.title, scene.description)
+    canvas = SvgCanvas(scene.width, scene.height, scene.title, scene.description, inches=inches)
     SceneRenderer(theme).render(scene, canvas)
     return canvas.to_svg()

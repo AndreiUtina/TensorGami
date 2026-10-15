@@ -37,6 +37,7 @@ class LayoutOptions:
     wrap_height: float | None = 1100  # top → bottom: wrap into columns beyond this
     row_gap: float = 40
     legend: bool = True
+    legend_width: float | None = None  # the most the legend takes (None: the figure's, ≥ 560)
     shapes_on_edges: bool = True
     loop_clearance: float = 14  # height of a state self-loop above its node
     u_shape: bool = True  # fold encoder–decoder skips (U-Net) into a U (block view)

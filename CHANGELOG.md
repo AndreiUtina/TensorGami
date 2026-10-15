@@ -24,6 +24,13 @@ versions).
   fills the slide, centred on the slide's proportions and saved at 13.33 × 7.5 in
   (`dpi=144`: 1920 × 1080). The figure reports the size of its box names on the slide
   (`fig.fitted`) and warns when they are too small for a projector.
+- Papers: `tg.draw(model, x, width="3.5in")` (also `"8.9cm"`, `"88mm"`, `"252pt"` or inches)
+  lays the figure out for that width with the style's text size (box names 9 pt), the shortest
+  layout that fits; shrinks only if none does, never taller than a page (`height=`: the most
+  it may take, 9 in by default), and warns under 7 pt. Saved exactly that wide, so
+  `\includegraphics` places it at true size; SVGs state their size in inches.
+- `legend_width`, a layout option: the most the legend may take (it stacks into fewer
+  columns); a figure fitted to a width sets it.
 
 ### Changed
 
@@ -42,6 +49,8 @@ versions).
 - Top → bottom figures taller than `wrap_height` (1100 px by default, a new layout option)
   stand in columns side by side, like a newspaper's, frames included: ResNet-34 in four
   columns, 1829 × 1007 instead of 844 × 2958 px.
+- A row holding only an input or output pill joins its neighbour, even if that row grows a
+  little long: no lone `output` at the end of a wrapped figure.
 - A row (or column) shorter than the longest is centred: the wire from the end of the row
   before comes back to the middle, and the white space is shared on both sides (AlexNet's
   classifier under its features).

@@ -8,7 +8,14 @@ import pytest
 from layout_checks import check_scene
 
 from tensorgami.api.figure import Figure
-from tensorgami.api.fit import PAGES, check_fit, fit_to_page
+from tensorgami.api.fit import (
+    PAGE_HEIGHT_IN,
+    PAGES,
+    check_fit,
+    document,
+    fit_to_page,
+    parse_length,
+)
 from tensorgami.ir import GraphBuilder
 from tensorgami.layout import LayoutOptions, layout
 from tensorgami.render.mpl import PX_PER_INCH
@@ -138,3 +145,73 @@ def test_a_scene_centred_on_a_larger_canvas():
     assert centred.notes[0].at == Point(100, 95)
     with pytest.raises(SceneError):
         scene.centred_in(50, 50)
+
+
+# --------------------------------------------------------------------------- a paper's column
+
+
+@pytest.mark.parametrize(
+    ("value", "inches"),
+    [("3.5in", 3.5), ("8.89cm", 3.5), ("88.9mm", 3.5), ("252pt", 3.5), ("336px", 3.5), (3.5, 3.5)],
+)
+def test_lengths_in_any_unit(value, inches):
+    assert parse_length(value) == pytest.approx(inches)
+
+
+@pytest.mark.parametrize("value", ["3.5", "wide", "-1in", "0cm", 0, -2, True, None])
+def test_lengths_that_are_not_lengths(value):
+    with pytest.raises(ValueError, match="width"):
+        parse_length(value)
+
+
+def test_a_document_page_is_at_most_a_page_tall_unless_told():
+    assert document("3.5in").height_in == PAGE_HEIGHT_IN == 9.0
+    assert document("7in", "4in").height_in == 4.0
+    assert document("88mm").name == "3.46 in wide"
+
+
+def column(graph, width: str = "3.5in", height=None, **options):
+    theme = load_style()
+    return fit_to_page(
+        document(width, height),
+        graph,
+        theme,
+        get_view("block"),
+        level=Level.OPERATORS,
+        options=LayoutOptions.for_style(theme, **options),
+        fixed=set(options),
+    )
+
+
+def test_a_small_network_fits_a_column_at_true_size_and_exactly_its_width():
+    """Box names keep the style's 9 pt, and the canvas is exactly 3.5 in wide, the legend
+    stacked to fit it."""
+    shown, scene, theme, info = column(chain(4))
+    assert info.label_pt == pytest.approx(theme.font(TextRole.LABEL).size * 0.75)  # 9 pt
+    assert scene.width == pytest.approx(3.5 * PX_PER_INCH)  # true size: 1 px = 1/96 in
+    legend = [n.box for n in scene.nodes if n.id.startswith("legend:")]
+    assert max(b.right for b in legend) <= scene.width
+    fig = Figure(scene, theme, shown, fitted=info)
+    assert fig.inches[0] == pytest.approx(3.5)
+    assert fig.inches[1] == pytest.approx(scene.height / PX_PER_INCH)
+    assert fig.to_svg().startswith('<svg xmlns="http://www.w3.org/2000/svg" width="3.5in"')
+    assert "3.5 in wide, box names 9 pt" in repr(fig)
+    check_scene(scene, shown, theme)
+
+
+def test_a_figure_is_never_taller_than_the_page_and_says_when_its_text_shrinks():
+    with pytest.warns(UserWarning, match=r"at 3.5 in wide the box names are [\d.]+ pt"):
+        _, scene, _, info = column(chain(60))
+    assert info.label_pt < 7
+    assert scene.height * 3.5 / (scene.width / PX_PER_INCH) / PX_PER_INCH <= 9.0 + 1e-6
+
+
+@pytest.mark.filterwarnings("ignore:at 7 in wide")  # 16 boxes in 2 in: small, on purpose
+def test_a_height_limit_is_kept():
+    _, scene, _, _ = column(chain(16), "7in", "2in")
+    assert scene.height / scene.width * 7 <= 2.0 + 1e-6
+
+
+def test_text_never_grows_beyond_the_styles_size():
+    _, _, theme, info = column(chain(2), "7in")
+    assert info.label_pt == pytest.approx(theme.font(TextRole.LABEL).size * 0.75)

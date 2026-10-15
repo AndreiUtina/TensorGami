@@ -174,6 +174,16 @@ Saved, it is 13.33 × 7.5 in, the slide of PowerPoint, Keynote and Google Slides
 
 ![AlexNet, for a slide](alexnet-slide.svg)
 
+## In a paper
+
+`width="7in"` lays the figure out for a 7-inch text width (a two-column paper's full width):
+the box names keep their 9 pt, the rows are as long as the width, and the figure is saved
+exactly 7 in wide, so `\includegraphics{alexnet.pdf}` places it at true size. A figure that
+cannot fit shrinks only as much as it must, never taller than a page (`height=` sets the most
+it may take), and says when its text gets small for print.
+
+![AlexNet, 7 in wide](alexnet-paper.svg)
+
 ## Origami style
 
 The same models drawn with `style="origami"`: upright cards, left → right (see [the style

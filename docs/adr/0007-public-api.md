@@ -56,6 +56,8 @@ dynamic figures (FR13).
 made for a fixed canvas: the slide style (larger text and lines), the layout whose text is
 largest once it fills the page, centred on the page's proportions. The `Figure` keeps the page
 (`fig.fitted`, `fig.inches`) and is saved at its size; at its natural size otherwise.
+`tg.draw(..., width="3.5in")` (step 13b) fits a width in a document the same way, but keeps the
+style's text size at most and lets the height follow (up to `height=`, a page by default).
 
 ## Alternatives considered
 

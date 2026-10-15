@@ -61,6 +61,7 @@ FIGURES = {  # file name: (model, tg.draw options besides the style)
     "alexnet-volume-dark": ("alexnet", {"level": 2, "view": "volume", "variant": "dark"}),
     "pix2pix-generator-dark": ("pix2pix_generator", {"level": 2, "variant": "dark"}),
     "alexnet-slide": ("alexnet", {"level": 2, "fit": "slide"}),  # step 13c: a 16:9 slide
+    "alexnet-paper": ("alexnet", {"level": 2, "width": "7in"}),  # step 13b: a paper's width
 }
 
 

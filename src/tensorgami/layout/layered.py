@@ -35,7 +35,7 @@ from tensorgami.render.text import HeuristicTextMeasurer, TextMeasurer
 from tensorgami.scene import Box, Edge, Node, Note, Point, Scene, Side, TextAnchor
 from tensorgami.scene import Group as SceneGroup
 from tensorgami.style import Shape, TextLayout, TextRole, Theme
-from tensorgami.vocabulary import EdgeKind
+from tensorgami.vocabulary import EdgeKind, OpCategory
 
 GRID = 8.0
 DUMMY_CROSS = 6.0
@@ -775,11 +775,14 @@ class _Run:
     def _add_legend(self, scene: Scene, top: float) -> None:
         m = self.opts.margin
         categories, kinds = scene.categories(), scene.edge_kinds()
+        room = self.opts.legend_width
+        if room is None:
+            room = max(scene.width - 2 * m, 560)
         for columns in (4, 3, 2, 1):
             legend = build_legend(
                 self.theme, categories, kinds, Point(m, top), columns, self.measurer
             )
-            if legend.box.w <= max(scene.width - 2 * m, 560) or columns == 1:
+            if legend.box.w <= room or columns == 1:
                 break
         scene.width = max(scene.width, legend.box.right + m)
         scene.height = legend.box.bottom + m
@@ -1158,7 +1161,27 @@ class _Level:
                 rows.append(current)
                 current = []
         rows.append(current)
-        return [row for row in rows if row]
+        return self._no_lone_pills([row for row in rows if row])
+
+    def _no_lone_pills(self, rows: list[list[int]]) -> list[list[int]]:
+        """A row holding nothing but an input or output pill joins its neighbour, even if
+        that row grows a little longer than the room: a lone ``output`` on a line of its own,
+        with a wire across the page to reach it, reads worse than a slightly longer row."""
+
+        def lone(row: list[int]) -> bool:
+            shown = [self.items[k] for r in row for k in self.ranks[r] if not self.items[k].dummy]
+            return bool(shown) and all(
+                it.node is not None and self.run.g.node(it.node).category is OpCategory.IO
+                for it in shown
+            )
+
+        merged: list[list[int]] = []
+        for row in rows:
+            if merged and (lone(row) or lone(merged[-1])):
+                merged[-1] = merged[-1] + row
+            else:
+                merged.append(row)
+        return merged
 
     def _place_flow(self, rows: list[list[int]]) -> None:
         self.rank_span: dict[int, tuple[float, float]] = {}

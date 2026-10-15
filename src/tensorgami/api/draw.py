@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any
 
 from tensorgami.api.annotations import Annotation, Input, Loss, Note
 from tensorgami.api.figure import Figure
-from tensorgami.api.fit import check_fit, fit_to_page
+from tensorgami.api.fit import check_fit, document, fit_to_page
 from tensorgami.ir import Graph
 from tensorgami.layout import LayoutOptions
 from tensorgami.style import DEFAULT_STYLE, Theme, load_style
@@ -28,6 +28,8 @@ _PARAMETERS = (
     "style",
     "variant",
     "fit",
+    "width",
+    "height",
     "overrides",
     "links",
     "annotations",
@@ -46,6 +48,8 @@ def draw(
     style: str | Path | Theme = DEFAULT_STYLE,
     variant: str | Sequence[str] | None = None,
     fit: str | None = None,
+    width: str | float | None = None,
+    height: str | float | None = None,
     overrides: Mapping[str, Mapping[str, Any]] | None = None,
     links: Sequence[tuple[str, ...]] = (),
     annotations: Sequence[Annotation] = (),
@@ -80,6 +84,11 @@ def draw(
             largest once it fills the slide, centred on the slide's proportions; saved at that
             size (``fig.save("model.png", dpi=144)``: 1920 × 1080). ``"slide-4:3"``: 10 ×
             7.5 in.
+        width: the figure's width in a document, e.g. ``"3.5in"`` (a two-column paper's
+            column), ``"8.9cm"``, ``"88mm"``, ``"252pt"`` or a number of inches: laid out to
+            fit it with the style's text size (box names 9 pt), shrunk only if nothing fits,
+            and saved exactly that wide, so LaTeX's ``\\includegraphics`` places it at true
+            size. ``height``: the most it may take (default: 9 in, a page's text height).
         overrides: category, label or leaf-ness per module path or class name, e.g.
             ``{"ConvLSTMCell": {"category": "recurrent", "label": "ConvLSTM cell"}}``.
         links: with several models (``model`` a dict of name → module, ``example_input`` a
@@ -110,7 +119,13 @@ def draw(
     _check_names(layout_options)
     _check_extras(model, example_input, links, annotations)
     theme = load_style(style, variant)
+    if fit is not None and width is not None:
+        raise ValueError("fit= and width= both size the figure: give one of them")
+    if height is not None and width is None:
+        raise ValueError("height= is the most a figure of a given width= may take: give width=")
     page = check_fit(fit) if fit is not None else None
+    if width is not None:
+        page = document(width, height)
     given = set(layout_options)
     if direction is not None:
         layout_options["direction"] = direction

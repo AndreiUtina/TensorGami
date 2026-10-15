@@ -68,16 +68,18 @@ class Figure:
 
     @property
     def fitted(self) -> Fitted | None:
-        """How the figure was fitted to a page (``fit="slide"``): the page and the size of
+        """How the figure was fitted (``fit="slide"``, ``width="3.5in"``): the page and the size of
         the box names on it, in pt; ``None`` at natural size."""
         return self._fitted
 
     @property
     def inches(self) -> tuple[float, float]:
-        """Size when saved: the page's (a slide: 13.33 × 7.5) or the natural size."""
+        """Size when saved: a slide's (13.33 × 7.5), the width asked for (``width="3.5in"``,
+        with the height that goes with it), or the natural size."""
         w, h = self.size
         if self._fitted is not None:
-            return self._fitted.page.width_in, self._fitted.page.height_in
+            width = self._fitted.page.width_in
+            return width, width * h / w
         return w / PX_PER_INCH, h / PX_PER_INCH
 
     @cached_property
@@ -94,7 +96,8 @@ class Figure:
         page = ""
         if self._fitted is not None:
             fit = self._fitted
-            page = f", {fit.page.name} {fit.page.aspect}, box names {fit.label_pt:.0f} pt"
+            where = f"{fit.page.name} {fit.page.aspect}".strip()
+            page = f", {where}, box names {fit.label_pt:.0f} pt"
         return f"<tensorgami.Figure {title!r} {w:.0f}×{h:.0f} px, style {style!r}{page}>"
 
     # ------------------------------------------------------------------ output
@@ -123,7 +126,9 @@ class Figure:
         return buffer.getvalue()
 
     def to_svg(self) -> str:
-        return render_svg(self._scene, self._style)
+        """The SVG document; a fitted figure states its printed size (``width="3.5in"``)."""
+        inches = self.inches if self._fitted is not None else None
+        return render_svg(self._scene, self._style, inches=inches)
 
     def _repr_png_(self) -> tuple[bytes, dict[str, int]]:
         """Jupyter display: rendered at 2× but shown at the natural size."""

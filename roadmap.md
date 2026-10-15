@@ -392,7 +392,13 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   the slide, centred on a canvas of the slide's proportions and saved at its size (`dpi=144`:
   1920 × 1080). `fig.fitted` reports the box names' size on the slide (AlexNet: 14.5 pt); under
   10 pt a warning suggests fewer boxes (`level="stages"`).
-- Export for LaTeX reports (PDF/SVG at exact column widths).
+- **Papers** ✅ (13b, 2026-10-15): `width="3.5in"` (in, cm, mm, pt, px or a number of inches)
+  and `height=` (default 9 in, a page's text height): the style's text size at most (box names
+  9 pt), the shortest layout that fits at that size, else the one shrinking least; centred on
+  a canvas exactly that wide; the legend stacks to fit (`legend_width`); a warning under 7 pt.
+  Saved at that width (PDF, PNG at its dpi; SVG with `width="3.5in"`). On the way: a row
+  holding only an input or output pill joins its neighbour. AlexNet: 7 in wide at 9 pt; at
+  3.5 in, `level="stages"` keeps 9 pt.
 
 ### 14) Dynamic information flow ⬜
 - Animate how information flows through the architecture: layers light up in execution

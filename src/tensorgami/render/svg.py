@@ -32,11 +32,20 @@ def _points(points: Sequence[Point]) -> str:
 class SvgCanvas:
     """Accumulates SVG elements; :meth:`to_svg` returns a standalone document."""
 
-    def __init__(self, width: float, height: float, title: str = "", description: str = ""):
+    def __init__(
+        self,
+        width: float,
+        height: float,
+        title: str = "",
+        description: str = "",
+        *,
+        inches: tuple[float, float] | None = None,
+    ):
         self.width = width
         self.height = height
         self.title = title
         self.description = description
+        self.inches = inches  # the printed size, when it is not the natural one (1 px = 1/96 in)
         self._parts: list[str] = []
         self._depth = 0
 
@@ -115,9 +124,12 @@ class SvgCanvas:
         if self._depth:
             raise RuntimeError(f"{self._depth} group(s) left open")
         w, h = _num(self.width), _num(self.height)
+        size_w, size_h = w, h
+        if self.inches is not None:
+            size_w, size_h = (f"{_num(round(v, 3))}in" for v in self.inches)
         head = [
             '<svg xmlns="http://www.w3.org/2000/svg" '
-            f'width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img">'
+            f'width="{size_w}" height="{size_h}" viewBox="0 0 {w} {h}" role="img">'
         ]
         if self.title:
             head.append(f"  <title>{escape(self.title)}</title>")

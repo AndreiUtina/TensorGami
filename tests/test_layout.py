@@ -285,6 +285,34 @@ def test_a_short_last_row_is_centred_under_the_long_one(theme):
     check_scene(scene, graph, theme)
 
 
+def test_no_row_holds_only_an_input_or_output_pill():
+    """A lone pill joins its neighbour row, even if that row grows a little long."""
+    from types import SimpleNamespace
+
+    from tensorgami.layout.layered import _Level
+
+    b = GraphBuilder()
+    x = b.input((1, 8))
+    layers = []
+    prev = x
+    for _ in range(3):
+        n = b.node("Linear", category=C.LINEAR, outputs=[(1, 8)])
+        b.edge(prev, n)
+        layers.append(n)
+        prev = n
+    out = b.output(prev)
+    order = [x, *layers, out]
+    level = SimpleNamespace(
+        items={k: SimpleNamespace(node=k, dummy=False) for k in order},
+        ranks={r: [k] for r, k in enumerate(order)},
+        run=SimpleNamespace(g=b.build()),
+    )
+    merge = _Level._no_lone_pills
+    assert merge(level, [[0, 1], [2, 3], [4]]) == [[0, 1], [2, 3, 4]]  # the output joins
+    assert merge(level, [[0], [1, 2], [3, 4]]) == [[0, 1, 2], [3, 4]]  # so does the input
+    assert merge(level, [[0, 1], [2, 3, 4]]) == [[0, 1], [2, 3, 4]]
+
+
 def _framed_chain(length: int, *, skip: bool = False):
     """input → a framed group of ``length`` layers (optionally with a skip from its input to
     a final ``+``, as in a residual block) → output."""
