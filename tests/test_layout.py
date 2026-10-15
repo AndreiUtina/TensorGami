@@ -16,7 +16,7 @@ from tensorgami.transforms import simplify
 from tensorgami.vocabulary import EdgeKind
 from tensorgami.vocabulary import OpCategory as C
 
-NO_WRAP = LayoutOptions(wrap_width=None)
+NO_WRAP = LayoutOptions(wrap_width=None, wrap_height=None)
 
 
 # --------------------------------------------------------------------------- labels
@@ -134,7 +134,7 @@ def test_shapes_are_labelled_only_where_they_change():
 @pytest.mark.parametrize("direction", list(Direction))
 def test_layout_invariants(theme, make, level, direction):
     graph = simplify(make(), level)
-    options = LayoutOptions(direction=direction, wrap_width=None)
+    options = LayoutOptions(direction=direction, wrap_width=None, wrap_height=None)
     scene = LayeredLayout(options).layout(graph, theme)
     check_scene(scene, graph, theme, monotonic="x" if direction is Direction.LEFT_RIGHT else "y")
 
@@ -229,6 +229,62 @@ def test_long_chains_wrap_into_rows(theme):
     check_scene(wrapped, graph, theme)
 
 
+def _chain(length: int):
+    b = GraphBuilder()
+    prev = b.input((1, 8))
+    for _ in range(length):
+        n = b.node("Linear", category=C.LINEAR, outputs=[(1, 8)])
+        b.edge(prev, n)
+        prev = n
+    b.output(prev)
+    return b.build()
+
+
+def test_a_tall_network_stands_in_columns(theme):
+    """Top → bottom, a network taller than ``wrap_height`` wraps into columns side by side,
+    like a newspaper's; ``wrap_height=None`` keeps one column."""
+    graph = _chain(20)
+    tall = layout(graph, theme, LayoutOptions(direction="TB", wrap_height=None))
+    cols = layout(graph, theme, LayoutOptions(direction="TB", wrap_height=600))
+
+    def columns(scene):
+        return {round(n.box.cx) for n in scene.nodes if not n.id.startswith("legend:")}
+
+    assert len(columns(tall)) == 1
+    assert len(columns(cols)) >= 2 and cols.height < tall.height / 2
+    check_scene(cols, graph, theme)
+
+
+def test_a_short_last_row_is_centred_under_the_long_one(theme):
+    """A long block fills the first row and the rest is short (AlexNet's classifier after its
+    features): the wire comes back to the middle and the short row is centred under the long
+    one, sharing the white space on both sides."""
+    b = GraphBuilder()
+    x = b.input((1, 8))
+    block = b.group("block", "ResidualBlock")  # its skip makes it one unbreakable unit
+    prev = x
+    for _ in range(5):
+        n = b.node("Linear", category=C.LINEAR, group=block, outputs=[(1, 8)])
+        b.edge(prev, n)
+        prev = n
+    add = b.node("add", category=C.MERGE, group=block, outputs=[(1, 8)])
+    b.edge(prev, add)
+    b.edge(x, add)
+    head = b.node("Linear", category=C.LINEAR, outputs=[(1, 4)])
+    b.edge(add, head)
+    b.output(head)
+    graph = b.build()
+    scene = layout(graph, theme, LayoutOptions(wrap_width=800, legend=False))
+    boxes = {n.id: n.box for n in scene.nodes}
+    (frame,) = [g.box for g in scene.groups]
+    output = next(n.box for n in scene.nodes if n.category is C.IO and n.box.x > boxes[x].x)
+    assert boxes[head].y > frame.bottom  # a second row: the head and the output
+    first = (boxes[x].x + frame.right) / 2
+    second = (boxes[head].x + output.right) / 2
+    assert abs(first - second) < 1 and boxes[head].x > boxes[x].x + 100
+    check_scene(scene, graph, theme)
+
+
 def _framed_chain(length: int, *, skip: bool = False):
     """input → a framed group of ``length`` layers (optionally with a skip from its input to
     a final ``+``, as in a residual block) → output."""
@@ -304,6 +360,66 @@ def test_a_pill_stays_beside_a_frame_that_nearly_fills_the_width():
     assert _best_cuts(levels, levels[:-1], sizes, gaps, 1100) == [1, 3]  # not [0, 1, 3, 4]
 
 
+def _encoder_decoder():
+    """Two inputs, an encoder of 3 layers and a decoder of 4 whose third layer also takes the
+    encoder's output (the Transformer's cross-attention), each in a frame."""
+    b = GraphBuilder("seq2seq", root_type="Seq2Seq")
+    source, target = b.input((1, 8), label="source"), b.input((1, 8), label="target")
+    encoder = b.group("encoder", "Encoder", module="encoder")
+    decoder = b.group("decoder", "Decoder", module="decoder")
+    prev = source
+    for _ in range(3):
+        n = b.node("Linear", category=C.LINEAR, group=encoder, outputs=[(1, 8)])
+        b.edge(prev, n)
+        prev = n
+    memory, prev = prev, target
+    for k in range(4):
+        n = b.node(
+            "MultiheadAttention" if k == 2 else "Linear",
+            category=C.ATTENTION if k == 2 else C.LINEAR,
+            group=decoder,
+            outputs=[(1, 8)],
+        )
+        b.edge(prev, n)
+        if k == 2:
+            b.edge(memory, n)
+        prev = n
+    b.output(prev)
+    return b.build()
+
+
+@pytest.mark.parametrize("direction", list(Direction))
+def test_an_encoder_and_its_decoder_stand_side_by_side(theme, direction):
+    """The decoder takes the encoder's output partway along it: both stacks run in parallel,
+    starting level, and the encoder's output enters the decoder from the side."""
+    graph = _encoder_decoder()
+    scene = layout(
+        graph, theme, LayoutOptions(direction=direction, wrap_width=None, wrap_height=None)
+    )
+    frames = {g.id: g.box for g in scene.groups}
+    enc, dec = frames["encoder"], frames["decoder"]
+    if direction is Direction.TOP_BOTTOM:
+        assert enc.right < dec.x and enc.y == dec.y  # beside it, from the same height
+    else:
+        assert enc.bottom < dec.y and enc.x == dec.x
+    check_scene(scene, graph, theme)
+
+
+def test_a_residual_skip_is_not_a_side_input(theme):
+    from tensorgami.layout.labels import Labeler
+    from tensorgami.layout.layered import _Run
+    from tensorgami.render.text import HeuristicTextMeasurer
+
+    for graph in (simplify(residual_cnn(), 2), _encoder_decoder()):
+        run = _Run(graph, theme, LayoutOptions(), Labeler(), HeuristicTextMeasurer())
+        sides = [graph.edges[i] for i in run.side_inputs]
+        if graph.name == "seq2seq":
+            (edge,) = sides
+            assert graph.node(edge.target).op == "MultiheadAttention"
+        else:
+            assert sides == []  # the skip leaves from the block's own input
+
+
 def test_top_bottom_direction_stacks_vertically(theme):
     graph = simplify(transformer(), 2)
     scene = layout(graph, theme, LayoutOptions(direction=Direction.TOP_BOTTOM))
@@ -377,7 +493,9 @@ def test_style_layout_preferences_apply_unless_options_are_explicit(theme):
     assert plain == LayoutOptions()  # the default style keeps the defaults
     assert LayoutOptions.for_style(roomy).rank_gap == 160
     wide = LayeredLayout().layout(graph, roomy)
-    narrow = LayeredLayout(LayoutOptions(wrap_width=None)).layout(graph, roomy)  # explicit wins
+    narrow = LayeredLayout(LayoutOptions(wrap_width=None, wrap_height=None)).layout(
+        graph, roomy
+    )  # explicit wins
     assert wide.width > narrow.width
     vertical = dataclasses.replace(theme, layout={"direction": "TB"})
     assert LayoutOptions.for_style(vertical).direction is Direction.TOP_BOTTOM
@@ -399,7 +517,9 @@ def origami():
 @pytest.mark.parametrize("direction", list(Direction))
 def test_origami_layouts_keep_the_invariants(origami, make, direction):
     graph = simplify(make(), 2)
-    options = LayoutOptions.for_style(origami, direction=direction, wrap_width=None)
+    options = LayoutOptions.for_style(
+        origami, direction=direction, wrap_width=None, wrap_height=None
+    )
     scene = LayeredLayout(options).layout(graph, origami)
     check_scene(scene, graph, origami, monotonic="x" if direction is Direction.LEFT_RIGHT else "y")
 
@@ -442,7 +562,9 @@ def test_layout_options_are_checked(option, error, message):
 
 
 def test_layout_options_accept_numbers_and_none():
-    options = LayoutOptions(rank_gap=60, node_gap=22.5, wrap_width=None, legend=False)
+    options = LayoutOptions(
+        rank_gap=60, node_gap=22.5, wrap_width=None, wrap_height=None, legend=False
+    )
     assert (options.rank_gap, options.wrap_width, options.legend) == (60, None, False)
 
 
@@ -482,7 +604,9 @@ def test_each_flow_direction_gets_its_own_arrangement(theme, direction, text, wi
         ),
     )
     graph = simplify(residual_cnn(), 2)
-    scene = layout(graph, styled, LayoutOptions(direction=direction, wrap_width=None))
+    scene = layout(
+        graph, styled, LayoutOptions(direction=direction, wrap_width=None, wrap_height=None)
+    )
     check_scene(scene, graph, styled)
     boxes = _boxes(scene)
     assert {n.text.value for n in boxes} == {text}  # recorded for the painter

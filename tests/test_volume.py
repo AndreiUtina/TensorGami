@@ -34,7 +34,7 @@ def test_volumes_grow_with_their_dimensions():
 
 def draw(graph, theme, **options):
     return get_view("volume").draw(
-        graph, theme, level=2, options=LayoutOptions(wrap_width=None, **options)
+        graph, theme, level=2, options=LayoutOptions(wrap_width=None, wrap_height=None, **options)
     )
 
 

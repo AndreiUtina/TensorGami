@@ -113,7 +113,7 @@ def test_levels_count_from_the_models():
 @pytest.mark.parametrize("direction", ["LR", "TB"])
 def test_training_arrows_rise_into_the_frames(theme, direction):
     g = simplify(gan(), 2)
-    scene = layout(g, theme, LayoutOptions(direction=direction, wrap_width=None))
+    scene = layout(g, theme, LayoutOptions(direction=direction, wrap_width=None, wrap_height=None))
     check_scene(scene, g, theme)
     frames = {f.id: f.box for f in scene.groups}  # a one-layer model has no frame: its box
     frames.setdefault(
@@ -132,7 +132,7 @@ def test_training_arrows_rise_into_the_frames(theme, direction):
 
 def test_arrows_from_several_losses_are_named(theme):
     g = add_loss(gan(), "l1", ["generator", "real image"], trains=["generator"])
-    scene = layout(simplify(g, 2), theme, LayoutOptions(wrap_width=None))
+    scene = layout(simplify(g, 2), theme, LayoutOptions(wrap_width=None, wrap_height=None))
     into = [e for e in scene.edges if e.kind is EdgeKind.TRAINING and isinstance(e.source, str)]
     named = {e.label for e in into if e.label}
     assert named == {"adversarial", "l1"}  # the generator gets one from each loss
@@ -145,7 +145,7 @@ def test_the_loss_loops_back_over_the_top_into_the_model_beside_it(theme):
     above the discriminator and down into it (counterclockwise); the generator, beyond the
     discriminator, is reached from underneath."""
     g = simplify(gan(), 2)
-    scene = layout(g, theme, LayoutOptions(wrap_width=None))
+    scene = layout(g, theme, LayoutOptions(wrap_width=None, wrap_height=None))
     loss = next(n.box for n in scene.nodes if n.id.startswith("loss:"))
     arrows = {
         e.via[-1].x: e

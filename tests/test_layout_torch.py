@@ -29,7 +29,7 @@ def traced(name: str):
 @pytest.mark.parametrize("direction", list(Direction))
 def test_reference_layouts_keep_the_invariants(theme, name, level, direction):
     graph = simplify(traced(name), level)
-    options = LayoutOptions(direction=direction, wrap_width=None)
+    options = LayoutOptions(direction=direction, wrap_width=None, wrap_height=None)
     scene = LayeredLayout(options).layout(graph, theme)
     check_scene(scene, graph, theme, monotonic="x" if direction is Direction.LEFT_RIGHT else "y")
 

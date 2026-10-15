@@ -165,6 +165,29 @@ def test_multi_output_layout_ops_and_buffer_sources():
     assert buffer.category is C.TENSOR and buffer.display_label == "pe"
 
 
+@pytest.mark.parametrize(
+    ("after", "kept"),
+    [
+        ((1, 64, 392, 392), True),  # U-Net's "copy and crop": only height and width shrink
+        ((1, 64, 568), False),  # an index (x[..., 0]): fewer dimensions
+        ((1, 32, 568, 568), False),  # a slice of the channels
+        ((1, 64, 568, 568), False),  # everything: nothing changes
+    ],
+)
+def test_a_crop_stays_other_indexing_is_bypassed(after, kept):
+    b = GraphBuilder()
+    x = b.input((1, 1, 572, 572))
+    conv = b.node("Conv2d", category=C.CONV, outputs=[(1, 64, 568, 568)])
+    item = b.node("getitem", category=C.RESHAPE, outputs=[after])
+    b.chain([x, conv, item])
+    b.output(item)
+    g = RemoveLayoutOps().apply(b.build())
+    assert ("getitem" in ops(g)) is kept
+    if kept:
+        (crop,) = by_op(g, "getitem")
+        assert crop.label == "Crop" and crop.params["caption"] == "→ 392×392"
+
+
 def test_activation_and_dropout_fold_into_the_layer():
     b = GraphBuilder()
     x = b.input((1, 4))

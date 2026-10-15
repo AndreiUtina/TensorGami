@@ -16,7 +16,7 @@ from tensorgami.transforms.ushape import FoldUShape
 from tensorgami.views import get_view
 from tensorgami.vocabulary import OpCategory as C
 
-NO_WRAP = LayoutOptions(wrap_width=None)
+NO_WRAP = LayoutOptions(wrap_width=None, wrap_height=None)
 
 
 def folded(levels: int = 3):
@@ -60,7 +60,19 @@ def test_nested_skips_become_levels_with_two_sides_and_a_bottleneck():
     assert {side for level, side in where.values() if level == 3} == {"bottom"}
     assert all(g.node(n).op != "input" for n in where)  # the ends stay outside the U
     head = next(n for n in g.nodes if n.op == "Conv2d" and n.module == "head")
-    assert head.group != u.id
+    assert where[head.id] == (0, "dec")  # after the outermost merge: it closes the top row
+
+
+def test_the_whole_encoder_decoder_is_in_the_u():
+    """Layers before the outermost skip open the top encoder row, layers after its merge close
+    the top decoder row (U-Net's first convolutions, its 1×1 output layer): nothing of the
+    model is left on a line of its own before or after the U."""
+    g = FoldUShape().apply(simplify(unet(3, stem=True), 2))
+    where = place(g)
+    module = {n.module: n.id for n in g.nodes}
+    assert where[module["stem"]] == (0, "enc") and where[module["head"]] == (0, "dec")
+    assert where[module["up0.conv"]] == (0, "dec")
+    assert {n.id for n in g.nodes if not n.is_input and not n.is_output} == set(where)
 
 
 @pytest.mark.parametrize("make", [residual_cnn, ALL["transformer"], ALL["vae"]])
@@ -78,7 +90,11 @@ def test_two_nested_skips_are_not_enough():
 @pytest.mark.parametrize("direction", list(Direction))
 def test_u_layout_keeps_the_invariants(theme, direction):
     g = folded(4)
-    check_scene(layout(g, theme, LayoutOptions(direction=direction, wrap_width=None)), g, theme)
+    check_scene(
+        layout(g, theme, LayoutOptions(direction=direction, wrap_width=None, wrap_height=None)),
+        g,
+        theme,
+    )
 
 
 def test_levels_are_rows_with_the_skip_across_the_middle(theme):
@@ -130,7 +146,9 @@ def test_merge_notes_sit_where_no_wire_is(theme):
     b.output(act)
     g = simplify(b.build(), 2)
     for direction in Direction:
-        scene = layout(g, theme, LayoutOptions(direction=direction, wrap_width=None))
+        scene = layout(
+            g, theme, LayoutOptions(direction=direction, wrap_width=None, wrap_height=None)
+        )
         (merge,) = [n for n in scene.nodes if n.category is C.MERGE and ":" not in n.id]
         used = {e.entry for e in scene.edges if e.target == merge.id}
         used |= {e.exit for e in scene.edges if e.source == merge.id}

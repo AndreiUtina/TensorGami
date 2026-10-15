@@ -110,13 +110,13 @@ def by_id(scene):
 @pytest.mark.parametrize("make", [lambda: convlstm(steps=3), lambda: fused_lstm(steps=6)])
 def test_grid_layout_keeps_the_invariants(theme, make, direction):
     g = unrolled(make())
-    scene = layout(g, theme, LayoutOptions(direction=direction, wrap_width=None))
+    scene = layout(g, theme, LayoutOptions(direction=direction, wrap_width=None, wrap_height=None))
     check_scene(scene, g, theme)
 
 
 def test_time_runs_along_rows_and_layers_stack_upwards(theme):
     g = unrolled(fused_lstm(steps=3))
-    nodes = by_id(layout(g, theme, LayoutOptions(wrap_width=None)))
+    nodes = by_id(layout(g, theme, LayoutOptions(wrap_width=None, wrap_height=None)))
     cells = {(n.params[LAYER], n.params[STEP]): nodes[n.id].box for n in grid_nodes(g)}
     for t in range(3):
         assert cells[0, t].cx == cells[1, t].cx  # a column per step
@@ -139,9 +139,9 @@ def test_top_to_bottom_turns_the_grid(theme):
 
 def test_hidden_steps_are_marked(theme):
     g = unrolled(fused_lstm(steps=9))
-    scene = layout(g, theme, LayoutOptions(wrap_width=None))
+    scene = layout(g, theme, LayoutOptions(wrap_width=None, wrap_height=None))
     assert [n.text for n in scene.notes].count("⋯") == 3  # two layers and the inputs
-    short = layout(unrolled(fused_lstm(3)), theme, LayoutOptions(wrap_width=None))
+    short = layout(unrolled(fused_lstm(3)), theme, LayoutOptions(wrap_width=None, wrap_height=None))
     assert not any(n.text == "⋯" for n in short.notes)
 
 
@@ -157,7 +157,10 @@ def test_auto_unrolls_traced_loops_only():
 
 def test_unrolled_view_draws_a_grid(theme):
     shown, scene = get_view("unrolled").draw(
-        fused_lstm(steps=3), theme, level=2, options=LayoutOptions(wrap_width=None)
+        fused_lstm(steps=3),
+        theme,
+        level=2,
+        options=LayoutOptions(wrap_width=None, wrap_height=None),
     )
     assert any(g.type_name == UNROLLED for g in shown.groups)
     assert not [g for g in scene.groups if "unrolled" in g.id]  # a grid needs no frame
