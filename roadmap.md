@@ -326,6 +326,26 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 - A loss loops back into the model right beside it over the top, counterclockwise (out of
   its side, up past the output, down into the model: GAN loss → discriminator); into models
   further away its arrows run underneath.
+- **Against the literature** (2026-10-14, with the user): `examples/classics.ipynb` draws the
+  ten most-cited deep-learning papers that have an architecture figure (Google Scholar,
+  2026-10-14: ResNet, Transformer, AlexNet, BERT, LSTM, U-Net, Faster R-CNN, ViT, LeNet-5,
+  YOLO), each rebuilt as its paper describes it (`examples/classics.py`, parameter counts
+  checked by `tests/test_classics.py`), next to a link to the paper's figure. Every
+  structure matches; the papers add illustrations of the data and hardware. Fixed on the way:
+  a U is folded whole (U-Net's first convolutions and 1×1 head were outside it) and crops stay
+  in the drawing. Ideas left: drop operations whose result reaches no output, unfolded
+  repeats on request, encoder and decoder side by side, grouped convolutions and masked
+  attention in the details.
+- Then, with the user (2026-10-15): **more compact figures** (32 px between layers, 16 px
+  between neighbours, 40 px between wrapped rows, 10 px frame padding and 16 px titles, 16 px
+  margins, 16 px around shape labels; the U, grid and origami styles alike): about a fifth less
+  area on average over the gallery and the classics, with every invariant kept; and **parallel
+  stacks**: a module fed partway along by another (the Transformer's decoder) stands beside it,
+  starting level, the wire entering from the side (the Transformer top → bottom: 621 × 2134 →
+  786 × 1180 px; ADR-0004). Then **columns**: top → bottom figures taller than `wrap_height`
+  (1100 px) stand in columns side by side, with the same rules as rows (ResNet-34: 844 × 2958
+  → 1829 × 1007 px), and a shorter row or column is **centred** under the longest, the wire
+  into it coming back to the middle (AlexNet's classifier).
 
 ## Phase D — Reports, presentations and release
 

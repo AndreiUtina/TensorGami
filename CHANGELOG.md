@@ -15,10 +15,35 @@ versions).
   page colour, so dark figures blend into a dark-mode README.
 - The README's figures follow the reader's GitHub theme (light or dark versions).
 
+- `examples/classics.ipynb`: the ten most-cited deep-learning papers with an architecture
+  figure, each model rebuilt as its paper describes it (`examples/classics.py`) and drawn
+  next to a link to the paper's figure, with what is the same and what differs.
+
 ### Changed
 
 - The contrast check of a style judges translucent cards by the colour they show on the
   background.
+- An encoder–decoder with nested skips is folded into the U whole: the layers before the
+  outermost skip and after its merge join the U's top row (U-Net's first convolutions and its
+  1×1 output layer were drawn outside it).
+- A crop stays in the drawing as a box (U-Net's "copy and crop"); every other indexing
+  operation is still left out at the layer level.
+- More compact figures: less space between layers (32 px), neighbours (16 px), wrapped rows
+  (40 px) and around frames, labels and margins; about a fifth less area on average.
+- A module fed partway along by another module stands beside it, both starting level, the
+  wire entering from the side: the Transformer's encoder and decoder run in parallel, as in
+  the paper (before, the decoder came after the whole encoder).
+- Top → bottom figures taller than `wrap_height` (1100 px by default, a new layout option)
+  stand in columns side by side, like a newspaper's, frames included: ResNet-34 in four
+  columns, 1829 × 1007 instead of 844 × 2958 px.
+- A row (or column) shorter than the longest is centred: the wire from the end of the row
+  before comes back to the middle, and the white space is shared on both sides (AlexNet's
+  classifier under its features).
+
+### Fixed
+
+- A frame that wraps into rows inside its parent kept to the page width less its frame
+  padding, but not less the room its own wires need to turn into the next row.
 
 ## [0.1.0] — 2026-10-13
 

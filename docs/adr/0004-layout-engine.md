@@ -39,6 +39,16 @@ frame too wide for the page folds inside (AlexNet's `features`, a ResNet stage).
 like lines of text; a row ends only where a single wire continues, so a residual block is
 never split.
 
+Top → bottom, the same rule with `wrap_height` makes columns side by side; a row or
+column shorter than the longest is centred, so the wire into it comes back to the middle.
+
+*Side inputs (2026-10-15):* an edge into a module partway along it, from another module that
+is independent of the module's main input (the Transformer's encoder output into each decoder
+layer's second attention), does not order the two: the module may share its rank with the
+source, both start level, and the edge enters from the side, level with its target, along the
+gap between them. Edges from pure sources, from loose tensors and from upstream of the main
+input (residual skips) keep the usual rules.
+
 All engines are deterministic: ties are broken by execution order, never by hash or set
 order.
 

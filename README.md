@@ -64,6 +64,7 @@ tg.draw(model, x, style="origami")                 # or "origami-extended", or a
 tg.draw(model, x, variant="dark")                  # for dark slides; "greyscale" for print
 tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
 tg.draw(model, x, wrap_width=1600)                 # fold into rows beyond 1600 px (None: never)
+tg.draw(model, x, direction="TB", wrap_height=900) # top → bottom: columns beyond 900 px
 tg.draw(model, x, view="unrolled")                 # recurrence as a time × layer grid
 tg.draw(model, x, view="volume")                   # CNN layers as tensor volumes
 tg.draw(model, x, view="cell")                     # an LSTM / GRU cell as its gates
@@ -106,7 +107,11 @@ Notebooks with every option, already run, are in
 - [`pix2pix.ipynb`](examples/pix2pix.ipynb):
   a U-Net generator, a PatchGAN discriminator and both together;
 - [`tour.ipynb`](examples/tour.ipynb):
-  one model per family.
+  one model per family;
+- [`classics.ipynb`](examples/classics.ipynb):
+  the ten most-cited deep-learning papers with an architecture figure (ResNet, Transformer,
+  AlexNet, BERT, LSTM, U-Net, Faster R-CNN, ViT, LeNet-5, YOLO), each drawn by Tensorgami
+  next to the paper's own figure.
 
 The pipeline's stages can also be used one by one, e.g. to inspect what was captured:
 
