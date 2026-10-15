@@ -52,6 +52,11 @@ several models with `links=` for cGANs — both implemented in step 11e (`tg.Los
 `tg.Note`; `tg.draw({name: model}, {name: input}, links=[…])`) — and `tg.animate(...)` for the
 dynamic figures (FR13).
 
+*Fitted to a page (2026-10-15, step 13c):* `tg.draw(..., fit="slide")` returns a figure
+made for a fixed canvas: the slide style (larger text and lines), the layout whose text is
+largest once it fills the page, centred on the page's proportions. The `Figure` keeps the page
+(`fig.fitted`, `fig.inches`) and is saved at its size; at its natural size otherwise.
+
 ## Alternatives considered
 
 - **A class-based API** (`tg.Drawer(model).set_level(2).render()`). It is more verbose for

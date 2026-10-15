@@ -145,6 +145,46 @@ def greyscale(theme: Theme) -> Theme:
     )
 
 
+def presentation(theme: Theme, text: float = 1.35, lines: float = 1.5) -> Theme:
+    """The style for a slide: text, boxes and arrowheads ``text`` times larger and lines
+    ``lines`` times thicker, while the spaces between layers stay: a denser figure whose text
+    is larger for its size. ``tg.draw(..., fit="slide")`` applies it."""
+    fonts = {r: dataclasses.replace(f, size=f.size * text) for r, f in theme.fonts.items()}
+    m = theme.metrics
+    metrics = dataclasses.replace(
+        m,
+        node_stroke=m.node_stroke * lines,
+        arrow_length=m.arrow_length * text,
+        arrow_width=m.arrow_width * text,
+        label_halo=m.label_halo * text,
+        delay_marker=m.delay_marker * text,
+        line_gap=m.line_gap * text,
+        terminal_radius=m.terminal_radius * text,
+        fold_width=m.fold_width * text,
+        corner_radius=m.corner_radius * text,
+    )
+    b = theme.boxes
+    boxes = dataclasses.replace(
+        b,
+        padding=b.padding * text,
+        min_width=b.min_width * text,
+        height=b.height * text,
+        detail_height=b.detail_height * text,
+        gap=b.gap * text,
+    )
+    edges = {k: dataclasses.replace(e, width=e.width * lines) for k, e in theme.edges.items()}
+    group = dataclasses.replace(theme.group, width=theme.group.width * lines)
+    return dataclasses.replace(
+        theme,
+        name=f"{theme.name}, slide",
+        fonts=fonts,
+        metrics=metrics,
+        boxes=boxes,
+        edges=edges,
+        group=group,
+    )
+
+
 VARIANTS: dict[str, Callable[[Theme], Theme]] = {"dark": dark, "greyscale": greyscale}
 
 

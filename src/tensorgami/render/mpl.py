@@ -219,13 +219,23 @@ class MatplotlibCanvas:
 # --------------------------------------------------------------------------- entry points
 
 
-def render_figure(scene: Scene, theme: Theme, *, dpi: float = PX_PER_INCH) -> MplFigure:
-    """A standalone matplotlib Figure at the scene's natural size (not registered with
-    pyplot, so notebooks do not display it twice)."""
-    figure = MplFigure(figsize=(scene.width / PX_PER_INCH, scene.height / PX_PER_INCH), dpi=dpi)
+def render_figure(
+    scene: Scene,
+    theme: Theme,
+    *,
+    dpi: float = PX_PER_INCH,
+    width_in: float | None = None,
+) -> MplFigure:
+    """A standalone matplotlib Figure (not registered with pyplot, so notebooks do not display
+    it twice): at the scene's natural size, or ``width_in`` inches wide with text and lines
+    scaled along (a slide)."""
+    natural = scene.width / PX_PER_INCH
+    width = width_in or natural
+    figure = MplFigure(figsize=(width, width * scene.height / scene.width), dpi=dpi)
     ax = figure.add_axes((0.0, 0.0, 1.0, 1.0))
     with mpl.rc_context(RC), quiet_fonts():
-        SceneRenderer(theme).render(scene, MatplotlibCanvas(ax, scene.width, scene.height))
+        canvas = MatplotlibCanvas(ax, scene.width, scene.height, scale=width / natural)
+        SceneRenderer(theme).render(scene, canvas)
     return figure
 
 

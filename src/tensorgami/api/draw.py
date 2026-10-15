@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any
 
 from tensorgami.api.annotations import Annotation, Input, Loss, Note
 from tensorgami.api.figure import Figure
+from tensorgami.api.fit import check_fit, fit_to_page
 from tensorgami.ir import Graph
 from tensorgami.layout import LayoutOptions
 from tensorgami.style import DEFAULT_STYLE, Theme, load_style
@@ -26,6 +27,7 @@ _PARAMETERS = (
     "view",
     "style",
     "variant",
+    "fit",
     "overrides",
     "links",
     "annotations",
@@ -43,6 +45,7 @@ def draw(
     view: str = "auto",
     style: str | Path | Theme = DEFAULT_STYLE,
     variant: str | Sequence[str] | None = None,
+    fit: str | None = None,
     overrides: Mapping[str, Mapping[str, Any]] | None = None,
     links: Sequence[tuple[str, ...]] = (),
     annotations: Sequence[Annotation] = (),
@@ -72,6 +75,11 @@ def draw(
         variant: the style recoloured for where the figure goes: ``"dark"`` (a dark
             background, for slides) or ``"greyscale"`` (black-and-white print); a list
             applies several in order.
+        fit: ``"slide"``: a figure made for a 16:9 slide (13.33 × 7.5 in, as PowerPoint,
+            Keynote and Google Slides): larger text and lines, the layout whose text is
+            largest once it fills the slide, centred on the slide's proportions; saved at that
+            size (``fig.save("model.png", dpi=144)``: 1920 × 1080). ``"slide-4:3"``: 10 ×
+            7.5 in.
         overrides: category, label or leaf-ness per module path or class name, e.g.
             ``{"ConvLSTMCell": {"category": "recurrent", "label": "ConvLSTM cell"}}``.
         links: with several models (``model`` a dict of name → module, ``example_input`` a
@@ -102,6 +110,8 @@ def draw(
     _check_names(layout_options)
     _check_extras(model, example_input, links, annotations)
     theme = load_style(style, variant)
+    page = check_fit(fit) if fit is not None else None
+    given = set(layout_options)
     if direction is not None:
         layout_options["direction"] = direction
     options = LayoutOptions.for_style(theme, **layout_options)
@@ -109,6 +119,11 @@ def draw(
     chosen = get_view(view)
 
     graph = _annotate(_capture(model, example_input, overrides), links, annotations)
+    if page is not None:
+        shown, scene, theme, fitted = fit_to_page(
+            page, graph, theme, chosen, level=level, options=options, fixed=given
+        )
+        return Figure(scene, theme, shown, fitted=fitted)
     shown, scene = chosen.draw(graph, theme, level=level, options=options)
     return Figure(scene, theme, shown)
 

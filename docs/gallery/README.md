@@ -165,6 +165,15 @@ The origami styles too:
 
 ![AlexNet, origami, greyscale](origami/alexnet-greyscale.svg)
 
+## Slides
+
+`fit="slide"` makes a figure for a 16:9 slide: larger text and lines, the layout whose text is
+largest once the figure fills the slide (here four rows), centred on the slide's proportions.
+Saved, it is 13.33 × 7.5 in, the slide of PowerPoint, Keynote and Google Slides: at
+`dpi=144`, 1920 × 1080 px.
+
+![AlexNet, for a slide](alexnet-slide.svg)
+
 ## Origami style
 
 The same models drawn with `style="origami"`: upright cards, left → right (see [the style

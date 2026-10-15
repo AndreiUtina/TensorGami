@@ -19,6 +19,12 @@ versions).
   figure, each model rebuilt as its paper describes it (`examples/classics.py`) and drawn
   next to a link to the paper's figure, with what is the same and what differs.
 
+- Slides: `tg.draw(model, x, fit="slide")` makes a figure for a 16:9 slide (or
+  `"slide-4:3"`): larger text and lines, the row length whose text is largest once the figure
+  fills the slide, centred on the slide's proportions and saved at 13.33 × 7.5 in
+  (`dpi=144`: 1920 × 1080). The figure reports the size of its box names on the slide
+  (`fig.fitted`) and warns when they are too small for a projector.
+
 ### Changed
 
 - The contrast check of a style judges translucent cards by the colour they show on the

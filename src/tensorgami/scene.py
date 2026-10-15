@@ -7,6 +7,7 @@ Coordinates are SVG user units with the origin top-left and y pointing down.
 
 from __future__ import annotations
 
+import dataclasses
 from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
 from enum import StrEnum
@@ -259,3 +260,34 @@ class Scene:
         yield from self.edges
         yield from self.nodes
         yield from self.notes
+
+    def centred_in(self, width: float, height: float) -> Scene:
+        """The same drawing in the middle of a larger canvas (e.g. a 16:9 slide)."""
+        if width < self.width - 0.5 or height < self.height - 0.5:
+            raise SceneError(f"{width}×{height} is smaller than the scene")
+        dx, dy = (width - self.width) / 2, (height - self.height) / 2
+        canvas = Scene(width, height, self.title, self.description)
+        for item in (*self.nodes, *self.groups, *self.edges, *self.notes):
+            canvas.add(_shifted(item, dx, dy))
+        return canvas
+
+
+def _shifted(item: SceneItem, dx: float, dy: float) -> SceneItem:
+    def move(point: Point) -> Point:
+        return point.offset(dx, dy)
+
+    match item:
+        case Node() | Group():
+            box = item.box
+            return dataclasses.replace(item, box=Box(box.x + dx, box.y + dy, box.w, box.h))
+        case Edge():
+            return dataclasses.replace(
+                item,
+                source=item.source if isinstance(item.source, str) else move(item.source),
+                target=item.target if isinstance(item.target, str) else move(item.target),
+                via=tuple(move(p) for p in item.via),
+                label_at=move(item.label_at) if item.label_at else None,
+            )
+        case Note():
+            return dataclasses.replace(item, at=move(item.at))
+    raise SceneError(f"not a scene item: {item!r}")

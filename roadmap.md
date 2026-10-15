@@ -386,7 +386,12 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   variant figures per style in the gallery. The dark board is GitHub's dark page colour
   (#0d1117, as the logo banner): the README's figures switch with the reader's theme
   (`<picture>`; PyPI shows the light ones), and the build makes their links absolute too.
-- Presentation sizing: slide (16:9 sizing, larger fonts).
+- **Slides** ✅ (13c, 2026-10-15): `fit="slide"` (16:9, 13.33 × 7.5 in) and `"slide-4:3"`:
+  the style with 1.35× text and boxes and 1.5× lines (spaces unchanged: a denser figure), the
+  row or column length (one line, 2800 … 600 px) whose text is largest once the figure fills
+  the slide, centred on a canvas of the slide's proportions and saved at its size (`dpi=144`:
+  1920 × 1080). `fig.fitted` reports the box names' size on the slide (AlexNet: 14.5 pt); under
+  10 pt a warning suggests fewer boxes (`level="stages"`).
 - Export for LaTeX reports (PDF/SVG at exact column widths).
 
 ### 14) Dynamic information flow ⬜

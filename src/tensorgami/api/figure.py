@@ -8,6 +8,7 @@ from functools import cached_property
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from tensorgami.api.fit import Fitted
 from tensorgami.ir import Graph
 from tensorgami.render.mpl import PX_PER_INCH, draw_scene, quiet_fonts, render_figure
 from tensorgami.render.scene_renderer import render_svg
@@ -33,10 +34,18 @@ class Figure:
     * ``fig.draw_on(ax)`` draws into a panel of your own ``plt.subplots`` layout.
     """
 
-    def __init__(self, scene: Scene, style: Theme, graph: Graph | None = None) -> None:
+    def __init__(
+        self,
+        scene: Scene,
+        style: Theme,
+        graph: Graph | None = None,
+        *,
+        fitted: Fitted | None = None,
+    ) -> None:
         self._scene = scene
         self._style = style
         self._graph = graph
+        self._fitted = fitted
 
     # ------------------------------------------------------------------ inspection
 
@@ -57,9 +66,23 @@ class Figure:
         """Natural size in px (1 px = 1/96 inch)."""
         return self._scene.width, self._scene.height
 
+    @property
+    def fitted(self) -> Fitted | None:
+        """How the figure was fitted to a page (``fit="slide"``): the page and the size of
+        the box names on it, in pt; ``None`` at natural size."""
+        return self._fitted
+
+    @property
+    def inches(self) -> tuple[float, float]:
+        """Size when saved: the page's (a slide: 13.33 × 7.5) or the natural size."""
+        w, h = self.size
+        if self._fitted is not None:
+            return self._fitted.page.width_in, self._fitted.page.height_in
+        return w / PX_PER_INCH, h / PX_PER_INCH
+
     @cached_property
     def figure(self) -> MplFigure:
-        return render_figure(self._scene, self._style)
+        return render_figure(self._scene, self._style, width_in=self.inches[0])
 
     @property
     def ax(self) -> Axes:
@@ -68,7 +91,11 @@ class Figure:
     def __repr__(self) -> str:
         w, h = self.size
         title, style = self._scene.title, self._style.name
-        return f"<tensorgami.Figure {title!r} {w:.0f}×{h:.0f} px, style {style!r}>"
+        page = ""
+        if self._fitted is not None:
+            fit = self._fitted
+            page = f", {fit.page.name} {fit.page.aspect}, box names {fit.label_pt:.0f} pt"
+        return f"<tensorgami.Figure {title!r} {w:.0f}×{h:.0f} px, style {style!r}{page}>"
 
     # ------------------------------------------------------------------ output
 
@@ -112,8 +139,7 @@ class Figure:
         """Open the figure in a matplotlib window (from scripts)."""
         import matplotlib.pyplot as plt
 
-        w, h = self.size
-        window = plt.figure(figsize=(w / PX_PER_INCH, h / PX_PER_INCH))
+        window = plt.figure(figsize=self.inches)
         self.draw_on(window.add_axes((0.0, 0.0, 1.0, 1.0)))
         with quiet_fonts():
             plt.show()

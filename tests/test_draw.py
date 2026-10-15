@@ -164,6 +164,8 @@ class MustNotRun(nn.Module):
         ({"theme": "origami"}, TypeError, "did you mean 'style'"),
         ({"varient": "dark"}, TypeError, "did you mean 'variant'"),
         ({"variant": "night"}, ValueError, "unknown variant 'night'; available: dark"),
+        ({"fitt": "slide"}, TypeError, "did you mean 'fit'"),
+        ({"fit": "poster"}, ValueError, "unknown fit 'poster'; available: slide, slide-4:3"),
         ({"colour": "red"}, TypeError, "layout options are: direction"),
         ({"style": "origamy"}, ThemeError, "built-in styles: default, origami"),
         ({"level": 9}, ValueError, "level must be one of 0 system"),
