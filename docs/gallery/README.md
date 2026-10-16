@@ -209,6 +209,20 @@ it may take), and says when its text gets small for print.
 
 ![AlexNet, 7 in wide](alexnet-paper.svg)
 
+## Etching style
+
+`style="etching"`: black ink on white, the operations told apart by engraved textures instead
+of colour, for black-and-white print and for every reader (see [the style
+page](../style/etching.md)).
+
+![AlexNet, etching](etching/alexnet.svg)
+
+![AlexNet, etching, volume view](etching/alexnet-volume.svg)
+
+![VAE with its losses, etching](etching/vae-losses.svg)
+
+![pix2pix, the whole system, etching](etching/pix2pix-system.svg)
+
 ## Origami style
 
 The same models drawn with `style="origami"`: upright cards, left → right (see [the style

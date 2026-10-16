@@ -35,7 +35,7 @@ when running Tensorgami (`style="default"`), with more styles added over time: a
 | `default` | ✅ | light, print-friendly, semantic colour per operation category |
 | `origami` | ✅ ([style page](../style/origami.md)) | hairline "wire" look with translucent folded-paper cards, after the radial figure in DeepMind's essay *Bending the curve of discovery*; upright cards left → right, flat single-line cards top → bottom |
 | `origami-extended` | ✅ ([style page](../style/origami.md)) | the origami look with level text: flat single-line cards top → bottom (default), stacked cards left → right |
-| third | to be decided | — |
+| `etching` | ✅ ([style page](../style/etching.md)) | black ink on white: operations told apart by engraved textures (a strip at the start of each box, a volume's face) instead of colour; wires by line style; for black-and-white print and colour-vision deficiency |
 
 ## Variants (2026-10-14, step 13a)
 

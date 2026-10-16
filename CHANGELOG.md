@@ -24,6 +24,12 @@ versions).
   fills the slide, centred on the slide's proportions and saved at 13.33 × 7.5 in
   (`dpi=144`: 1920 × 1080). The figure reports the size of its box names on the slide
   (`fig.fitted`) and warns when they are too small for a projector.
+- A third style, `etching`: black ink on white paper, the operations told apart by engraved
+  textures (diagonal, cross-hatch, dots, grid, zigzag…) in a strip at the start of each box and
+  over a volume's face, instead of colour; wires told apart by line style; Helvetica, 0.75 pt
+  lines. For journals printed in black and white and for every reader. Textures are a new
+  capability any style can use (`texture = "diagonal"` in a category); a new check keeps them
+  distinct.
 - Palettes: `tg.draw(model, x, palette="colorblind")` recolours the operations of any style:
   `colorblind` (Okabe–Ito with Paul Tol's colour-blind-safe hues), `tab10` (matplotlib's
   default colours), `vivid` (saturated, for slides and posters) and `mono` (one hue, layers

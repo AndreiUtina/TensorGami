@@ -349,7 +349,7 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
 
 ## Phase D — Reports, presentations and release
 
-### 13) Styles and presentation output 🔶 (`default`, `origami`, `origami-extended` ✅; third to decide)
+### 13) Styles and presentation output ✅ (`default`, `origami`, `origami-extended`, `etching`; variants, palettes, slides, papers)
 - Named styles, one TOML file each, chosen with `style=` (ADR-0008): `load_style("origami")`
   or `tg.draw(model, x, style="origami")`; a style may set layout preferences (`[layout]`:
   spacing, direction, wrapping) and box sizes (`[boxes]`).
@@ -375,7 +375,14 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   - Fixed on the way (all styles): frame titles are painted above the wires on a small
     background patch; wrapped edges bend outside frames; rows wrap only when that makes a
     figure at least 20 % narrower.
-- **Third style:** to be decided.
+- **`etching`** ✅ (13d, 2026-10-16, chosen after a short survey: journal artwork rules ask
+  for patterns, not similar greys, in black-and-white print; He et al., IEEE TVCG 2024, on
+  black-and-white textures; Marshall et al., PLOS ONE 2025): black ink on white, operations
+  told apart by engraved textures (45° apart, even ink, set off by a white gap) in a strip at
+  the start of each box and over a volume's face; wires by line style (state bold, sampling
+  dotted, training dashed); Helvetica, 0.75 pt lines, square corners, hairline frames. Textures
+  are a renderer capability any style can use (`texture =`); a new rule keeps them distinct.
+  Combines with palettes (coloured textures) and variants ([style page](docs/style/etching.md)).
 - **Variants** ✅ (13a, 2026-10-14): `variant="dark"` and `variant="greyscale"`, for any
   style (functions `Theme → Theme`, validated like every style; ADR-0008). Dark keeps the
   pastel cards (made opaque) on a dark board and lightens wires, outlines, frames and the text

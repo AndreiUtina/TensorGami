@@ -60,7 +60,7 @@ arguments, or a dict of keyword arguments, including the batch dimension.
 
 ```python
 tg.draw(model, x, level="stages")                  # less detail: 0 system … 3 operators
-tg.draw(model, x, style="origami")                 # or "origami-extended", or a path to a TOML
+tg.draw(model, x, style="origami")                 # or "origami-extended", "etching", or a TOML
 tg.draw(model, x, variant="dark")                  # for dark slides; "greyscale" for print
 tg.draw(model, x, palette="colorblind")            # or "tab10", "vivid", "mono"
 tg.draw(model, x, fit="slide")                     # a 16:9 slide: larger text, best layout
@@ -85,7 +85,8 @@ tg.draw({"generator": G, "discriminator": D}, {"generator": (z, y), "discriminat
 - **Views**: block diagrams (`view="block"`), recurrent networks unrolled over time
   (`"unrolled"`), CNNs as 3-D tensor volumes (`"volume"`) and recurrent cells as their gates
   (`"cell"`). Encoder–decoders with nested skips (U-Net, pix2pix) fold into a U.
-- **Styles**: [`default`](docs/style/style-baseline.md),
+- **Styles**: [`default`](docs/style/style-baseline.md), [`etching`](docs/style/etching.md)
+  (black ink, operations told apart by engraved textures: for black-and-white print),
   and [`origami` and `origami-extended`](docs/style/origami.md)
   (narrow boxes in the style of the survey figures). A style is a TOML file; your own can be
   passed by path. Any style comes in a `dark` variant for slides and a `greyscale` one for
