@@ -24,6 +24,12 @@ versions).
   fills the slide, centred on the slide's proportions and saved at 13.33 × 7.5 in
   (`dpi=144`: 1920 × 1080). The figure reports the size of its box names on the slide
   (`fig.fitted`) and warns when they are too small for a projector.
+- Palettes: `tg.draw(model, x, palette="colorblind")` recolours the operations of any style:
+  `colorblind` (Okabe–Ito with Paul Tol's colour-blind-safe hues), `tab10` (matplotlib's
+  default colours), `vivid` (saturated, for slides and posters) and `mono` (one hue, layers
+  with weights darker). Fills keep text at 4.5 : 1, outlines show at 3 : 1, coloured wires
+  follow their category; every palette passes the style checks with every variant
+  (`load_style("origami", "dark", "colorblind")`).
 - Papers: `tg.draw(model, x, width="3.5in")` (also `"8.9cm"`, `"88mm"`, `"252pt"` or inches)
   lays the figure out for that width with the style's text size (box names 9 pt), the shortest
   layout that fits; shrinks only if none does, never taller than a page (`height=`: the most

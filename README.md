@@ -62,6 +62,7 @@ arguments, or a dict of keyword arguments, including the batch dimension.
 tg.draw(model, x, level="stages")                  # less detail: 0 system … 3 operators
 tg.draw(model, x, style="origami")                 # or "origami-extended", or a path to a TOML
 tg.draw(model, x, variant="dark")                  # for dark slides; "greyscale" for print
+tg.draw(model, x, palette="colorblind")            # or "tab10", "vivid", "mono"
 tg.draw(model, x, fit="slide")                     # a 16:9 slide: larger text, best layout
 tg.draw(model, x, width="3.5in")                   # a paper's column, at true text size
 tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
@@ -88,7 +89,9 @@ tg.draw({"generator": G, "discriminator": D}, {"generator": (z, y), "discriminat
   and [`origami` and `origami-extended`](docs/style/origami.md)
   (narrow boxes in the style of the survey figures). A style is a TOML file; your own can be
   passed by path. Any style comes in a `dark` variant for slides and a `greyscale` one for
-  black-and-white print.
+  black-and-white print, and in four palettes: `colorblind` (safe for colour-vision
+  deficiency), `tab10` (matplotlib's colours), `vivid` (for slides and posters) and `mono` (one
+  hue).
 - **Slides**: `fit="slide"` draws a figure for a 16:9 slide, with text sized for a projector
   and the layout chosen to make it as large as possible; saved at the slide's size.
 - **Papers**: `width="3.5in"` (or `"8.9cm"`, `"252pt"`) lays a figure out for a column or text

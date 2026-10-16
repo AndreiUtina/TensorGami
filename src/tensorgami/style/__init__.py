@@ -19,6 +19,7 @@ from tensorgami.style.glyphs import (
     TextRole,
 )
 from tensorgami.style.loader import available_themes, parse_theme, read_theme
+from tensorgami.style.palettes import apply_palette, available_palettes
 from tensorgami.style.theme import Theme, ThemeError
 from tensorgami.style.validation import Issue, ThemeValidator
 from tensorgami.style.variants import apply_variants, available_variants
@@ -37,15 +38,20 @@ def load_theme(source: str | Path = DEFAULT_STYLE, *, validate: bool = True) -> 
 
 
 def load_style(
-    style: str | Path | Theme = DEFAULT_STYLE, variant: str | Sequence[str] | None = None
+    style: str | Path | Theme = DEFAULT_STYLE,
+    variant: str | Sequence[str] | None = None,
+    palette: str | None = None,
 ) -> Theme:
     """The user-facing name for :func:`load_theme`: ``load_style("origami")``, or
-    ``load_style("path/to/my-style.toml")`` (ADR-0008); ``variant`` recolours it for where the
-    figure goes (``"dark"``, ``"greyscale"``; several apply in order). A loaded theme is
-    passed through (with its variants). The result is validated like every style."""
+    ``load_style("path/to/my-style.toml")`` (ADR-0008); ``palette`` recolours its operations
+    (``"colorblind"``, ``"tab10"``, ``"vivid"``, ``"mono"``), then ``variant`` recolours it for
+    where the figure goes (``"dark"``, ``"greyscale"``; several apply in order). A loaded theme
+    is passed through. The result is validated like every style."""
     theme = style if isinstance(style, Theme) else load_theme(style)
-    if not variant:
+    if not variant and not palette:
         return theme
+    if palette:
+        theme = apply_palette(theme, palette)
     return ThemeValidator().ensure_valid(apply_variants(theme, variant))
 
 
@@ -73,7 +79,9 @@ __all__ = [
     "Theme",
     "ThemeError",
     "ThemeValidator",
+    "apply_palette",
     "apply_variants",
+    "available_palettes",
     "available_styles",
     "available_themes",
     "available_variants",

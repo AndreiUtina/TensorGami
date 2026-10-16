@@ -392,6 +392,11 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   the slide, centred on a canvas of the slide's proportions and saved at its size (`dpi=144`:
   1920 × 1080). `fig.fitted` reports the box names' size on the slide (AlexNet: 14.5 pt); under
   10 pt a warning suggests fewer boxes (`level="stages"`).
+- **Palettes** ✅ (2026-10-16): `palette="colorblind"` (Okabe–Ito with Paul Tol's hues),
+  `"tab10"` (matplotlib's), `"vivid"` (slides and posters), `"mono"` (one hue, layers with
+  weights darker) for any style and with any variant: tints keep text at 4.5 : 1, outlines
+  show at 3 : 1, coloured wires follow their category; all 48 combinations of style, palette
+  and variant pass the style checks (ADR-0008). Four CNN figures per style in the gallery.
 - **Papers** ✅ (13b, 2026-10-15): `width="3.5in"` (in, cm, mm, pt, px or a number of inches)
   and `height=` (default 9 in, a page's text height): the style's text size at most (box names
   9 pt), the shortest layout that fits at that size, else the one shrinking least; centred on

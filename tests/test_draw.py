@@ -164,6 +164,8 @@ class MustNotRun(nn.Module):
         ({"theme": "origami"}, TypeError, "did you mean 'style'"),
         ({"varient": "dark"}, TypeError, "did you mean 'variant'"),
         ({"variant": "night"}, ValueError, "unknown variant 'night'; available: dark"),
+        ({"pallete": "mono"}, TypeError, "did you mean 'palette'"),
+        ({"palette": "pastel"}, ValueError, "unknown palette 'pastel'; available: colorblind"),
         ({"fitt": "slide"}, TypeError, "did you mean 'fit'"),
         ({"fit": "poster"}, ValueError, "unknown fit 'poster'; available: slide, slide-4:3"),
         ({"fit": "slide", "width": "3.5in"}, ValueError, "give one of them"),

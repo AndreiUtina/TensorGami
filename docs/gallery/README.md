@@ -165,6 +165,31 @@ The origami styles too:
 
 ![AlexNet, origami, greyscale](origami/alexnet-greyscale.svg)
 
+## Palettes
+
+`palette=` recolours the operations of any style: a light tint of each palette colour for the
+fill (the text keeps 4.5 : 1), the colour itself for the outline, and the coloured wires
+(recurrent state, sampling, training) in their category's colour. Every palette passes the
+same checks as every style, with every variant.
+
+`palette="colorblind"`: Okabe & Ito's palette, completed from Paul Tol's colour-blind-safe sets,
+for readers with colour-vision deficiency.
+
+![CNN, colorblind](cnn-colorblind.svg)
+
+`palette="tab10"`: matplotlib's default colours, so the figure matches the plots of the paper.
+
+![CNN, tab10](cnn-tab10.svg)
+
+`palette="vivid"`: saturated hues with stronger fills, for slides and posters.
+
+![CNN, vivid](cnn-vivid.svg)
+
+`palette="mono"`: one hue; layers with weights (convolution, linear, recurrent, attention,
+embedding) darker, the operations between them lighter, one outline for all.
+
+![CNN, mono](cnn-mono.svg)
+
 ## Slides
 
 `fit="slide"` makes a figure for a 16:9 slide: larger text and lines, the layout whose text is

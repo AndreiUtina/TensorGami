@@ -27,6 +27,7 @@ _PARAMETERS = (
     "view",
     "style",
     "variant",
+    "palette",
     "fit",
     "width",
     "height",
@@ -47,6 +48,7 @@ def draw(
     view: str = "auto",
     style: str | Path | Theme = DEFAULT_STYLE,
     variant: str | Sequence[str] | None = None,
+    palette: str | None = None,
     fit: str | None = None,
     width: str | float | None = None,
     height: str | float | None = None,
@@ -79,6 +81,10 @@ def draw(
         variant: the style recoloured for where the figure goes: ``"dark"`` (a dark
             background, for slides) or ``"greyscale"`` (black-and-white print); a list
             applies several in order.
+        palette: the operations' colours, for any style: ``"colorblind"`` (safe for
+            colour-vision deficiency), ``"tab10"`` (matplotlib's colours, to match your plots),
+            ``"vivid"`` (saturated, for slides and posters) or ``"mono"`` (one hue: layers
+            with weights darker).
         fit: ``"slide"``: a figure made for a 16:9 slide (13.33 × 7.5 in, as PowerPoint,
             Keynote and Google Slides): larger text and lines, the layout whose text is
             largest once it fills the slide, centred on the slide's proportions; saved at that
@@ -118,7 +124,7 @@ def draw(
     # every argument is checked before the model runs, so a typo costs no forward pass
     _check_names(layout_options)
     _check_extras(model, example_input, links, annotations)
-    theme = load_style(style, variant)
+    theme = load_style(style, variant, palette)
     if fit is not None and width is not None:
         raise ValueError("fit= and width= both size the figure: give one of them")
     if height is not None and width is None:

@@ -57,6 +57,19 @@ uses `Theme.outside_font`: the node's font, or the background text colour where 
 would be too faint. The contrast rule judges a translucent card by the colour it shows on the
 background.
 
+## Palettes (2026-10-16, step 13)
+
+A *palette* recolours the operation categories of any style: `palette="colorblind"`, `"tab10"`,
+`"vivid"` or `"mono"` (`load_style(style, variant, palette)`; the palette first, then the
+variants). It gives a base colour per category; the fill is the lightest-needed tint on which
+the style's text reaches 4.5 : 1 (opaque and as seen through a translucent card), the outline
+the colour darkened to 3 : 1 on the background, and the coloured wires (state, sampling,
+training) follow their category. Shapes, fonts and the neutral categories stay the style's.
+The colours of `colorblind` and `vivid` were chosen by a search over candidate hues per
+category so that every pair stays apart in every style (CIE76 ΔE ≥ 10 for fills, 15 for
+outlines); `mono` uses one neutral outline for all, so its categories are told apart by
+lightness and label.
+
 ## Consequences
 
 - `layout(graph, style)` without explicit options uses the style's layout preferences.

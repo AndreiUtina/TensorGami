@@ -62,6 +62,11 @@ FIGURES = {  # file name: (model, tg.draw options besides the style)
     "pix2pix-generator-dark": ("pix2pix_generator", {"level": 2, "variant": "dark"}),
     "alexnet-slide": ("alexnet", {"level": 2, "fit": "slide"}),  # step 13c: a 16:9 slide
     "alexnet-paper": ("alexnet", {"level": 2, "width": "7in"}),  # step 13b: a paper's width
+    # palettes (step 13): the operations recoloured, for any style
+    "cnn-colorblind": ("cnn", {"level": 2, "palette": "colorblind"}),
+    "cnn-tab10": ("cnn", {"level": 2, "palette": "tab10"}),
+    "cnn-vivid": ("cnn", {"level": 2, "palette": "vivid"}),
+    "cnn-mono": ("cnn", {"level": 2, "palette": "mono"}),
 }
 
 
