@@ -1,0 +1,243 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="916" height="444" viewBox="0 0 916 444" role="img">
+  <title>ConvLSTMForecaster cells</title>
+  <rect x="0" y="0" width="916" height="444" fill="#ffffff"/>
+  <g class="tg-groups">
+    <g class="tg-group" data-id="cell:1">
+      <rect x="16" y="16" width="884" height="344" fill="#ffffff" fill-opacity="0" stroke="#2a2a2a" stroke-width="0.75" stroke-linejoin="round"/>
+    </g>
+  </g>
+  <g class="tg-edges">
+    <g class="tg-edge tg-edge-state">
+      <polyline points="98,63 230,63" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round"/>
+      <polyline points="223,65.75 230,63 223,60.25" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-state">
+      <polyline points="254,63 410,63" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round"/>
+      <polyline points="403,65.75 410,63 403,60.25" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-state">
+      <polyline points="434,63 818,63" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round"/>
+      <polyline points="811,65.75 818,63 811,60.25" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="434,63 734,63 734,101.7" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="734,108 731.25,101 736.75,101" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-state">
+      <polyline points="98,263 134,263" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round"/>
+      <polyline points="127,265.75 134,263 127,260.25" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="146,308 146,281.3" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="146,275 148.75,282 143.25,282" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="158,263 242,263 242,220.3" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="242,214 244.75,221 239.25,221" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="158,263 362,263 362,220.3" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="362,214 364.75,221 359.25,221" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="158,263 482,263 482,220.3" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="482,214 484.75,221 479.25,221" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="158,263 602,263 602,220.3" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="602,214 604.75,221 599.25,221" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="242,168 242,81.3" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="242,75 244.75,82 239.25,82" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="362,168 362,126 403.7,126" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="410,126 403,128.75 403,123.25" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="482,168 482,126 440.3,126" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="434,126 441,123.25 441,128.75" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="422,114 422,81.3" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="422,75 424.75,82 419.25,82" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="650,191 715.7,191" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="722,191 715,193.75 715,188.25" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="734,144 734,172.7" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="734,179 731.25,172 736.75,172" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-state">
+      <polyline points="734,203 734,263 818,263" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round"/>
+      <polyline points="811,265.75 818,263 811,260.25" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-state">
+      <polyline points="406,392 436,392" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round"/>
+      <polyline points="429,394.75 436,392 429,389.25" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="406,416 429.7,416" fill="none" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polygon points="436,416 429,418.75 429,413.25" fill="#141414" stroke="#141414" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+  </g>
+  <g class="tg-nodes">
+    <g class="tg-node tg-tensor" data-id="cell:1.c_prev">
+      <rect x="26" y="42" width="72" height="42" rx="21" fill="#ffffff" stroke="#4a4a4a" stroke-width="1" stroke-linejoin="round"/>
+      <text x="62" y="59.95" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#111111">c<tspan dy="3.36" font-size="9">t-1</tspan></text>
+      <text x="62" y="74.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#3a3a3a">8×16×16</text>
+    </g>
+    <g class="tg-node tg-tensor" data-id="cell:1.h_prev">
+      <rect x="26" y="242" width="72" height="42" rx="21" fill="#ffffff" stroke="#4a4a4a" stroke-width="1" stroke-linejoin="round"/>
+      <text x="62" y="259.95" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#111111">h<tspan dy="3.36" font-size="9">t-1</tspan></text>
+      <text x="62" y="274.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#3a3a3a">8×16×16</text>
+    </g>
+    <g class="tg-node tg-tensor" data-id="cell:1.x">
+      <rect x="110" y="308" width="72" height="42" rx="21" fill="#ffffff" stroke="#4a4a4a" stroke-width="1" stroke-linejoin="round"/>
+      <text x="146" y="325.95" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#111111">x<tspan dy="3.36" font-size="9">t</tspan></text>
+      <text x="146" y="340.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#3a3a3a">1×16×16</text>
+    </g>
+    <g class="tg-node tg-merge" data-id="cell:1.concat">
+      <circle cx="146" cy="263" r="12" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <text x="146" y="267.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#111111">‖</text>
+    </g>
+    <g class="tg-node tg-conv" data-id="cell:1.f">
+      <rect x="194" y="168" width="96" height="46" rx="1.5" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polyline points="196.5,174.73 200.73,170.5" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="196.5,179.68 205.68,170.5" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="196.5,184.63 207,174.13" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="196.5,189.58 207,179.08" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="196.5,194.53 207,184.03" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="196.5,199.48 207,188.98" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="196.5,204.43 207,193.93" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="196.5,209.38 207,198.88" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="199.33,211.5 207,203.83" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="204.28,211.5 207,208.78" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="208,168 208,214" fill="none" stroke="#141414" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="249" y="187.95" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#111111">σ</text>
+      <text x="249" y="202.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#3a3a3a">forget</text>
+    </g>
+    <g class="tg-node tg-conv" data-id="cell:1.i">
+      <rect x="314" y="168" width="96" height="46" rx="1.5" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polyline points="316.5,173.52 319.52,170.5" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="316.5,178.47 324.47,170.5" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="316.5,183.42 327,172.92" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="316.5,188.37 327,177.87" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="316.5,193.32 327,182.82" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="316.5,198.27 327,187.77" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="316.5,203.22 327,192.72" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="316.5,208.17 327,197.67" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="318.12,211.5 327,202.62" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="323.07,211.5 327,207.57" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="328,168 328,214" fill="none" stroke="#141414" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="369" y="187.95" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#111111">σ</text>
+      <text x="369" y="202.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#3a3a3a">input</text>
+    </g>
+    <g class="tg-node tg-conv" data-id="cell:1.g">
+      <rect x="434" y="168" width="96" height="46" rx="1.5" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polyline points="436.5,172.32 438.32,170.5" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="436.5,177.27 443.27,170.5" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="436.5,182.22 447,171.72" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="436.5,187.17 447,176.67" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="436.5,192.12 447,181.62" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="436.5,197.07 447,186.57" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="436.5,202.02 447,191.52" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="436.5,206.97 447,196.47" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="436.92,211.5 447,201.42" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="441.87,211.5 447,206.37" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="448,168 448,214" fill="none" stroke="#141414" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="489" y="187.95" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#111111">tanh</text>
+      <text x="489" y="202.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#3a3a3a">candidate</text>
+    </g>
+    <g class="tg-node tg-conv" data-id="cell:1.o">
+      <rect x="554" y="168" width="96" height="46" rx="1.5" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polyline points="556.5,171.11 557.11,170.5" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="556.5,176.06 562.06,170.5" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="556.5,181.01 567,170.51" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="556.5,185.96 567,175.46" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="556.5,190.91 567,180.41" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="556.5,195.86 567,185.36" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="556.5,200.81 567,190.31" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="556.5,205.76 567,195.26" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="556.5,210.71 567,200.21" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="560.66,211.5 567,205.16" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="565.61,211.5 567,210.11" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="568,168 568,214" fill="none" stroke="#141414" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="609" y="187.95" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#111111">σ</text>
+      <text x="609" y="202.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#3a3a3a">output</text>
+    </g>
+    <g class="tg-node tg-merge" data-id="cell:1.mul_f">
+      <circle cx="242" cy="63" r="12" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <text x="242" y="67.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#111111">×</text>
+    </g>
+    <g class="tg-node tg-merge" data-id="cell:1.mul_ig">
+      <circle cx="422" cy="126" r="12" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <text x="422" y="130.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#111111">×</text>
+    </g>
+    <g class="tg-node tg-merge" data-id="cell:1.add_c">
+      <circle cx="422" cy="63" r="12" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <text x="422" y="67.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#111111">+</text>
+    </g>
+    <g class="tg-node tg-activation" data-id="cell:1.tanh_c">
+      <rect x="686" y="108" width="96" height="36" rx="1.5" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polyline points="690.92,141.5 688.5,139.08" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="695.87,141.5 688.5,134.13" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="699,139.68 688.5,129.18" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="699,134.73 688.5,124.23" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="699,129.78 688.5,119.28" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="699,124.83 688.5,114.33" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="699,119.88 689.62,110.5" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="699,114.93 694.57,110.5" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="700,108 700,144" fill="none" stroke="#141414" stroke-width="0.8" stroke-linejoin="round"/>
+      <text x="741" y="130.2" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#111111">tanh</text>
+    </g>
+    <g class="tg-node tg-merge" data-id="cell:1.mul_o">
+      <circle cx="734" cy="191" r="12" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <text x="734" y="195.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#111111">×</text>
+    </g>
+    <g class="tg-node tg-tensor" data-id="cell:1.c">
+      <rect x="818" y="42" width="72" height="42" rx="21" fill="#ffffff" stroke="#4a4a4a" stroke-width="1" stroke-linejoin="round"/>
+      <text x="854" y="59.95" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#111111">c<tspan dy="3.36" font-size="9">t</tspan></text>
+      <text x="854" y="74.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#3a3a3a">8×16×16</text>
+    </g>
+    <g class="tg-node tg-tensor" data-id="cell:1.h">
+      <rect x="818" y="242" width="72" height="42" rx="21" fill="#ffffff" stroke="#4a4a4a" stroke-width="1" stroke-linejoin="round"/>
+      <text x="854" y="259.95" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#111111">h<tspan dy="3.36" font-size="9">t</tspan></text>
+      <text x="854" y="274.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#3a3a3a">8×16×16</text>
+    </g>
+    <g class="tg-node tg-tensor" data-id="legend:0:tensor">
+      <rect x="16" y="384" width="30" height="16" rx="8" fill="#ffffff" stroke="#4a4a4a" stroke-width="1" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-merge" data-id="legend:1:merge">
+      <circle cx="31" cy="416" r="9" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <text x="31" y="420.9" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#111111">+</text>
+    </g>
+    <g class="tg-node tg-conv" data-id="legend:2:conv">
+      <rect x="211" y="384" width="30" height="16" rx="1.5" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polyline points="213.5,390.37 217.37,386.5" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="213.5,395.32 220,388.82" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="216.27,397.5 220,393.77" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="221,384 221,400" fill="none" stroke="#141414" stroke-width="0.8" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-activation" data-id="legend:3:activation">
+      <rect x="211" y="408" width="30" height="16" rx="1.5" fill="#ffffff" stroke="#141414" stroke-width="1" stroke-linejoin="round"/>
+      <polyline points="218.56,421.5 213.5,416.44" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="220,417.99 213.5,411.49" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="220,413.04 217.46,410.5" fill="none" stroke="#141414" stroke-width="0.75" stroke-linejoin="round"/>
+      <polyline points="221,408 221,424" fill="none" stroke="#141414" stroke-width="0.8" stroke-linejoin="round"/>
+    </g>
+  </g>
+  <g class="tg-labels">
+    <rect x="20.5" y="19.6" width="171.38" height="15.8" rx="2" fill="#ffffff"/>
+    <text x="23" y="30.65" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="9" font-weight="700" fill="#2a2a2a">CONVLSTMCELL · GATES: CONV2D</text>
+    <text x="54" y="395.5" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" fill="#111111">Tensor / state</text>
+    <text x="54" y="419.5" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" fill="#111111">Merge (add, concat, multiply)</text>
+    <text x="249" y="395.5" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" fill="#111111">Convolution</text>
+    <text x="249" y="419.5" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" fill="#111111">Activation</text>
+    <text x="444" y="395.5" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" fill="#111111">Recurrent state</text>
+    <text x="444" y="419.5" font-family="'Helvetica Neue', 'Helvetica', 'Arial', 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="10" fill="#111111">Data flow</text>
+  </g>
+</svg>
