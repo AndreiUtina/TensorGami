@@ -28,7 +28,7 @@ b.output(conv)
 graph = b.build()
 
 styles = available_styles()
-assert styles == ["default", "origami", "origami-extended"], styles
+assert styles == ["default", "etching", "origami", "origami-extended"], styles
 folder = Path(tempfile.mkdtemp())
 for name in styles:
     style = load_style(name)
