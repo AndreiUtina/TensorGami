@@ -26,7 +26,8 @@ class GroupPainter:
         b = group.box
         if group.title:
             font = self._theme.font(TextRole.GROUP_TITLE)
-            at = Point(b.x + style.corner_radius, b.y + style.padding * 0.5 + font.size / 2)
+            inset = style.corner_radius or style.padding * 0.5  # square corners: off the edge
+            at = Point(b.x + inset, b.y + style.padding * 0.5 + font.size / 2)
             halo = self._theme.metrics.label_halo
             width = self._measurer.width(group.title, font)
             behind = self._theme.background if style.fill_opacity < 1 else style.fill

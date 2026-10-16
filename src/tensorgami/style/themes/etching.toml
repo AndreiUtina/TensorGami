@@ -1,0 +1,246 @@
+# Tensorgami "etching" style.
+#
+# Black ink on white paper, like an engraved plate. The operations are told apart by engraved
+# textures instead of colour: each box carries a narrow textured strip at its start (diagonal
+# lines for convolutions, dots for normalisation, a cross-hatch for attention…), set off from
+# the outline by a white gap, while its text stays on plain white; a volume's face is engraved
+# whole. The wires are one ink, told apart by line style only.
+#
+# For journals printed in black and white (Elsevier and AAS ask for patterns rather than
+# similar greys), for photocopies, and for every reader, whatever their colour vision. Journal
+# conventions: Helvetica or Arial, lines of 0.75 pt (Nature: 0.25–1 pt), text of 6.75 pt and
+# more at true size. Textures 45° apart with even ink, after He et al., "Design
+# Characterization for Black-and-White Textures in Visualization" (IEEE TVCG, 2024).
+#
+# It passes the same validation rules as every style; palettes colour its textures, and its
+# dark variant engraves in light ink.
+
+[theme]
+name = "etching"
+description = "Black ink on white: operations told apart by engraved textures, not colour."
+background = "#ffffff"
+
+[fonts.families]
+sans = ["Helvetica Neue", "Helvetica", "Arial", "Liberation Sans", "DejaVu Sans", "sans-serif"]
+
+[fonts.label]
+family = "sans"
+size = 12
+weight = 600
+color = "#111111"
+
+[fonts.detail]
+family = "sans"
+size = 10
+color = "#3a3a3a"
+
+[fonts.symbol]
+family = "sans"
+size = 14
+weight = 600
+color = "#111111"
+
+[fonts.annotation]   # tensor shapes on the wires
+family = "sans"
+size = 9
+color = "#3a3a3a"
+
+[fonts.group-title]
+family = "sans"
+size = 9
+weight = 700
+caps = true
+color = "#2a2a2a"
+
+[fonts.badge]
+family = "sans"
+size = 9.5
+weight = 700
+color = "#2a2a2a"
+
+[fonts.note]
+family = "sans"
+size = 10
+italic = true
+color = "#3a3a3a"
+
+[fonts.legend]
+family = "sans"
+size = 10
+color = "#111111"
+
+[metrics]
+grid = 8
+corner_radius = 1.5     # square technical corners
+node_stroke = 1.0       # 0.75 pt
+arrow_length = 7
+arrow_width = 5.5
+label_halo = 2.5
+delay_marker = 6
+cuboid_angle = 35
+trapezoid_ratio = 0.45
+line_gap = 3
+texture_strip = 14      # the engraved strip at the start of a box
+texture_spacing = 3.5
+texture_line = 0.75
+
+[group]
+fill = "#ffffff"
+fill_opacity = 0        # hairline frames without a fill
+stroke = "#2a2a2a"
+width = 0.75
+corner_radius = 0
+padding = 14
+badge_fill = "#ffffff"
+
+# ----------------------------------------------------------------- data and structure (plain)
+
+[categories.io]
+name = "Input / output"
+shape = "pill"
+fill = "#ffffff"
+stroke = "#141414"
+
+[categories.tensor]
+name = "Tensor / state"
+shape = "pill"
+fill = "#ffffff"
+stroke = "#4a4a4a"
+
+[categories.module]
+name = "Composite block"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#141414"
+
+[categories.merge]
+name = "Merge (add, concat, multiply)"
+shape = "circle"
+fill = "#ffffff"
+stroke = "#141414"
+
+[categories.reshape]
+name = "Reshape / flatten"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#4a4a4a"
+
+[categories.regularization]
+name = "Regularisation (dropout)"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#4a4a4a"
+dash = [3, 2]
+
+[categories.other]
+name = "Other operation"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#4a4a4a"
+
+# ----------------------------------------------------------------- operations (engraved)
+
+[categories.conv]
+name = "Convolution"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#141414"
+texture = "diagonal"
+
+[categories.linear]
+name = "Linear / dense"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#141414"
+texture = "horizontal"
+
+[categories.recurrent]
+name = "Recurrent cell"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#141414"
+texture = "vertical"
+
+[categories.attention]
+name = "Attention"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#141414"
+texture = "crosshatch"
+
+[categories.norm]
+name = "Normalisation"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#141414"
+texture = "dots"
+
+[categories.activation]
+name = "Activation"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#141414"
+texture = "backdiagonal"
+
+[categories.resample]
+name = "Pooling / resampling"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#141414"
+texture = "grid"
+
+[categories.embedding]
+name = "Embedding"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#141414"
+texture = "zigzag"
+
+[categories.stochastic]
+name = "Sampling / noise"
+shape = "pill"
+fill = "#ffffff"
+stroke = "#141414"
+dash = [3, 2]
+
+[categories.loss]
+name = "Loss / objective"
+shape = "rect"
+fill = "#ffffff"
+stroke = "#141414"
+texture = "dashes"
+
+# ----------------------------------------------------------------- edges (one ink, by line style)
+
+[edges.data]
+name = "Data flow"
+color = "#141414"
+width = 1.0
+arrow = "filled"
+
+[edges.state]             # bold, as the cell state's "conveyor belt" in Olah's LSTM figures
+name = "Recurrent state"
+color = "#141414"
+width = 2.0
+arrow = "open"
+
+[edges.stochastic]
+name = "Sampling / noise"
+color = "#141414"
+width = 1.0
+arrow = "filled"
+dash = [1.5, 2]
+
+[edges.training]
+name = "Training signal (loss, gradient)"
+color = "#141414"
+width = 1.0
+arrow = "open"
+dash = [5, 3]
+
+[edges.tied]
+name = "Shared weights"
+color = "#6b6b6b"
+width = 0.9
+arrow = "none"
+dash = [1.5, 2]

@@ -117,12 +117,32 @@ class DistinctEdgesRule:
             seen.setdefault(signature, kind)
 
 
+@dataclass(frozen=True)
+class DistinctTexturesRule:
+    """A texture tells one category apart (etching): no two categories may share one."""
+
+    name: str = "distinct-textures"
+
+    def check(self, theme: Theme) -> Iterable[Issue]:
+        seen: dict[object, str] = {}
+        for category, style in theme.nodes.items():
+            if style.texture is None:
+                continue
+            if style.texture in seen:
+                yield Issue(
+                    self.name,
+                    f"'{seen[style.texture]}' and '{category}' share the texture {style.texture}",
+                )
+            seen.setdefault(style.texture, category)
+
+
 def default_rules() -> list[ThemeRule]:
     return [
         TextContrastRule(),
         GraphicContrastRule(),
         DistinctCategoriesRule(),
         DistinctEdgesRule(),
+        DistinctTexturesRule(),
     ]
 
 

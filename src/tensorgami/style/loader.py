@@ -20,6 +20,7 @@ from tensorgami.style.glyphs import (
     Shape,
     TextLayout,
     TextRole,
+    Texture,
 )
 from tensorgami.style.theme import Theme, ThemeError
 from tensorgami.vocabulary import EdgeKind, OpCategory
@@ -121,6 +122,7 @@ class _ThemeParser:
             text=self._color(t, "text", path) if "text" in t else default_text,
             dash=self._dash(t, path),
             opacity=self._fraction(t, "opacity", path),
+            texture=self._enum(t, "texture", path, Texture) if "texture" in t else None,
         )
 
     def _edge(self, t: Mapping[str, Any], path: str) -> EdgeStyle:

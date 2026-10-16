@@ -11,6 +11,7 @@ from typing import Protocol
 
 from tensorgami.render.canvas import Canvas, Paint
 from tensorgami.render.text import BASELINE_SHIFT
+from tensorgami.render.textures import engrave
 from tensorgami.scene import Box, Node, Point, Side, TextAnchor
 from tensorgami.style.glyphs import NodeStyle, Shape, TextLayout, TextRole
 from tensorgami.style.theme import Theme
@@ -100,13 +101,37 @@ def draw_node_text(canvas: Canvas, node: Node, theme: Theme, face: Box, *, centr
         draw_text_block(canvas, node, theme, face.center)
 
 
+def textured(canvas: Canvas, node: Node, theme: Theme, box: Box) -> Box:
+    """A category's engraved texture (etching) in a strip at the start of ``box``, behind a
+    white gap and a hairline; returns the rest of the box, which is free for text. The strip
+    is on the left, or at the bottom of an upright card (its text reads bottom → top)."""
+    style, m = node_style(node, theme), theme.metrics
+    if style.texture is None:
+        return box
+    gap = m.node_stroke + 1.5  # white between the texture and the outline
+    if arrangement(node, theme) is TextLayout.ROTATED:
+        strip = min(m.texture_strip, box.h / 3)
+        area = Box(box.x + gap, box.bottom - strip + 1, box.w - 2 * gap, strip - gap - 1)
+        line = [Point(box.x, box.bottom - strip), Point(box.right, box.bottom - strip)]
+        rest = Box(box.x, box.y, box.w, box.h - strip)
+    else:
+        strip = min(m.texture_strip, box.w / 3)
+        area = Box(box.x + gap, box.y + gap, strip - gap - 1, box.h - 2 * gap)
+        line = [Point(box.x + strip, box.y), Point(box.x + strip, box.bottom)]
+        rest = Box(box.x + strip, box.y, box.w - strip, box.h)
+    engrave(canvas, area, style.texture, style.stroke, m)
+    canvas.polyline(line, Paint(None, style.stroke, m.node_stroke * 0.8))
+    return rest
+
+
 class RectPainter:
-    """Rounded rectangle: operations and layers."""
+    """Rounded rectangle: operations and layers (with its texture strip in the etching
+    style)."""
 
     def paint(self, canvas: Canvas, node: Node, theme: Theme) -> None:
         style = node_style(node, theme)
         canvas.rect(node.box, outline(style, theme), theme.metrics.corner_radius)
-        draw_node_text(canvas, node, theme, node.box)
+        draw_node_text(canvas, node, theme, textured(canvas, node, theme, node.box))
 
     def anchor(self, node: Node, side: Side, theme: Theme) -> Point:
         return node.box.anchor(side)
@@ -222,6 +247,10 @@ class CuboidPainter:
         canvas.polygon(side, Paint(style.fill.darken(0.14), style.stroke, width, style.dash))
         canvas.polygon(top, Paint(style.fill.lighten(0.45), style.stroke, width, style.dash))
         canvas.rect(b, outline(style, theme))
+        if style.texture is not None:  # etching: the whole front face engraved
+            gap = width + 1.5
+            face = Box(b.x + gap, b.y + gap, b.w - 2 * gap, b.h - 2 * gap)
+            engrave(canvas, face, style.texture, style.stroke, theme.metrics)
         label_font = theme.outside_font(node.category, TextRole.LABEL)  # below, on the background
         y = b.bottom + 6 + label_font.size / 2
         if node.label:

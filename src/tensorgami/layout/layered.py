@@ -267,6 +267,8 @@ class _Run:
         length = _ceil(text_w + boxes.padding)
         if shape is Shape.FOLDED:  # the folded strip is extra; text stays on the flat face
             length = _ceil(length + self.theme.metrics.fold_width)
+        if shape is Shape.RECT and self.theme.node_style(node.category).texture is not None:
+            length = _ceil(length + self.theme.metrics.texture_strip)  # the engraved strip
         if shape is Shape.PILL:
             return max(length, 64.0), thickness - 4
         length = max(length, boxes.min_width)

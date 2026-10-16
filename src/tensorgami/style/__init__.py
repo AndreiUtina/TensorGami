@@ -17,6 +17,7 @@ from tensorgami.style.glyphs import (
     Shape,
     TextLayout,
     TextRole,
+    Texture,
 )
 from tensorgami.style.loader import available_themes, parse_theme, read_theme
 from tensorgami.style.palettes import apply_palette, available_palettes
@@ -76,6 +77,7 @@ __all__ = [
     "Shape",
     "TextLayout",
     "TextRole",
+    "Texture",
     "Theme",
     "ThemeError",
     "ThemeValidator",

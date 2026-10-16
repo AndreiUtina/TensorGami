@@ -20,6 +20,24 @@ class Shape(StrEnum):
     FOLDED = "folded"  # folded paper: two facets split by a slanted crease (origami style)
 
 
+class Texture(StrEnum):
+    """An engraved texture telling a category apart without colour (the etching style): in a
+    narrow strip at the start of a box, or over a volume's face. Orientations 45° apart and
+    equal ink density, after He et al., *Design Characterization for Black-and-White Textures
+    in Visualization* (IEEE TVCG 2024)."""
+
+    DIAGONAL = "diagonal"  # ////
+    BACKDIAGONAL = "backdiagonal"  # \\\\
+    HORIZONTAL = "horizontal"  # ≡
+    VERTICAL = "vertical"  # |||
+    CROSSHATCH = "crosshatch"  # ×××
+    GRID = "grid"  # +++
+    DOTS = "dots"  # ···
+    ZIGZAG = "zigzag"  # /\/\
+    DASHES = "dashes"  # staggered short dashes
+    SOLID = "solid"  # filled with ink
+
+
 class TextLayout(StrEnum):
     """How a box arranges its label and detail."""
 
@@ -82,6 +100,7 @@ class NodeStyle:
     text: Color
     dash: tuple[float, ...] = ()
     opacity: float = 1.0  # of the fill: translucent paper lets what lies beneath show through
+    texture: Texture | None = None  # engraved in the outline's colour (etching)
 
 
 @dataclass(frozen=True, slots=True)
@@ -123,6 +142,9 @@ class Metrics:
     terminal_radius: float = 2.5  # dot terminals of edges
     fold_width: float = 18  # width of the folded strip on the right of a folded box (px)
     fold_shade: float = 0.07  # how much darker the folded strip is
+    texture_strip: float = 14  # width of a box's textured strip (etching)
+    texture_spacing: float = 4  # between the lines (or dots) of a texture
+    texture_line: float = 0.8  # line width of a texture
 
 
 @dataclass(frozen=True)
