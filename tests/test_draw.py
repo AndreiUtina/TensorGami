@@ -21,7 +21,7 @@ from tensorgami.importers import ImporterError, UnclassifiedOpWarning  # noqa: E
 from tensorgami.importers.torch import trace  # noqa: E402
 from tensorgami.layout import LayoutOptions, layout  # noqa: E402
 from tensorgami.render import render_svg  # noqa: E402
-from tensorgami.style import ThemeError, load_style  # noqa: E402
+from tensorgami.style import ThemeError, available_styles, load_style  # noqa: E402
 from tensorgami.transforms import simplify  # noqa: E402
 from tensorgami.views import VIEWS, available_views, get_view  # noqa: E402
 
@@ -39,7 +39,7 @@ def x():
 # --------------------------------------------------------------------------- end to end
 
 
-@pytest.mark.parametrize("style", ["default", "origami", "origami-extended"])
+@pytest.mark.parametrize("style", available_styles())
 @pytest.mark.parametrize("name", REFERENCE)
 def test_every_reference_model_is_drawn(name, style):
     make, example = REFERENCE[name]
@@ -172,7 +172,7 @@ class MustNotRun(nn.Module):
         ({"height": "4in"}, ValueError, "give width="),
         ({"width": "wide"}, ValueError, "width: a length such as '3.5in'"),
         ({"colour": "red"}, TypeError, "layout options are: direction"),
-        ({"style": "origamy"}, ThemeError, "built-in styles: default, origami"),
+        ({"style": "origamy"}, ThemeError, "built-in styles: default, etching, origami"),
         ({"level": 9}, ValueError, "level must be one of 0 system"),
         ({"direction": "XY"}, ValueError, "direction must be 'LR'"),
         ({"view": "fancy"}, ValueError, "unknown view 'fancy'"),

@@ -199,7 +199,7 @@ def test_a_style_may_carry_layout_preferences():
 def test_origami_styles_are_built_in_and_pass_every_rule(name):
     from tensorgami.style import available_styles, load_style
 
-    assert available_styles() == ["default", "origami", "origami-extended"]
+    assert available_styles() == ["default", "etching", "origami", "origami-extended"]
     origami = load_style(name)
     assert ThemeValidator().validate(origami) == []
     assert origami.node_style(OpCategory.CONV).shape is Shape.FOLDED
