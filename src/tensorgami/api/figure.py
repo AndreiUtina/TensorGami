@@ -19,6 +19,8 @@ if TYPE_CHECKING:
     from matplotlib.axes import Axes
     from matplotlib.figure import Figure as MplFigure
 
+    from tensorgami.api.animation import Animation
+
 #: formats written through matplotlib (SVG is written by Tensorgami's own SVG canvas)
 RASTER_AND_PDF = {".png", ".pdf", ".jpg", ".jpeg", ".tif", ".tiff"}
 SCREEN_DPI = 2 * PX_PER_INCH  # notebook display: rendered at 2× for sharp HiDPI screens
@@ -134,6 +136,14 @@ class Figure:
         """Jupyter display: rendered at 2× but shown at the natural size."""
         w, h = self.size
         return self.to_png(), {"width": round(w), "height": round(h)}
+
+    def animate(self, *, step: float = 0.6, hold: float = 1.5) -> Animation:
+        """The figure lighting up as the model runs: layer after layer in the order data
+        reaches them, ``step`` seconds each, the whole model at the end for ``hold`` seconds.
+        Save it with ``.save("model.gif")`` (or ``.mp4``) or ``.save_frames(folder)``."""
+        from tensorgami.api.animation import Animation
+
+        return Animation(self, step=step, hold=hold)
 
     def draw_on(self, ax: Axes) -> Axes:
         """Draw into an existing Axes (e.g. a panel of ``plt.subplots``); returns it."""

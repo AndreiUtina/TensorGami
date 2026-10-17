@@ -65,6 +65,7 @@ tg.draw(model, x, variant="dark")                  # for dark slides; "greyscale
 tg.draw(model, x, palette="colorblind")            # or "tab10", "vivid", "mono"
 tg.draw(model, x, fit="slide")                     # a 16:9 slide: larger text, best layout
 tg.draw(model, x, width="3.5in")                   # a paper's column, at true text size
+tg.draw(model, x).animate().save("model.gif")      # lights up as the model runs (or .mp4)
 tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
 tg.draw(model, x, wrap_width=1600)                 # fold into rows beyond 1600 px (None: never)
 tg.draw(model, x, direction="TB", wrap_height=900) # top → bottom: columns beyond 900 px
@@ -95,6 +96,8 @@ tg.draw({"generator": G, "discriminator": D}, {"generator": (z, y), "discriminat
   hue).
 - **Slides**: `fit="slide"` draws a figure for a 16:9 slide, with text sized for a projector
   and the layout chosen to make it as large as possible; saved at the slide's size.
+- **Animations**: `fig.animate()` lights the figure up as the model runs, layer after layer
+  in the order data reaches them; saved as a GIF, an MP4 or one image per step for slides.
 - **Papers**: `width="3.5in"` (or `"8.9cm"`, `"252pt"`) lays a figure out for a column or text
   width with its text at true size (9 pt), and saves it exactly that wide, so LaTeX includes
   it without scaling.

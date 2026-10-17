@@ -412,7 +412,16 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   holding only an input or output pill joins its neighbour. AlexNet: 7 in wide at 9 pt; at
   3.5 in, `level="stages"` keeps 9 pt.
 
-### 14) Dynamic information flow ⬜
+### 14) Dynamic information flow 🔶 (14a ✅; 14b data in motion, 14c playback, 14d activations)
+- **14a Execution order** ✅ (2026-10-17): `fig.animate()`: a timeline over the drawn graph
+  (a node's step is one more than its latest input's, so parallel branches light together and
+  a merge waits; buffers just before their reader; training arrows and state loops are no
+  dependencies; a ×N block's steps play N times, the badge counting 1/N…N/N); each frame the
+  still figure in a `FrameState` (pending: the style faded 80 % towards the background; active:
+  a halo in its own colour and a bold outline following its shape; done: as is); the last
+  frame is the still figure (tested for every gallery figure). `anim.save("x.gif")` (Pillow,
+  one palette for all frames), `.mp4` (ffmpeg, optional), `anim.save_frames(folder)` (PNG,
+  PDF, SVG per step: slide builds), inline in Jupyter. AlexNet: 17 frames, 82 kB.
 - Animate how information flows through the architecture: layers light up in execution
   order, tensor shapes evolve along the edges, recurrent steps unfold over time.
 - Outputs: GIF/MP4 for presentations (`matplotlib.animation`) and interactive playback in

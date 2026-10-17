@@ -59,6 +59,12 @@ largest once it fills the page, centred on the page's proportions. The `Figure` 
 `tg.draw(..., width="3.5in")` (step 13b) fits a width in a document the same way, but keeps the
 style's text size at most and lets the height follow (up to `height=`, a page by default).
 
+*Animations (2026-10-17, step 14a):* `fig.animate()` returns a `tg.Animation` over the same
+scene: a timeline of steps (the order data reaches the nodes, a ×N block once per pass) and
+one frame per step, each the still figure in a state (pending faded, active highlighted, done
+as is), so the last frame is the still figure. Saved as GIF (Pillow), MP4 (ffmpeg, optional)
+or one file per step; shown inline in Jupyter as the GIF.
+
 ## Alternatives considered
 
 - **A class-based API** (`tg.Drawer(model).set_level(2).render()`). It is more verbose for

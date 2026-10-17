@@ -24,6 +24,12 @@ versions).
   fills the slide, centred on the slide's proportions and saved at 13.33 × 7.5 in
   (`dpi=144`: 1920 × 1080). The figure reports the size of its box names on the slide
   (`fig.fitted`) and warns when they are too small for a projector.
+- Animations: `fig.animate()` lights the figure up as the model runs: layers in the order
+  data reaches them (parallel branches together, a merge after all its inputs, buffers just
+  before their reader), a block folded ×N once per pass with its badge counting (1/N, 2/N…),
+  the whole model at the end. What has not run is faded, what runs is highlighted (a halo in
+  its own colour, a bold outline). `anim.save("model.gif")` (or `.mp4` with ffmpeg),
+  `anim.save_frames(folder)` (PNG, PDF or SVG per step, for slide builds); inline in Jupyter.
 - A third style, `etching`: black ink on white paper, the operations told apart by engraved
   textures (diagonal, cross-hatch, dots, grid, zigzag…) in a strip at the start of each box and
   over a volume's face, instead of colour; wires told apart by line style; Helvetica, 0.75 pt

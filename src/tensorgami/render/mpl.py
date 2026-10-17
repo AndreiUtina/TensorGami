@@ -21,7 +21,7 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Circle, FancyBboxPatch, Polygon, Rectangle
 
 from tensorgami.render.canvas import Paint
-from tensorgami.render.scene_renderer import SceneRenderer
+from tensorgami.render.scene_renderer import FrameState, SceneRenderer
 from tensorgami.render.text import BASELINE_SHIFT, Script, display_text, parse_markup
 from tensorgami.scene import Box, Point, Scene, TextAnchor
 from tensorgami.style import Theme
@@ -225,6 +225,7 @@ def render_figure(
     *,
     dpi: float = PX_PER_INCH,
     width_in: float | None = None,
+    state: FrameState | None = None,
 ) -> MplFigure:
     """A standalone matplotlib Figure (not registered with pyplot, so notebooks do not display
     it twice): at the scene's natural size, or ``width_in`` inches wide with text and lines
@@ -235,7 +236,7 @@ def render_figure(
     ax = figure.add_axes((0.0, 0.0, 1.0, 1.0))
     with mpl.rc_context(RC), quiet_fonts():
         canvas = MatplotlibCanvas(ax, scene.width, scene.height, scale=width / natural)
-        SceneRenderer(theme).render(scene, canvas)
+        SceneRenderer(theme).render(scene, canvas, state)
     return figure
 
 

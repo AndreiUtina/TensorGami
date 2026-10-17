@@ -185,6 +185,30 @@ def presentation(theme: Theme, text: float = 1.35, lines: float = 1.5) -> Theme:
     )
 
 
+def faded(theme: Theme, amount: float = 0.8) -> Theme:
+    """Every colour mixed ``amount`` of the way towards the background: what an animation
+    draws for the parts of a model that have not run yet (not a variant: it fails the
+    contrast rules on purpose)."""
+    bg = theme.background
+
+    def fade(color: Color) -> Color:
+        return color.mix(bg, amount)
+
+    nodes = {
+        c: dataclasses.replace(s, fill=fade(s.fill), stroke=fade(s.stroke), text=fade(s.text))
+        for c, s in theme.nodes.items()
+    }
+    edges = {k: dataclasses.replace(e, color=fade(e.color)) for k, e in theme.edges.items()}
+    fonts = {r: dataclasses.replace(f, color=fade(f.color)) for r, f in theme.fonts.items()}
+    group = dataclasses.replace(
+        theme.group,
+        fill=fade(theme.group.fill),
+        stroke=fade(theme.group.stroke),
+        badge_fill=fade(theme.group.badge_fill),
+    )
+    return dataclasses.replace(theme, nodes=nodes, edges=edges, fonts=fonts, group=group)
+
+
 VARIANTS: dict[str, Callable[[Theme], Theme]] = {"dark": dark, "greyscale": greyscale}
 
 

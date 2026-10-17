@@ -54,3 +54,12 @@ def test_the_gallery_page_shows_every_figure():
     page = (GALLERY / "README.md").read_text(encoding="utf-8")
     shown = {name for name in set(builder.FIGURES) | set(builder.COMPOSED) if f"{name}.svg" in page}
     assert shown == set(builder.FIGURES) | set(builder.COMPOSED), "add the new figures to README.md"
+
+
+def test_every_gallery_figure_animates_and_ends_as_its_still():
+    """Step 14a: every view, composite and fitted figure lights up step by step, and the
+    last frame is the still figure."""
+    for name, fig in builder.figures("default"):
+        anim = fig.animate()
+        assert len(anim) >= 2, name
+        assert anim.to_svg(len(anim) - 1) == fig.to_svg(), name
