@@ -147,8 +147,9 @@ COMPOSED = {  # file name: (figure, tg.draw options besides the style)
 }
 
 
-#: figures also shown running (``fig.animate()``), saved in ``animations/``; the tests check
-#: that they animate, not their pixels (those depend on the platform's fonts)
+#: figures also shown running (``fig.animate()``), saved in ``animations/`` as an animated SVG
+#: (checked by the tests like every SVG here) and as a GIF (not checked: its pixels depend on
+#: the platform's fonts)
 ANIMATED = [
     "alexnet",
     "alexnet-dark",
@@ -184,7 +185,11 @@ def build(style: str = "default") -> list[Path]:
 def build_animations() -> list[Path]:
     out_dir = HERE / "animations"
     out_dir.mkdir(exist_ok=True)
-    return [figure(name).animate().save(out_dir / f"{name}.gif") for name in ANIMATED]
+    paths = []
+    for name in ANIMATED:
+        anim = figure(name).animate()
+        paths += [anim.save(out_dir / f"{name}.svg"), anim.save(out_dir / f"{name}.gif")]
+    return paths
 
 
 if __name__ == "__main__":

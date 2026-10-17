@@ -17,7 +17,6 @@ that build up step by step.
 
 from __future__ import annotations
 
-import base64
 import io
 import math
 import shutil
@@ -29,7 +28,17 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from tensorgami.api.player import page_html, player_html
 from tensorgami.ir import Graph
+from tensorgami.render.animated import (
+    LOOP_PULSE,
+    PULSE_RADIUS,
+    PULSE_RING,
+    TRAIL,
+    TRAIL_SPACING,
+    Pulse,
+    render_animated_svg,
+)
 from tensorgami.render.edges import EdgeRouter
 from tensorgami.render.mpl import quiet_fonts, render_figure
 from tensorgami.render.painters import default_painters
@@ -293,11 +302,44 @@ class Animation:
         self._image(index, dpi).save(buffer, format="PNG")
         return buffer.getvalue()
 
-    def to_svg(self, step: int) -> str:
-        """Step ``step`` (see :attr:`steps`) as an SVG document."""
+    def to_svg(self, step: int | None = None) -> str:
+        """The animation as an animated SVG: looping, sharp at any size, playing in browsers
+        (a viewer that does not animate shows the still figure); or, with ``step``, that step
+        (see :attr:`steps`) as a still SVG."""
         fig = self._figure
         inches = fig.inches if fig.fitted is not None else None
-        return render_svg(fig.scene, fig.style, inches=inches, state=self._steps[step])
+        if step is not None:
+            return render_svg(fig.scene, fig.style, inches=inches, state=self._steps[step])
+        frames, pulses, _ = self._timed()
+        return render_animated_svg(fig.scene, fig.style, frames, pulses, inches=inches)
+
+    def to_html(self) -> str:
+        """The player: the animated SVG with play/pause, step back and forward, a time slider
+        and the speed (what Jupyter shows)."""
+        _, _, starts = self._timed()
+        total = sum(self._durations)
+        return player_html(
+            self.to_svg(), total=total, starts=starts, title=self._figure.scene.title
+        )
+
+    def _timed(self) -> tuple[list[tuple[FrameState, float]], list[Pulse], list[float]]:
+        """The frames as (state, seconds), the pulses with their times, and when each step
+        lights up (seconds into the animation)."""
+        timed = list(zip(self._frames, self._durations, strict=True))
+        frames = [(self._steps[frame.step], seconds) for frame, seconds in timed]
+        pulses: list[Pulse] = []
+        starts: list[float] = []
+        now, travel = 0.0, None  # travel: (since when, from where along) the data under way
+        for frame, seconds in timed:
+            if frame.pulses and travel is None:
+                travel = (now, frame.starts)
+            elif not frame.pulses:
+                if travel is not None:
+                    pulses += [Pulse(e, travel[0], now, s) for e, s in travel[1].items()]
+                    travel = None
+                starts.append(now)
+            now += seconds
+        return frames, pulses, starts
 
     def _path(self, edge: int) -> list[Point]:
         if edge not in self._paths:
@@ -312,14 +354,14 @@ class Animation:
         scene, style = self._figure.scene, self._figure.style
         path = self._path(edge)
         color = style.edge_style(scene.edges[edge].kind).color.hex
-        radius = PULSE_RADIUS * (0.7 if scene.edges[edge].delay else 1.0)  # loops are small
+        radius = PULSE_RADIUS * (LOOP_PULSE if scene.edges[edge].delay else 1.0)
         scale = image.width / scene.width
         length = _length(path)
         head = along * length
-        for k in range(len(_TRAIL), 0, -1):  # the tail first, the head drawn over it
-            behind = head - k * radius * 1.25
+        for k in range(len(TRAIL), 0, -1):  # the tail first, the head drawn over it
+            behind = head - k * radius * TRAIL_SPACING
             if behind > start * length:
-                alpha, size = _TRAIL[k - 1]
+                alpha, size = TRAIL[k - 1]
                 self._paste(image, _dot(color, radius * size * scale, alpha), path, behind)
         ring = style.background.hex
         self._paste(image, _head(color, ring, radius * scale), path, head)
@@ -334,17 +376,24 @@ class Animation:
     # ------------------------------------------------------------------ output
 
     def save(self, path: str | Path, *, dpi: float = 96) -> Path:
-        """Write the animation: ``.gif`` (looping) or ``.mp4`` (needs ffmpeg)."""
+        """Write the animation: ``.gif`` (looping), ``.svg`` (animated, sharp at any size),
+        ``.html`` (a page with the player) or ``.mp4`` (needs ffmpeg)."""
         path = Path(path)
         suffix = path.suffix.lower()
         if suffix == ".gif":
             path.write_bytes(self._gif(dpi))
+        elif suffix == ".svg":
+            path.write_text(self.to_svg(), encoding="utf-8")
+        elif suffix == ".html":
+            title = self._figure.scene.title or "animation"
+            path.write_text(page_html(self.to_html(), title), encoding="utf-8")
         elif suffix == ".mp4":
             self._mp4(path, dpi)
         else:
             raise ValueError(
-                f"an animation is saved as .gif or .mp4, not {suffix or 'a file without suffix'};"
-                " for one image per step use anim.save_frames(folder)"
+                f"an animation is saved as .gif, .svg, .html or .mp4, not "
+                f"{suffix or 'a file without suffix'}; for one image per step use "
+                "anim.save_frames(folder)"
             )
         return path
 
@@ -439,14 +488,8 @@ class Animation:
     # ------------------------------------------------------------------ notebooks
 
     def _repr_html_(self) -> str:
-        """Jupyter: the GIF, inline, at the figure's natural size."""
-        data = base64.b64encode(self._gif(96)).decode("ascii")
-        width = round(self._figure.size[0])
-        return f'<img src="data:image/gif;base64,{data}" width="{width}" alt="animation">'
-
-
-PULSE_RADIUS = 4.5  # px of the figure
-_TRAIL = [(190, 0.62), (140, 0.52), (100, 0.44), (65, 0.37), (35, 0.31)]  # alpha, size
+        """Jupyter: the player."""
+        return self.to_html()
 
 
 def _inside(point: Point, box: Box) -> bool:
@@ -496,4 +539,4 @@ def _head(color: str, ring: str, radius: float) -> Image:
     from PIL import ImageColor
 
     rgb = ImageColor.getrgb(color)[:3]
-    return _disc((*rgb, 255), radius + radius * 0.35, (*ImageColor.getrgb(ring)[:3], 255))
+    return _disc((*rgb, 255), radius * (1 + PULSE_RING), (*ImageColor.getrgb(ring)[:3], 255))

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import dataclasses
-from collections.abc import Mapping
+from collections.abc import Callable, Hashable, Mapping
 from dataclasses import dataclass, field
 from enum import StrEnum
 from types import MappingProxyType
@@ -14,7 +14,7 @@ from tensorgami.render.groups import GroupPainter
 from tensorgami.render.painters import PainterRegistry, default_painters
 from tensorgami.render.svg import SvgCanvas
 from tensorgami.render.text import HeuristicTextMeasurer, TextMeasurer
-from tensorgami.scene import Box, Edge, Group, Node, Point, Scene
+from tensorgami.scene import Box, Edge, Group, Node, Note, Point, Scene
 from tensorgami.style.glyphs import Shape
 from tensorgami.style.theme import Theme
 from tensorgami.style.variants import faded
@@ -48,6 +48,19 @@ class FrameState:
         return Emphasis.PENDING
 
 
+@dataclass(frozen=True)
+class Item:
+    """One part of the figure as the renderer paints it: ``look(state, emphases)`` says how it
+    looks in a frame of an animation (``None``: not drawn; ``state`` is ``None`` for the still
+    figure), ``paint(canvas, look)`` paints it so. An animated SVG paints each look an item
+    takes once and switches between them."""
+
+    css_class: str | None  # its own ``<g>``, or painted straight into its layer
+    data_id: str | None
+    look: Callable[[FrameState | None, _Emphases | None], Hashable | None]
+    paint: Callable[[Canvas, Hashable], None]
+
+
 class SceneRenderer:
     """Paints back to front: background, groups, edge lines, nodes, edge labels, notes.
 
@@ -67,71 +80,139 @@ class SceneRenderer:
         self._measurer = measurer
         self._edges = EdgePainter(theme, measurer)
         self._groups = GroupPainter(theme, measurer)
+        self._faded: Theme | None = None
+
+    @property
+    def theme(self) -> Theme:
+        return self._theme
+
+    @property
+    def painters(self) -> PainterRegistry:
+        return self._painters
 
     def render(self, scene: Scene, canvas: Canvas, state: FrameState | None = None) -> None:
         """Paint ``scene``; with a ``state``, as one frame of an animation: what has not run
         yet faded, what runs now highlighted."""
-        theme = self._theme
-        canvas.rect(Box(0, 0, scene.width, scene.height), Paint(theme.background))
-        if state is not None:
-            fade = faded(theme)
-            dim_edges = EdgePainter(fade, self._measurer)
-            dim_groups = GroupPainter(fade, self._measurer)
-            emphasis = _Emphases(scene, state)
-        groups = [
-            dataclasses.replace(g, badge=state.badges[g.id])
-            if state is not None and g.id in state.badges
-            else g
-            for g in scene.groups
+        self.background(scene, canvas)
+        emphases = _Emphases(scene, state) if state is not None else None
+        for layer, items in self.layers(scene):
+            canvas.begin_group(layer)
+            for item in items:
+                look = item.look(state, emphases)
+                if look is None:
+                    continue
+                if item.css_class is not None:
+                    canvas.begin_group(item.css_class, item.data_id)
+                item.paint(canvas, look)
+                if item.css_class is not None:
+                    canvas.end_group()
+            canvas.end_group()
+
+    def background(self, scene: Scene, canvas: Canvas) -> None:
+        canvas.rect(Box(0, 0, scene.width, scene.height), Paint(self._theme.background))
+
+    def emphases(self, scene: Scene, state: FrameState) -> _Emphases:
+        """How the wires and frames of ``scene`` follow the nodes in ``state``."""
+        return _Emphases(scene, state)
+
+    def layers(self, scene: Scene) -> list[tuple[str, list[Item]]]:
+        """The figure's items, layer by layer, back to front."""
+        router = EdgeRouter(scene, self._theme, self._painters)
+        routes = [(edge, router.route(edge)) for edge in scene.edges]
+        labels = [self._group_labels(g) for g in scene.groups]
+        labels += [self._edge_label(edge, path) for edge, path in routes]
+        labels += [self._note(note) for note in scene.notes]
+        return [
+            ("tg-groups", [self._group(g) for g in scene.groups]),
+            ("tg-edges", [self._edge(edge, path) for edge, path in routes]),
+            ("tg-nodes", [self._node(n) for n in scene.nodes]),
+            ("tg-labels", labels),
         ]
 
-        def group_painter(group: Group) -> GroupPainter:
-            dim = state is not None and emphasis.group(group) is Emphasis.PENDING
-            return dim_groups if dim else self._groups
+    # ------------------------------------------------------------------ items
 
-        def edge_painter(edge: Edge) -> EdgePainter:
-            dim = state is not None and emphasis.edge(edge) is Emphasis.PENDING
-            return dim_edges if dim else self._edges
+    def _dim(self) -> Theme:
+        if self._faded is None:
+            self._faded = faded(self._theme)
+            self._dim_edges = EdgePainter(self._faded, self._measurer)
+            self._dim_groups = GroupPainter(self._faded, self._measurer)
+        return self._faded
 
-        canvas.begin_group("tg-groups")
-        for group in groups:
-            canvas.begin_group("tg-group", group.id)
-            group_painter(group).paint(canvas, group)
-            canvas.end_group()
-        canvas.end_group()
+    def _group_painter(self, look: Emphasis) -> GroupPainter:
+        if look is Emphasis.PENDING:
+            self._dim()
+            return self._dim_groups
+        return self._groups
 
-        router = EdgeRouter(scene, theme, self._painters)
-        routes = [(edge, router.route(edge)) for edge in scene.edges]
-        canvas.begin_group("tg-edges")
-        for edge, path in routes:
-            canvas.begin_group(f"tg-edge tg-edge-{edge.kind}")
-            edge_painter(edge).paint_line(canvas, edge, path)
-            canvas.end_group()
-        canvas.end_group()
+    def _edge_painter(self, look: Emphasis) -> EdgePainter:
+        if look is Emphasis.PENDING:
+            self._dim()
+            return self._dim_edges
+        return self._edges
 
-        canvas.begin_group("tg-nodes")
-        for node in scene.nodes:
-            canvas.begin_group(f"tg-node tg-{node.category}", node.id)
-            look = state.of(node.id) if state is not None else Emphasis.DONE
+    def _group(self, group: Group) -> Item:
+        def look(state: FrameState | None, emphases: _Emphases | None) -> Emphasis:
+            return emphases.group(group) if emphases is not None else Emphasis.DONE
+
+        def paint(canvas: Canvas, look: Emphasis) -> None:
+            self._group_painter(look).paint(canvas, group)
+
+        return Item("tg-group", group.id, look, paint)
+
+    def _group_labels(self, group: Group) -> Item:
+        def look(state: FrameState | None, emphases: _Emphases | None) -> tuple[Emphasis, str]:
+            if state is None or emphases is None:
+                return Emphasis.DONE, group.badge
+            return emphases.group(group), state.badges.get(group.id, group.badge)
+
+        def paint(canvas: Canvas, look: tuple[Emphasis, str]) -> None:
+            emphasis, badge = look
+            shown = dataclasses.replace(group, badge=badge) if badge != group.badge else group
+            self._group_painter(emphasis).paint_labels(canvas, shown)
+
+        return Item(None, None, look, paint)
+
+    def _edge(self, edge: Edge, path: list[Point]) -> Item:
+        def look(state: FrameState | None, emphases: _Emphases | None) -> Emphasis:
+            if emphases is not None and emphases.edge(edge) is Emphasis.PENDING:
+                return Emphasis.PENDING
+            return Emphasis.DONE
+
+        def paint(canvas: Canvas, look: Emphasis) -> None:
+            self._edge_painter(look).paint_line(canvas, edge, path)
+
+        return Item(f"tg-edge tg-edge-{edge.kind}", None, look, paint)
+
+    def _edge_label(self, edge: Edge, path: list[Point]) -> Item:
+        def look(state: FrameState | None, emphases: _Emphases | None) -> Emphasis | None:
+            if emphases is not None and emphases.edge(edge) is Emphasis.PENDING:
+                return None  # its shape appears as the data arrives
+            return Emphasis.DONE
+
+        def paint(canvas: Canvas, look: Emphasis) -> None:
+            self._edges.paint_label(canvas, edge, path)
+
+        return Item(None, None, look, paint)
+
+    def _note(self, note: Note) -> Item:
+        def paint(canvas: Canvas, look: Emphasis) -> None:
+            canvas.text(note.at, note.text, self._theme.font(note.role), note.anchor)
+
+        return Item(None, None, lambda state, emphases: Emphasis.DONE, paint)
+
+    def _node(self, node: Node) -> Item:
+        def look(state: FrameState | None, emphases: _Emphases | None) -> Emphasis:
+            return state.of(node.id) if state is not None else Emphasis.DONE
+
+        def paint(canvas: Canvas, look: Emphasis) -> None:
             if look is Emphasis.ACTIVE:
                 self._halo(canvas, node)
-            styled = fade if look is Emphasis.PENDING else theme
+            styled = self._dim() if look is Emphasis.PENDING else self._theme
             self._painters.for_node(node, styled).paint(canvas, node, styled)
             if look is Emphasis.ACTIVE:
                 self._ring(canvas, node)
-            canvas.end_group()
-        canvas.end_group()
 
-        canvas.begin_group("tg-labels")
-        for group in groups:
-            group_painter(group).paint_labels(canvas, group)
-        for edge, path in routes:
-            if state is not None and emphasis.edge(edge) is Emphasis.PENDING:
-                continue  # its shape appears as the data arrives
-            edge_painter(edge).paint_label(canvas, edge, path)
-        for note in scene.notes:
-            canvas.text(note.at, note.text, theme.font(note.role), note.anchor)
-        canvas.end_group()
+        return Item(f"tg-node tg-{node.category}", node.id, look, paint)
 
     def _outline(self, canvas: Canvas, node: Node, grow: float, paint: Paint) -> None:
         """The node's own outline, grown by ``grow``: round for a merge circle, a stadium for

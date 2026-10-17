@@ -107,10 +107,20 @@ class SvgCanvas:
                 body.append(f'<tspan{dy} font-size="{size}">{escape(run.text)}</tspan>')
         self._emit(f"<text {attrs}>{''.join(body)}</text>")
 
-    def begin_group(self, css_class: str, data_id: str | None = None) -> None:
+    def begin_group(self, css_class: str, data_id: str | None = None, attrs: str = "") -> None:
+        """``<g class=…>``; ``attrs``: more attributes, as markup (an animation's)."""
+        css = f" class={quoteattr(css_class)}" if css_class else ""
         ident = f" data-id={quoteattr(data_id)}" if data_id else ""
-        self._emit(f"<g class={quoteattr(css_class)}{ident}>")
+        self._emit(f"<g{css}{ident}{attrs}>")
         self._depth += 1
+
+    def raw(self, markup: str) -> None:
+        """Markup no primitive draws (an animation), written as it is."""
+        self._emit(markup)
+
+    def elements(self) -> list[str]:
+        """What has been drawn so far, one element a line (indented by nesting)."""
+        return [part[2:] for part in self._parts]
 
     def end_group(self) -> None:
         if self._depth == 0:

@@ -1,0 +1,674 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="411.3" height="994" viewBox="0 0 411.3 994" role="img">
+  <title>TokenTransformer</title>
+  <rect x="0" y="0" width="411.3" height="994" fill="#ffffff"/>
+  <g class="tg-groups">
+    <g class="tg-group" data-id="encoder.layers.0">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.14956"/>
+        <rect x="105" y="214" width="225.5" height="506" rx="10" fill="#fefefe" stroke="#e0e3e8" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 3"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.14956"/>
+        <rect x="105" y="214" width="225.5" height="506" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 3"/>
+      </g>
+    </g>
+  </g>
+  <g class="tg-edges">
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.199413"/>
+        <polyline points="213,306 213,322 165.5,322 165.5,330.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="165.5,338 162,330 169,330" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.199413"/>
+        <polyline points="213,306 213,322 165.5,322 165.5,330.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="165.5,338 162,330 169,330" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.249267"/>
+        <polyline points="165.5,362 165.5,386.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="165.5,394 162,386 169,386" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.249267"/>
+        <polyline points="165.5,362 165.5,386.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="165.5,394 162,386 169,386" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.29912"/>
+        <polyline points="165.5,430 165.5,446 252.5,446 252.5,454.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="252.5,462 249,454 256,454" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.29912"/>
+        <polyline points="165.5,430 165.5,446 252.5,446 252.5,454.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="252.5,462 249,454 256,454" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.348974"/>
+        <polyline points="252.5,508 252.5,532.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="252.5,540 249,532 256,532" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.348974"/>
+        <polyline points="252.5,508 252.5,532.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="252.5,540 249,532 256,532" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.398827"/>
+        <polyline points="165.5,430 165.5,602 209,602 209,610.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="209,618 205.5,610 212.5,610" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.398827"/>
+        <polyline points="165.5,430 165.5,602 209,602 209,610.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="209,618 205.5,610 212.5,610" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.398827"/>
+        <polyline points="252.5,586 252.5,602 209,602 209,610.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="209,618 205.5,610 212.5,610" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.398827"/>
+        <polyline points="252.5,586 252.5,602 209,602 209,610.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="209,618 205.5,610 212.5,610" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.44868"/>
+        <polyline points="209,642 209,666.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="209,674 205.5,666 212.5,666" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.44868"/>
+        <polyline points="209,642 209,666.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="209,674 205.5,666 212.5,666" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.049853"/>
+        <polyline points="68,48 68,72.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="68,80 64.5,72 71.5,72" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.049853"/>
+        <polyline points="68,48 68,72.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="68,80 64.5,72 71.5,72" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.099707"/>
+        <polyline points="68,126 68,142 118,142 118,150.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="118,158 114.5,150 121.5,150" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.099707"/>
+        <polyline points="68,126 68,142 118,142 118,150.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="118,158 114.5,150 121.5,150" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.099707"/>
+        <polyline points="168,119 168,142 118,142 118,150.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="118,158 114.5,150 121.5,150" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.099707"/>
+        <polyline points="168,119 168,142 118,142 118,150.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="118,158 114.5,150 121.5,150" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.14956"/>
+        <polyline points="118,182 118,214 118,250 213,250 213,252.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="213,260 209.5,252 216.5,252" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.14956"/>
+        <polyline points="118,182 118,214 118,250 213,250 213,252.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="213,260 209.5,252 216.5,252" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.199413"/>
+        <polyline points="118,182 118,214 118,322 165.5,322 165.5,330.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="165.5,338 162,330 169,330" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.199413"/>
+        <polyline points="118,182 118,214 118,322 165.5,322 165.5,330.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="165.5,338 162,330 169,330" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.847507"/>
+        <polyline points="209,710 209,720 209,744.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="209,752 205.5,744 212.5,744" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.847507"/>
+        <polyline points="209,710 209,720 209,744.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="209,752 205.5,744 212.5,744" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.897361"/>
+        <polyline points="209,798 209,822.8" fill="none" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="209,830 205.5,822 212.5,822" fill="#d6d9dd" stroke="#d6d9dd" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.897361"/>
+        <polyline points="209,798 209,822.8" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <polygon points="209,830 205.5,822 212.5,822" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g class="tg-edge tg-edge-data">
+      <polyline points="217.65,966 240.45,966" fill="none" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <polygon points="247.65,966 239.65,969.5 239.65,962.5" fill="#334155" stroke="#334155" stroke-width="0.5" stroke-linejoin="round"/>
+    </g>
+  </g>
+  <g class="tg-nodes">
+    <g class="tg-node tg-io" data-id="n0">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.049853"/>
+        <rect x="30" y="10" width="76" height="44" rx="22" fill="#475569" fill-opacity="0.18"/>
+        <rect x="36" y="16" width="64" height="32" rx="16" fill="#e2e8f0" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="68" y="36.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">input</text>
+        <rect x="33.5" y="13.5" width="69" height="37" rx="18.5" fill="none" stroke="#475569" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.049853"/>
+        <rect x="36" y="16" width="64" height="32" rx="16" fill="#e2e8f0" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="68" y="36.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">input</text>
+      </g>
+    </g>
+    <g class="tg-node tg-embedding" data-id="n1">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.049853"/>
+        <rect x="16" y="80" width="104" height="46" rx="6" fill="#faf6f2" stroke="#e5dbd2" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="68" y="99.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#cfd1d4">Embedding</text>
+        <text x="68" y="114.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#d6d9dd">100→32</text>
+      </g>
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.049853;0.099707"/>
+        <rect x="10" y="74" width="116" height="58" rx="12" fill="#7c4a1e" fill-opacity="0.18"/>
+        <rect x="16" y="80" width="104" height="46" rx="6" fill="#e7d3bd" stroke="#7c4a1e" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="68" y="99.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">Embedding</text>
+        <text x="68" y="114.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">100→32</text>
+        <rect x="13.5" y="77.5" width="109" height="51" rx="8.5" fill="none" stroke="#7c4a1e" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.099707"/>
+        <rect x="16" y="80" width="104" height="46" rx="6" fill="#e7d3bd" stroke="#7c4a1e" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="68" y="99.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">Embedding</text>
+        <text x="68" y="114.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">100→32</text>
+      </g>
+    </g>
+    <g class="tg-node tg-tensor" data-id="n2">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.049853"/>
+        <rect x="136" y="87" width="64" height="32" rx="16" fill="#ffffff" stroke="#dadde1" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="168" y="107.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#cfd1d4">pe</text>
+      </g>
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.049853;0.099707"/>
+        <rect x="130" y="81" width="76" height="44" rx="22" fill="#475569" fill-opacity="0.18"/>
+        <rect x="136" y="87" width="64" height="32" rx="16" fill="#ffffff" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="168" y="107.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">pe</text>
+        <rect x="133.5" y="84.5" width="69" height="37" rx="18.5" fill="none" stroke="#475569" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.099707"/>
+        <rect x="136" y="87" width="64" height="32" rx="16" fill="#ffffff" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="168" y="107.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">pe</text>
+      </g>
+    </g>
+    <g class="tg-node tg-merge" data-id="n3">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.099707"/>
+        <circle cx="118" cy="170" r="12" fill="#ffffff" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="118" y="174.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#cfd1d4">+</text>
+      </g>
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.099707;0.14956"/>
+        <circle cx="118" cy="170" r="18" fill="#334155" fill-opacity="0.18"/>
+        <circle cx="118" cy="170" r="12" fill="#ffffff" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="118" y="174.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#0f172a">+</text>
+        <circle cx="118" cy="170" r="14.5" fill="none" stroke="#334155" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.14956"/>
+        <circle cx="118" cy="170" r="12" fill="#ffffff" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="118" y="174.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#0f172a">+</text>
+      </g>
+    </g>
+    <g class="tg-node tg-attention" data-id="n4">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.14956"/>
+        <rect x="137" y="260" width="152" height="46" rx="6" fill="#fff7ee" stroke="#f3d9ce" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="213" y="279.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#cfd1d4">Multi-head attention</text>
+        <text x="213" y="294.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#d6d9dd">4 heads, Dropout</text>
+      </g>
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible;hidden" keyTimes="0;0.14956;0.199413;0.498534;0.548387"/>
+        <rect x="131" y="254" width="164" height="58" rx="12" fill="#c2410c" fill-opacity="0.18"/>
+        <rect x="137" y="260" width="152" height="46" rx="6" fill="#fed7aa" stroke="#c2410c" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="213" y="279.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">Multi-head attention</text>
+        <text x="213" y="294.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">4 heads, Dropout</text>
+        <rect x="134.5" y="257.5" width="157" height="51" rx="8.5" fill="none" stroke="#c2410c" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible" keyTimes="0;0.199413;0.498534;0.548387"/>
+        <rect x="137" y="260" width="152" height="46" rx="6" fill="#fed7aa" stroke="#c2410c" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="213" y="279.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">Multi-head attention</text>
+        <text x="213" y="294.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">4 heads, Dropout</text>
+      </g>
+    </g>
+    <g class="tg-node tg-merge" data-id="n6">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.199413"/>
+        <circle cx="165.5" cy="350" r="12" fill="#ffffff" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="165.5" y="354.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#cfd1d4">+</text>
+      </g>
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible;hidden" keyTimes="0;0.199413;0.249267;0.548387;0.59824"/>
+        <circle cx="165.5" cy="350" r="18" fill="#334155" fill-opacity="0.18"/>
+        <circle cx="165.5" cy="350" r="12" fill="#ffffff" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="165.5" y="354.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#0f172a">+</text>
+        <circle cx="165.5" cy="350" r="14.5" fill="none" stroke="#334155" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible" keyTimes="0;0.249267;0.548387;0.59824"/>
+        <circle cx="165.5" cy="350" r="12" fill="#ffffff" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="165.5" y="354.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#0f172a">+</text>
+      </g>
+    </g>
+    <g class="tg-node tg-norm" data-id="n7">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.249267"/>
+        <rect x="117.5" y="394" width="96" height="36" rx="6" fill="#fffce8" stroke="#ece0cd" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="165.5" y="416.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#cfd1d4">LayerNorm</text>
+      </g>
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible;hidden" keyTimes="0;0.249267;0.29912;0.59824;0.648094"/>
+        <rect x="111.5" y="388" width="108" height="48" rx="12" fill="#a16207" fill-opacity="0.18"/>
+        <rect x="117.5" y="394" width="96" height="36" rx="6" fill="#fef08a" stroke="#a16207" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="165.5" y="416.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">LayerNorm</text>
+        <rect x="115" y="391.5" width="101" height="41" rx="8.5" fill="none" stroke="#a16207" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible" keyTimes="0;0.29912;0.59824;0.648094"/>
+        <rect x="117.5" y="394" width="96" height="36" rx="6" fill="#fef08a" stroke="#a16207" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="165.5" y="416.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">LayerNorm</text>
+      </g>
+    </g>
+    <g class="tg-node tg-linear" data-id="n8">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.29912"/>
+        <rect x="184.5" y="462" width="136" height="46" rx="6" fill="#f8f7ff" stroke="#e2d4f7" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="252.5" y="481.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#cfd1d4">Linear</text>
+        <text x="252.5" y="496.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#d6d9dd">32→64, ReLU, Dropout</text>
+      </g>
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible;hidden" keyTimes="0;0.29912;0.348974;0.648094;0.697947"/>
+        <rect x="178.5" y="456" width="148" height="58" rx="12" fill="#6d28d9" fill-opacity="0.18"/>
+        <rect x="184.5" y="462" width="136" height="46" rx="6" fill="#ddd6fe" stroke="#6d28d9" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="252.5" y="481.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">Linear</text>
+        <text x="252.5" y="496.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">32→64, ReLU, Dropout</text>
+        <rect x="182" y="459.5" width="141" height="51" rx="8.5" fill="none" stroke="#6d28d9" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible" keyTimes="0;0.348974;0.648094;0.697947"/>
+        <rect x="184.5" y="462" width="136" height="46" rx="6" fill="#ddd6fe" stroke="#6d28d9" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="252.5" y="481.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">Linear</text>
+        <text x="252.5" y="496.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">32→64, ReLU, Dropout</text>
+      </g>
+    </g>
+    <g class="tg-node tg-linear" data-id="n11">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.348974"/>
+        <rect x="200.5" y="540" width="104" height="46" rx="6" fill="#f8f7ff" stroke="#e2d4f7" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="252.5" y="559.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#cfd1d4">Linear</text>
+        <text x="252.5" y="574.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#d6d9dd">64→32, Dropout</text>
+      </g>
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible;hidden" keyTimes="0;0.348974;0.398827;0.697947;0.747801"/>
+        <rect x="194.5" y="534" width="116" height="58" rx="12" fill="#6d28d9" fill-opacity="0.18"/>
+        <rect x="200.5" y="540" width="104" height="46" rx="6" fill="#ddd6fe" stroke="#6d28d9" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="252.5" y="559.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">Linear</text>
+        <text x="252.5" y="574.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">64→32, Dropout</text>
+        <rect x="198" y="537.5" width="109" height="51" rx="8.5" fill="none" stroke="#6d28d9" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible" keyTimes="0;0.398827;0.697947;0.747801"/>
+        <rect x="200.5" y="540" width="104" height="46" rx="6" fill="#ddd6fe" stroke="#6d28d9" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="252.5" y="559.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">Linear</text>
+        <text x="252.5" y="574.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">64→32, Dropout</text>
+      </g>
+    </g>
+    <g class="tg-node tg-merge" data-id="n13">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.398827"/>
+        <circle cx="209" cy="630" r="12" fill="#ffffff" stroke="#d6d9dd" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="209" y="634.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#cfd1d4">+</text>
+      </g>
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible;hidden" keyTimes="0;0.398827;0.44868;0.747801;0.797654"/>
+        <circle cx="209" cy="630" r="18" fill="#334155" fill-opacity="0.18"/>
+        <circle cx="209" cy="630" r="12" fill="#ffffff" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="209" y="634.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#0f172a">+</text>
+        <circle cx="209" cy="630" r="14.5" fill="none" stroke="#334155" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible" keyTimes="0;0.44868;0.747801;0.797654"/>
+        <circle cx="209" cy="630" r="12" fill="#ffffff" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="209" y="634.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#0f172a">+</text>
+      </g>
+    </g>
+    <g class="tg-node tg-norm" data-id="n14">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.44868"/>
+        <rect x="161" y="674" width="96" height="36" rx="6" fill="#fffce8" stroke="#ece0cd" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="209" y="696.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#cfd1d4">LayerNorm</text>
+      </g>
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible;hidden" keyTimes="0;0.44868;0.498534;0.797654;0.847507"/>
+        <rect x="155" y="668" width="108" height="48" rx="12" fill="#a16207" fill-opacity="0.18"/>
+        <rect x="161" y="674" width="96" height="36" rx="6" fill="#fef08a" stroke="#a16207" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="209" y="696.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">LayerNorm</text>
+        <rect x="158.5" y="671.5" width="101" height="41" rx="8.5" fill="none" stroke="#a16207" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden;visible" keyTimes="0;0.498534;0.797654;0.847507"/>
+        <rect x="161" y="674" width="96" height="36" rx="6" fill="#fef08a" stroke="#a16207" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="209" y="696.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">LayerNorm</text>
+      </g>
+    </g>
+    <g class="tg-node tg-linear" data-id="n26">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.847507"/>
+        <rect x="161" y="752" width="96" height="46" rx="6" fill="#f8f7ff" stroke="#e2d4f7" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="209" y="771.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#cfd1d4">Linear</text>
+        <text x="209" y="786.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#d6d9dd">32→100</text>
+      </g>
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.847507;0.897361"/>
+        <rect x="155" y="746" width="108" height="58" rx="12" fill="#6d28d9" fill-opacity="0.18"/>
+        <rect x="161" y="752" width="96" height="46" rx="6" fill="#ddd6fe" stroke="#6d28d9" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="209" y="771.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">Linear</text>
+        <text x="209" y="786.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">32→100</text>
+        <rect x="158.5" y="749.5" width="101" height="51" rx="8.5" fill="none" stroke="#6d28d9" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.897361"/>
+        <rect x="161" y="752" width="96" height="46" rx="6" fill="#ddd6fe" stroke="#6d28d9" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="209" y="771.95" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">Linear</text>
+        <text x="209" y="786.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10" text-anchor="middle" fill="#334155">32→100</text>
+      </g>
+    </g>
+    <g class="tg-node tg-io" data-id="n27">
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.897361"/>
+        <rect x="173" y="830" width="72" height="32" rx="16" fill="#f9fafc" stroke="#dadde1" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="209" y="850.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#cfd1d4">output</text>
+      </g>
+      <g visibility="hidden">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.897361;0.926686"/>
+        <rect x="167" y="824" width="84" height="44" rx="22" fill="#475569" fill-opacity="0.18"/>
+        <rect x="173" y="830" width="72" height="32" rx="16" fill="#e2e8f0" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="209" y="850.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">output</text>
+        <rect x="170.5" y="827.5" width="77" height="37" rx="18.5" fill="none" stroke="#475569" stroke-width="2.75" stroke-linejoin="round"/>
+      </g>
+      <g visibility="visible">
+        <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.926686"/>
+        <rect x="173" y="830" width="72" height="32" rx="16" fill="#e2e8f0" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+        <text x="209" y="850.2" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">output</text>
+      </g>
+    </g>
+    <g class="tg-node tg-io" data-id="legend:0:io">
+      <rect x="16" y="886" width="30" height="16" rx="8" fill="#e2e8f0" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-embedding" data-id="legend:1:embedding">
+      <rect x="16" y="910" width="30" height="16" rx="6" fill="#e7d3bd" stroke="#7c4a1e" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-tensor" data-id="legend:2:tensor">
+      <rect x="16" y="934" width="30" height="16" rx="8" fill="#ffffff" stroke="#475569" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-merge" data-id="legend:3:merge">
+      <circle cx="31" cy="966" r="9" fill="#ffffff" stroke="#334155" stroke-width="1.25" stroke-linejoin="round"/>
+      <text x="31" y="970.9" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#0f172a">+</text>
+    </g>
+    <g class="tg-node tg-attention" data-id="legend:4:attention">
+      <rect x="217.65" y="886" width="30" height="16" rx="6" fill="#fed7aa" stroke="#c2410c" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-norm" data-id="legend:5:norm">
+      <rect x="217.65" y="910" width="30" height="16" rx="6" fill="#fef08a" stroke="#a16207" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+    <g class="tg-node tg-linear" data-id="legend:6:linear">
+      <rect x="217.65" y="934" width="30" height="16" rx="6" fill="#ddd6fe" stroke="#6d28d9" stroke-width="1.25" stroke-linejoin="round"/>
+    </g>
+  </g>
+  <g class="tg-labels">
+    <g visibility="hidden">
+      <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="visible;hidden" keyTimes="0;0.14956"/>
+      <rect x="112.5" y="217.4" width="143.05" height="18.2" rx="2" fill="#fefefe"/>
+      <text x="115" y="230.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#d6d9dd">TransformerEncoderLayer</text>
+      <rect x="294.15" y="204.75" width="26.35" height="18.5" rx="9.25" fill="#ffffff" stroke="#e0e3e8" stroke-width="1" stroke-linejoin="round"/>
+      <text x="307.32" y="217.68" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle" fill="#d6d9dd">×2</text>
+    </g>
+    <g visibility="hidden">
+      <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.14956;0.498534"/>
+      <rect x="112.5" y="217.4" width="143.05" height="18.2" rx="2" fill="#f8fafc"/>
+      <text x="115" y="230.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">TransformerEncoderLayer</text>
+      <rect x="287.91" y="204.75" width="32.59" height="18.5" rx="9.25" fill="#ffffff" stroke="#64748b" stroke-width="1" stroke-linejoin="round"/>
+      <text x="304.21" y="217.68" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle" fill="#334155">1/2</text>
+    </g>
+    <g visibility="hidden">
+      <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.498534;0.847507"/>
+      <rect x="112.5" y="217.4" width="143.05" height="18.2" rx="2" fill="#f8fafc"/>
+      <text x="115" y="230.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">TransformerEncoderLayer</text>
+      <rect x="287.91" y="204.75" width="32.59" height="18.5" rx="9.25" fill="#ffffff" stroke="#64748b" stroke-width="1" stroke-linejoin="round"/>
+      <text x="304.21" y="217.68" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle" fill="#334155">2/2</text>
+    </g>
+    <g visibility="visible">
+      <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.847507"/>
+      <rect x="112.5" y="217.4" width="143.05" height="18.2" rx="2" fill="#f8fafc"/>
+      <text x="115" y="230.35" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="11" font-weight="600" fill="#334155">TransformerEncoderLayer</text>
+      <rect x="294.15" y="204.75" width="26.35" height="18.5" rx="9.25" fill="#ffffff" stroke="#64748b" stroke-width="1" stroke-linejoin="round"/>
+      <text x="307.32" y="217.68" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle" fill="#334155">×2</text>
+    </g>
+    <g visibility="visible">
+      <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.348974"/>
+      <rect x="256" y="515.8" width="27.8" height="16.4" rx="2" fill="#ffffff"/>
+      <text x="269.9" y="527.33" font-family="'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace" font-size="9.5" text-anchor="middle" fill="#475569">6×64</text>
+    </g>
+    <g visibility="visible">
+      <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.398827"/>
+      <rect x="256" y="585.8" width="27.8" height="16.4" rx="2" fill="#ffffff"/>
+      <text x="269.9" y="597.33" font-family="'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace" font-size="9.5" text-anchor="middle" fill="#475569">6×32</text>
+    </g>
+    <g visibility="visible">
+      <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.049853"/>
+      <rect x="71.5" y="55.8" width="10.7" height="16.4" rx="2" fill="#ffffff"/>
+      <text x="76.85" y="67.33" font-family="'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace" font-size="9.5" text-anchor="middle" fill="#475569">6</text>
+    </g>
+    <g visibility="visible">
+      <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.099707"/>
+      <rect x="71.5" y="125.8" width="27.8" height="16.4" rx="2" fill="#ffffff"/>
+      <text x="85.4" y="137.32" font-family="'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace" font-size="9.5" text-anchor="middle" fill="#475569">6×32</text>
+    </g>
+    <g visibility="visible">
+      <animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible" keyTimes="0;0.897361"/>
+      <rect x="212.5" y="805.8" width="33.5" height="16.4" rx="2" fill="#ffffff"/>
+      <text x="229.25" y="817.33" font-family="'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace" font-size="9.5" text-anchor="middle" fill="#475569">6×100</text>
+    </g>
+    <text x="54" y="897.67" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Input / output</text>
+    <text x="54" y="921.67" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Embedding</text>
+    <text x="54" y="945.67" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Tensor / state</text>
+    <text x="54" y="969.67" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Merge (add, concat, multiply)</text>
+    <text x="255.65" y="897.67" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Attention</text>
+    <text x="255.65" y="921.67" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Normalisation</text>
+    <text x="255.65" y="945.67" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Linear / dense</text>
+    <text x="255.65" y="969.67" font-family="'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif" font-size="10.5" fill="#0f172a">Data flow</text>
+  </g>
+  <g class="tg-pulses">
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.047368;0.049853;1" keyPoints="0;0;0.121094;0.121094" path="M68,48 L68,80"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.047368;0.049853"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.043759;0.049853;1" keyPoints="0;0;0.296875;0.296875" path="M68,48 L68,80"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.043759;0.049853"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.040151;0.049853;1" keyPoints="0;0;0.472656;0.472656" path="M68,48 L68,80"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.040151;0.049853"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.036542;0.049853;1" keyPoints="0;0;0.648438;0.648438" path="M68,48 L68,80"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.036542;0.049853"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.032934;0.049853;1" keyPoints="0;0;0.824219;0.824219" path="M68,48 L68,80"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.032934;0.049853"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.029326;0.049853;1" keyPoints="0;0;1;1" path="M68,48 L68,80"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.029326;0.049853"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.08622;0.099707;1" keyPoints="0;0;0.657012;0.657012" path="M68,126 L68,142 L118,142 L118,158"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.08622;0.099707"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.084812;0.099707;1" keyPoints="0;0;0.72561;0.72561" path="M68,126 L68,142 L118,142 L118,158"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.084812;0.099707"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.083403;0.099707;1" keyPoints="0;0;0.794207;0.794207" path="M68,126 L68,142 L118,142 L118,158"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.083403;0.099707"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.081995;0.099707;1" keyPoints="0;0;0.862805;0.862805" path="M68,126 L68,142 L118,142 L118,158"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.081995;0.099707"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.080587;0.099707;1" keyPoints="0;0;0.931402;0.931402" path="M68,126 L68,142 L118,142 L118,158"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.080587;0.099707"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.079179;0.099707;1" keyPoints="0;0;1;1" path="M68,126 L68,142 L118,142 L118,158"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.079179;0.099707"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.085666;0.099707;1" keyPoints="0;0;0.683989;0.683989" path="M168,119 L168,142 L118,142 L118,158"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.085666;0.099707"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.084369;0.099707;1" keyPoints="0;0;0.747191;0.747191" path="M168,119 L168,142 L118,142 L118,158"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.084369;0.099707"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.083071;0.099707;1" keyPoints="0;0;0.810393;0.810393" path="M168,119 L168,142 L118,142 L118,158"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.083071;0.099707"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.081774;0.099707;1" keyPoints="0;0;0.873596;0.873596" path="M168,119 L168,142 L118,142 L118,158"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.081774;0.099707"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.080476;0.099707;1" keyPoints="0;0;0.936798;0.936798" path="M168,119 L168,142 L118,142 L118,158"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.080476;0.099707"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.079179;0.099707;1" keyPoints="0;0;1;1" path="M168,119 L168,142 L118,142 L118,158"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.079179;0.099707"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.13237;0.14956;1" keyPoints="0;0;0.837428;0.837428" path="M118,182 L118,214 L118,250 L213,250 L213,260"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.13237;0.14956"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.131702;0.14956;1" keyPoints="0;0;0.869942;0.869942" path="M118,182 L118,214 L118,250 L213,250 L213,260"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.131702;0.14956"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.131035;0.14956;1" keyPoints="0;0;0.902457;0.902457" path="M118,182 L118,214 L118,250 L213,250 L213,260"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.131035;0.14956"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.130367;0.14956;1" keyPoints="0;0;0.934971;0.934971" path="M118,182 L118,214 L118,250 L213,250 L213,260"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.130367;0.14956"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.1297;0.14956;1" keyPoints="0;0;0.967486;0.967486" path="M118,182 L118,214 L118,250 L213,250 L213,260"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.1297;0.14956"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.129032;0.14956;1" keyPoints="0;0;1;1" path="M118,182 L118,214 L118,250 L213,250 L213,260"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.129032;0.14956"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.186148;0.199413;1" keyPoints="0;0;0.646226;0.646226" path="M213,306 L213,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.186148;0.199413"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.184695;0.199413;1" keyPoints="0;0;0.716981;0.716981" path="M213,306 L213,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.184695;0.199413"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.183243;0.199413;1" keyPoints="0;0;0.787736;0.787736" path="M213,306 L213,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.183243;0.199413"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.181791;0.199413;1" keyPoints="0;0;0.858491;0.858491" path="M213,306 L213,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.181791;0.199413"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.180338;0.199413;1" keyPoints="0;0;0.929245;0.929245" path="M213,306 L213,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.180338;0.199413"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.178886;0.199413;1" keyPoints="0;0;1;1" path="M213,306 L213,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.178886;0.199413"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.181723;0.199413;1" keyPoints="0;0;0.861794;0.861794" path="M118,182 L118,214 L118,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.181723;0.199413"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.181155;0.199413;1" keyPoints="0;0;0.889435;0.889435" path="M118,182 L118,214 L118,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.181155;0.199413"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.180588;0.199413;1" keyPoints="0;0;0.917076;0.917076" path="M118,182 L118,214 L118,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.180588;0.199413"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.18002;0.199413;1" keyPoints="0;0;0.944717;0.944717" path="M118,182 L118,214 L118,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.18002;0.199413"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.179453;0.199413;1" keyPoints="0;0;0.972359;0.972359" path="M118,182 L118,214 L118,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.179453;0.199413"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.178886;0.199413;1" keyPoints="0;0;1;1" path="M118,182 L118,214 L118,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.178886;0.199413"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.246781;0.249267;1" keyPoints="0;0;0.121094;0.121094" path="M165.5,362 L165.5,394"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.246781;0.249267"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.243173;0.249267;1" keyPoints="0;0;0.296875;0.296875" path="M165.5,362 L165.5,394"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.243173;0.249267"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.239564;0.249267;1" keyPoints="0;0;0.472656;0.472656" path="M165.5,362 L165.5,394"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.239564;0.249267"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.235956;0.249267;1" keyPoints="0;0;0.648438;0.648438" path="M165.5,362 L165.5,394"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.235956;0.249267"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.232347;0.249267;1" keyPoints="0;0;0.824219;0.824219" path="M165.5,362 L165.5,394"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.232347;0.249267"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.228739;0.249267;1" keyPoints="0;0;1;1" path="M165.5,362 L165.5,394"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.228739;0.249267"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.283444;0.29912;1" keyPoints="0;0;0.763655;0.763655" path="M165.5,430 L165.5,446 L252.5,446 L252.5,462"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.283444;0.29912"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.282474;0.29912;1" keyPoints="0;0;0.810924;0.810924" path="M165.5,430 L165.5,446 L252.5,446 L252.5,462"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.282474;0.29912"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.281503;0.29912;1" keyPoints="0;0;0.858193;0.858193" path="M165.5,430 L165.5,446 L252.5,446 L252.5,462"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.281503;0.29912"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.280533;0.29912;1" keyPoints="0;0;0.905462;0.905462" path="M165.5,430 L165.5,446 L252.5,446 L252.5,462"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.280533;0.29912"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.279563;0.29912;1" keyPoints="0;0;0.952731;0.952731" path="M165.5,430 L165.5,446 L252.5,446 L252.5,462"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.279563;0.29912"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.278592;0.29912;1" keyPoints="0;0;1;1" path="M165.5,430 L165.5,446 L252.5,446 L252.5,462"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.278592;0.29912"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.346488;0.348974;1" keyPoints="0;0;0.121094;0.121094" path="M252.5,508 L252.5,540"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.346488;0.348974"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.342879;0.348974;1" keyPoints="0;0;0.296875;0.296875" path="M252.5,508 L252.5,540"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.342879;0.348974"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.339271;0.348974;1" keyPoints="0;0;0.472656;0.472656" path="M252.5,508 L252.5,540"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.339271;0.348974"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.335663;0.348974;1" keyPoints="0;0;0.648438;0.648438" path="M252.5,508 L252.5,540"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.335663;0.348974"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.332054;0.348974;1" keyPoints="0;0;0.824219;0.824219" path="M252.5,508 L252.5,540"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.332054;0.348974"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.328446;0.348974;1" keyPoints="0;0;1;1" path="M252.5,508 L252.5,540"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.328446;0.348974"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.380793;0.398827;1" keyPoints="0;0;0.87851;0.87851" path="M165.5,430 L165.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.380793;0.398827"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.380294;0.398827;1" keyPoints="0;0;0.902808;0.902808" path="M165.5,430 L165.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.380294;0.398827"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.379795;0.398827;1" keyPoints="0;0;0.927106;0.927106" path="M165.5,430 L165.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.379795;0.398827"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.379297;0.398827;1" keyPoints="0;0;0.951404;0.951404" path="M165.5,430 L165.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.379297;0.398827"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.378798;0.398827;1" keyPoints="0;0;0.975702;0.975702" path="M165.5,430 L165.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.378798;0.398827"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.378299;0.398827;1" keyPoints="0;0;1;1" path="M165.5,430 L165.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.378299;0.398827"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.385946;0.398827;1" keyPoints="0;0;0.627483;0.627483" path="M252.5,586 L252.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.385946;0.398827"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.384417;0.398827;1" keyPoints="0;0;0.701987;0.701987" path="M252.5,586 L252.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.384417;0.398827"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.382887;0.398827;1" keyPoints="0;0;0.77649;0.77649" path="M252.5,586 L252.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.382887;0.398827"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.381358;0.398827;1" keyPoints="0;0;0.850993;0.850993" path="M252.5,586 L252.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.381358;0.398827"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.379829;0.398827;1" keyPoints="0;0;0.925497;0.925497" path="M252.5,586 L252.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.379829;0.398827"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.378299;0.398827;1" keyPoints="0;0;1;1" path="M252.5,586 L252.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.378299;0.398827"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.446195;0.44868;1" keyPoints="0;0;0.121094;0.121094" path="M209,642 L209,674"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.446195;0.44868"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.442586;0.44868;1" keyPoints="0;0;0.296875;0.296875" path="M209,642 L209,674"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.442586;0.44868"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.438978;0.44868;1" keyPoints="0;0;0.472656;0.472656" path="M209,642 L209,674"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.438978;0.44868"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.435369;0.44868;1" keyPoints="0;0;0.648438;0.648438" path="M209,642 L209,674"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.435369;0.44868"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.431761;0.44868;1" keyPoints="0;0;0.824219;0.824219" path="M209,642 L209,674"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.431761;0.44868"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.428152;0.44868;1" keyPoints="0;0;1;1" path="M209,642 L209,674"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.428152;0.44868"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.482101;0.498534;1" keyPoints="0.184971;0.184971;0.837428;0.837428" path="M118,182 L118,214 L118,250 L213,250 L213,260"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.482101;0.498534"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.481282;0.498534;1" keyPoints="0.184971;0.184971;0.869942;0.869942" path="M118,182 L118,214 L118,250 L213,250 L213,260"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.481282;0.498534"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.480463;0.498534;1" keyPoints="0.184971;0.184971;0.902457;0.902457" path="M118,182 L118,214 L118,250 L213,250 L213,260"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.480463;0.498534"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.479644;0.498534;1" keyPoints="0.184971;0.184971;0.934971;0.934971" path="M118,182 L118,214 L118,250 L213,250 L213,260"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.479644;0.498534"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.478825;0.498534;1" keyPoints="0.184971;0.184971;0.967486;0.967486" path="M118,182 L118,214 L118,250 L213,250 L213,260"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.478825;0.498534"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.478006;0.498534;1" keyPoints="0.184971;0.184971;1;1" path="M118,182 L118,214 L118,250 L213,250 L213,260"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.478006;0.498534"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.535121;0.548387;1" keyPoints="0;0;0.646226;0.646226" path="M213,306 L213,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.535121;0.548387"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.533669;0.548387;1" keyPoints="0;0;0.716981;0.716981" path="M213,306 L213,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.533669;0.548387"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.532217;0.548387;1" keyPoints="0;0;0.787736;0.787736" path="M213,306 L213,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.532217;0.548387"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.530764;0.548387;1" keyPoints="0;0;0.858491;0.858491" path="M213,306 L213,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.530764;0.548387"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.529312;0.548387;1" keyPoints="0;0;0.929245;0.929245" path="M213,306 L213,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.529312;0.548387"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.527859;0.548387;1" keyPoints="0;0;1;1" path="M213,306 L213,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.527859;0.548387"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.531226;0.548387;1" keyPoints="0.157248;0.157248;0.861794;0.861794" path="M118,182 L118,214 L118,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.531226;0.548387"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.530552;0.548387;1" keyPoints="0.157248;0.157248;0.889435;0.889435" path="M118,182 L118,214 L118,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.530552;0.548387"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.529879;0.548387;1" keyPoints="0.157248;0.157248;0.917076;0.917076" path="M118,182 L118,214 L118,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.529879;0.548387"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.529206;0.548387;1" keyPoints="0.157248;0.157248;0.944717;0.944717" path="M118,182 L118,214 L118,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.529206;0.548387"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.528533;0.548387;1" keyPoints="0.157248;0.157248;0.972359;0.972359" path="M118,182 L118,214 L118,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.528533;0.548387"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.527859;0.548387;1" keyPoints="0.157248;0.157248;1;1" path="M118,182 L118,214 L118,322 L165.5,322 L165.5,338"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.527859;0.548387"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.595755;0.59824;1" keyPoints="0;0;0.121094;0.121094" path="M165.5,362 L165.5,394"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.595755;0.59824"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.592146;0.59824;1" keyPoints="0;0;0.296875;0.296875" path="M165.5,362 L165.5,394"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.592146;0.59824"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.588538;0.59824;1" keyPoints="0;0;0.472656;0.472656" path="M165.5,362 L165.5,394"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.588538;0.59824"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.584929;0.59824;1" keyPoints="0;0;0.648438;0.648438" path="M165.5,362 L165.5,394"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.584929;0.59824"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.581321;0.59824;1" keyPoints="0;0;0.824219;0.824219" path="M165.5,362 L165.5,394"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.581321;0.59824"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.577713;0.59824;1" keyPoints="0;0;1;1" path="M165.5,362 L165.5,394"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.577713;0.59824"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.632418;0.648094;1" keyPoints="0;0;0.763655;0.763655" path="M165.5,430 L165.5,446 L252.5,446 L252.5,462"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.632418;0.648094"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.631447;0.648094;1" keyPoints="0;0;0.810924;0.810924" path="M165.5,430 L165.5,446 L252.5,446 L252.5,462"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.631447;0.648094"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.630477;0.648094;1" keyPoints="0;0;0.858193;0.858193" path="M165.5,430 L165.5,446 L252.5,446 L252.5,462"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.630477;0.648094"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.629507;0.648094;1" keyPoints="0;0;0.905462;0.905462" path="M165.5,430 L165.5,446 L252.5,446 L252.5,462"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.629507;0.648094"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.628536;0.648094;1" keyPoints="0;0;0.952731;0.952731" path="M165.5,430 L165.5,446 L252.5,446 L252.5,462"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.628536;0.648094"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.627566;0.648094;1" keyPoints="0;0;1;1" path="M165.5,430 L165.5,446 L252.5,446 L252.5,462"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.627566;0.648094"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.695461;0.697947;1" keyPoints="0;0;0.121094;0.121094" path="M252.5,508 L252.5,540"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.695461;0.697947"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.691853;0.697947;1" keyPoints="0;0;0.296875;0.296875" path="M252.5,508 L252.5,540"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.691853;0.697947"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.688245;0.697947;1" keyPoints="0;0;0.472656;0.472656" path="M252.5,508 L252.5,540"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.688245;0.697947"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.684636;0.697947;1" keyPoints="0;0;0.648438;0.648438" path="M252.5,508 L252.5,540"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.684636;0.697947"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.681028;0.697947;1" keyPoints="0;0;0.824219;0.824219" path="M252.5,508 L252.5,540"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.681028;0.697947"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.677419;0.697947;1" keyPoints="0;0;1;1" path="M252.5,508 L252.5,540"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.677419;0.697947"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.729767;0.747801;1" keyPoints="0;0;0.87851;0.87851" path="M165.5,430 L165.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.729767;0.747801"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.729268;0.747801;1" keyPoints="0;0;0.902808;0.902808" path="M165.5,430 L165.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.729268;0.747801"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.728769;0.747801;1" keyPoints="0;0;0.927106;0.927106" path="M165.5,430 L165.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.728769;0.747801"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.72827;0.747801;1" keyPoints="0;0;0.951404;0.951404" path="M165.5,430 L165.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.72827;0.747801"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.727772;0.747801;1" keyPoints="0;0;0.975702;0.975702" path="M165.5,430 L165.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.727772;0.747801"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.727273;0.747801;1" keyPoints="0;0;1;1" path="M165.5,430 L165.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.727273;0.747801"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.73492;0.747801;1" keyPoints="0;0;0.627483;0.627483" path="M252.5,586 L252.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.73492;0.747801"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.73339;0.747801;1" keyPoints="0;0;0.701987;0.701987" path="M252.5,586 L252.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.73339;0.747801"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.731861;0.747801;1" keyPoints="0;0;0.77649;0.77649" path="M252.5,586 L252.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.731861;0.747801"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.730332;0.747801;1" keyPoints="0;0;0.850993;0.850993" path="M252.5,586 L252.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.730332;0.747801"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.728802;0.747801;1" keyPoints="0;0;0.925497;0.925497" path="M252.5,586 L252.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.728802;0.747801"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.727273;0.747801;1" keyPoints="0;0;1;1" path="M252.5,586 L252.5,602 L209,602 L209,618"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.727273;0.747801"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.795168;0.797654;1" keyPoints="0;0;0.121094;0.121094" path="M209,642 L209,674"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.795168;0.797654"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.79156;0.797654;1" keyPoints="0;0;0.296875;0.296875" path="M209,642 L209,674"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.79156;0.797654"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.787951;0.797654;1" keyPoints="0;0;0.472656;0.472656" path="M209,642 L209,674"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.787951;0.797654"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.784343;0.797654;1" keyPoints="0;0;0.648438;0.648438" path="M209,642 L209,674"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.784343;0.797654"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.780735;0.797654;1" keyPoints="0;0;0.824219;0.824219" path="M209,642 L209,674"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.780735;0.797654"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.777126;0.797654;1" keyPoints="0;0;1;1" path="M209,642 L209,674"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.777126;0.797654"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.840726;0.847507;1" keyPoints="0;0;0.330357;0.330357" path="M209,710 L209,720 L209,752"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.840726;0.847507"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.837977;0.847507;1" keyPoints="0;0;0.464286;0.464286" path="M209,710 L209,720 L209,752"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.837977;0.847507"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.835227;0.847507;1" keyPoints="0;0;0.598214;0.598214" path="M209,710 L209,720 L209,752"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.835227;0.847507"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.832478;0.847507;1" keyPoints="0;0;0.732143;0.732143" path="M209,710 L209,720 L209,752"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.832478;0.847507"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.829729;0.847507;1" keyPoints="0;0;0.866071;0.866071" path="M209,710 L209,720 L209,752"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.829729;0.847507"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.826979;0.847507;1" keyPoints="0;0;1;1" path="M209,710 L209,720 L209,752"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.826979;0.847507"/></circle>
+    <circle r="1.4" fill="#334155" fill-opacity="0.14" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.894875;0.897361;1" keyPoints="0;0;0.121094;0.121094" path="M209,798 L209,830"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.894875;0.897361"/></circle>
+    <circle r="1.67" fill="#334155" fill-opacity="0.25" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.891266;0.897361;1" keyPoints="0;0;0.296875;0.296875" path="M209,798 L209,830"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.891266;0.897361"/></circle>
+    <circle r="1.98" fill="#334155" fill-opacity="0.39" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.887658;0.897361;1" keyPoints="0;0;0.472656;0.472656" path="M209,798 L209,830"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.887658;0.897361"/></circle>
+    <circle r="2.34" fill="#334155" fill-opacity="0.55" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.88405;0.897361;1" keyPoints="0;0;0.648438;0.648438" path="M209,798 L209,830"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.88405;0.897361"/></circle>
+    <circle r="2.79" fill="#334155" fill-opacity="0.75" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.880441;0.897361;1" keyPoints="0;0;0.824219;0.824219" path="M209,798 L209,830"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.880441;0.897361"/></circle>
+    <circle r="5.29" fill="#334155" stroke="#ffffff" stroke-width="1.57" visibility="hidden"><animateMotion dur="20.46s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.876833;0.897361;1" keyPoints="0;0;1;1" path="M209,798 L209,830"/><animate attributeName="visibility" dur="20.46s" repeatCount="indefinite" calcMode="discrete" values="hidden;visible;hidden" keyTimes="0;0.876833;0.897361"/></circle>
+  </g>
+</svg>

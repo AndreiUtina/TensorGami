@@ -73,6 +73,13 @@ starts)`: the state of a step (`anim.steps`) and how far along each wire its pul
 pasted onto each step's rendered image rather than rendered as scene items: a step is drawn
 once, whatever the number of frames.
 
+*Playback (2026-10-17, step 14c):* `anim.to_svg()` (no step) is the animation as one SVG,
+timed with SMIL, and `anim.save` writes `.svg` and `.html` as well; Jupyter shows a player
+(HTML and a small script around that SVG) instead of the GIF. SMIL rather than CSS keyframes:
+it animates along a path (`<animateMotion>`), plays inside `<img>` (READMEs), and its clock is
+scriptable (`pauseAnimations`, `setCurrentTime`), which the player's controls use. No
+ipywidgets: the player works without a kernel, in every notebook front end and in a page.
+
 ## Alternatives considered
 
 - **A class-based API** (`tg.Drawer(model).set_level(2).render()`). It is more verbose for

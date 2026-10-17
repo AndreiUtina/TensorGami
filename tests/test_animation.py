@@ -1,10 +1,11 @@
-"""``fig.animate()``: the figure lighting up as the model runs, and the data travelling between
-its steps (roadmap steps 14a, 14b)."""
+"""``fig.animate()``: the figure lighting up as the model runs, the data travelling between its
+steps, and its playback as an animated SVG and a player (roadmap steps 14a, 14b, 14c)."""
 
 from __future__ import annotations
 
 import io
 import shutil
+import xml.etree.ElementTree as ET
 
 import pytest
 from ir_fixtures import convlstm, transformer
@@ -193,7 +194,6 @@ def test_an_animation_is_saved_as_a_gif_and_as_frames(theme, tmp_path):
         paths = anim.save_frames(tmp_path / fmt, format=fmt, dpi=40)
         assert [p.name for p in paths][:2] == [f"step-1.{fmt}", f"step-2.{fmt}"]
         assert len(paths) == len(anim.steps) and all(p.stat().st_size > 0 for p in paths)
-    assert anim._repr_html_().startswith('<img src="data:image/gif;base64,')
 
 
 @pytest.mark.skipif(shutil.which("ffmpeg") is None, reason="needs ffmpeg")
@@ -206,7 +206,7 @@ def test_an_animation_is_saved_as_an_mp4(theme, tmp_path):
 def test_animation_errors(theme, tmp_path):
     graph, _ = branches()
     fig = figure(graph, theme)
-    with pytest.raises(ValueError, match="saved as .gif or .mp4"):
+    with pytest.raises(ValueError, match="saved as .gif, .svg, .html or .mp4"):
         fig.animate().save(tmp_path / "model.avi")
     with pytest.raises(ValueError, match="greater than 0"):
         fig.animate(step=0)
@@ -218,3 +218,119 @@ def test_animation_errors(theme, tmp_path):
         Animation(Figure(fig.scene, fig.style))
     with pytest.raises(ValueError, match="format"):
         fig.animate().save_frames(tmp_path, format="jpg")
+
+
+SVG = "{http://www.w3.org/2000/svg}"
+
+
+def shown(svg: str, at: float | None) -> list[str]:
+    """The elements an animated SVG shows at ``at`` (a fraction of its loop), the pulses
+    aside; ``None``: what a viewer that does not animate shows."""
+    out: list[str] = []
+
+    def visible(element: ET.Element, inherited: bool) -> bool:
+        if element.get("visibility"):
+            inherited = element.get("visibility") == "visible"
+        for animation in element.findall(f"{SVG}animate"):
+            if at is not None and animation.get("attributeName") == "visibility":
+                times = [float(t) for t in animation.get("keyTimes").split(";")]
+                values = animation.get("values").split(";")
+                inherited = values[max(i for i, t in enumerate(times) if t <= at)] == "visible"
+        return inherited
+
+    def walk(element: ET.Element, seen: bool) -> None:
+        for child in element:
+            tag = child.tag.removeprefix(SVG)
+            if tag in ("animate", "animateMotion", "title", "desc"):
+                continue
+            if tag == "g":
+                if child.get("class") != "tg-pulses":
+                    walk(child, visible(child, seen))
+            elif seen:
+                child.tail = None
+                out.append(ET.tostring(child, encoding="unicode"))
+
+    walk(ET.fromstring(svg), True)
+    return out
+
+
+@pytest.mark.parametrize("make", [branches, lambda: (simplify(convlstm(steps=3), 2), None)])
+def test_the_animated_svg_shows_each_step_as_its_still(theme, make):
+    graph, _ = make()
+    anim = figure(graph, theme).animate()
+    animated = anim.to_svg()
+    total = sum(anim.durations)
+    _, _, starts = anim._timed()
+    assert len(starts) == len(anim.steps)
+    lit = [d for f, d in zip(anim, anim.durations, strict=True) if not f.pulses]
+    for k, (start, seconds) in enumerate(zip(starts, lit, strict=True)):
+        middle = (start + seconds / 2) / total
+        assert shown(animated, middle) == shown(anim.to_svg(k), None), k
+    # a viewer that does not animate shows the still figure
+    assert shown(animated, None) == shown(anim.figure.to_svg(), None)
+
+
+def test_while_data_travels_the_svg_shows_the_step_before(theme):
+    graph, _ = branches()
+    anim = figure(graph, theme).animate()
+    animated, total, now = anim.to_svg(), sum(anim.durations), 0.0
+    for frame, seconds in zip(anim, anim.durations, strict=True):
+        if frame.pulses:
+            middle = (now + seconds / 2) / total
+            assert shown(animated, middle) == shown(anim.to_svg(frame.step), None)
+        now += seconds
+
+
+def test_the_pulses_move_along_their_wires_while_the_data_travels(theme):
+    graph = simplify(transformer(layers=2), 2)
+    anim = figure(graph, theme).animate()
+    _, pulses, _ = anim._timed()
+    total = sum(anim.durations)
+    root = ET.fromstring(anim.to_svg())
+    (layer,) = [g for g in root.iter(f"{SVG}g") if g.get("class") == "tg-pulses"]
+    dots = layer.findall(f"{SVG}circle")
+    heads = [d for d in dots if d.get("stroke")]
+    assert len(heads) == len(pulses) and len(dots) > len(heads)  # each with a tail
+    for head, pulse in zip(heads, pulses, strict=True):
+        assert head.get("visibility") == "hidden"  # nothing stray without animation
+        motion = head.find(f"{SVG}animateMotion")
+        times = [float(t) for t in motion.get("keyTimes").split(";")]
+        points = [float(t) for t in motion.get("keyPoints").split(";")]
+        assert times == sorted(times) and times[0] == 0 and times[-1] == 1
+        assert times[1:3] == [
+            pytest.approx(pulse.begin / total, abs=1e-5),
+            pytest.approx(pulse.end / total, abs=1e-5),
+        ]
+        assert points[:3] == [pytest.approx(pulse.start, abs=1e-5)] * 2 + [1]
+        switch = head.find(f"{SVG}animate")
+        assert switch.get("values") == "hidden;visible;hidden"
+        assert switch.get("keyTimes") == ";".join(motion.get("keyTimes").split(";")[:3])
+    assert any(p.start > 0 for p in pulses)  # the stack's second pass, from its frame
+
+
+def test_the_player_drives_the_animated_svg(theme, tmp_path):
+    graph, _ = branches()
+    anim = figure(graph, theme).animate()
+    html = anim._repr_html_()
+    assert '<svg class="tg-animation"' in html and "<animateMotion" in html
+    assert html.count("<script>") == 1 and "pauseAnimations" in html
+    for control in ("previous", "play", "next", "time", "step", "speed"):
+        assert f'data-tg="{control}"' in html
+    assert f"step 1 / {len(anim.steps)}" in html
+    _, _, starts = anim._timed()
+    assert str([round(s, 3) for s in starts]).replace(" ", "") in html.replace(" ", "")
+    ids = {anim.to_html().split('"')[1] for _ in range(2)}
+    assert len(ids) == 2  # two players of one animation on a page stay apart
+    page = anim.save(tmp_path / "model.html").read_text(encoding="utf-8")
+    assert page.startswith("<!doctype html>") and "<title>branches</title>" in page
+    svg = anim.save(tmp_path / "model.svg").read_text(encoding="utf-8")
+    assert svg == anim.to_svg() and ET.fromstring(svg) is not None
+
+
+def test_a_fitted_animation_keeps_its_printed_size(theme):
+    graph, _ = branches()
+    scene = layout(graph, theme)
+    from tensorgami.api.fit import Fitted, document
+
+    fig = Figure(scene, theme, graph, fitted=Fitted(document("3.5in"), 9.0))
+    assert 'width="3.5in"' in fig.animate().to_svg()

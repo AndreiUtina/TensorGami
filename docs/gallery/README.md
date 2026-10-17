@@ -214,32 +214,37 @@ it may take), and says when its text gets small for print.
 `fig.animate()` plays the figure as the model runs (roadmap step 14): the layers light up in
 the order data reaches them, parallel branches together, a merge once all its inputs have
 arrived. Between two steps the data travels: a pulse runs along each wire into the next
-layer, and the wire's tensor shape appears as it arrives. Saved with `.save("model.gif")`
-(or `.mp4`), or one image per step with `.save_frames(folder)`.
+layer, and the wire's tensor shape appears as it arrives.
 
-![AlexNet, running](animations/alexnet.gif)
+The animations here are animated SVGs (`.save("model.svg")`): vector, sharp at any zoom, a
+few kB once compressed, and playing wherever SVG does. Each also exists as a GIF
+(`.save("model.gif")`, in [`animations/`](animations/)) for slides and chats; `.save("model.mp4")`
+makes a video, `.save("model.html")` a page with the player that Jupyter shows (play/pause,
+step by step, a time slider, the speed), and `.save_frames(folder)` one image per step.
+
+![AlexNet, running](animations/alexnet.svg)
 
 A block repeated ×N plays N passes, its badge counting them. A stack of layers (the
 Transformer's encoder layer, ×2) reads its previous pass at each new one: the pulse starts at
 the frame.
 
-<img src="animations/transformer.gif" alt="Transformer, running" width="340">
+<img src="animations/transformer.svg" alt="Transformer, running" width="340">
 
 A recurrent cell folded over time sends its state round its loops (the h and c wires) into the
 next step, with the next frame of the input:
 
-![ConvLSTM, folded, running](animations/convlstm-folded.gif)
+![ConvLSTM, folded, running](animations/convlstm-folded.svg)
 
 Unrolled over time, the cells light up along the wavefront: each needs the cell below it (this
 time step) and the cell before it (the last time step).
 
-![LSTM, unrolled, running](animations/lstm-unrolled.gif)
+![LSTM, unrolled, running](animations/lstm-unrolled.svg)
 
 The U-Net generator of pix2pix, skips and all, and AlexNet on a dark background:
 
-![pix2pix generator, running](animations/pix2pix-generator.gif)
+![pix2pix generator, running](animations/pix2pix-generator.svg)
 
-![AlexNet, dark, running](animations/alexnet-dark.gif)
+![AlexNet, dark, running](animations/alexnet-dark.svg)
 
 ## Etching style
 

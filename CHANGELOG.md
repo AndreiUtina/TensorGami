@@ -36,7 +36,13 @@ versions).
   (×N) takes each new pass's input where its wire enters the frame. `fig.animate(flow=False)`
   keeps one frame per step; `travel=` and `fps=` set how long the data travels and how
   smoothly. `anim.steps` holds the state of each step, `anim[i]` the frames.
-- Animations in the gallery and the README.
+- Playback: in Jupyter an animation plays in a player (play/pause, step back and forward, a
+  time slider, the step shown, the speed; space and the arrow keys), with no widget library
+  or kernel needed. `anim.save("model.svg")` writes an animated SVG: vector, sharp at any
+  size, a few kB compressed, playing in browsers, GitHub READMEs and VS Code (a viewer that
+  does not animate shows the still figure); `anim.save("model.html")` a page with the player.
+  `anim.to_svg()` returns the animated SVG, `anim.to_svg(step)` one step as a still.
+- Animations in the gallery (animated SVGs, and GIFs) and the README.
 - A third style, `etching`: black ink on white paper, the operations told apart by engraved
   textures (diagonal, cross-hatch, dots, grid, zigzag…) in a strip at the start of each box and
   over a volume's face, instead of colour; wires told apart by line style; Helvetica, 0.75 pt

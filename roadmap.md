@@ -412,7 +412,7 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   holding only an input or output pill joins its neighbour. AlexNet: 7 in wide at 9 pt; at
   3.5 in, `level="stages"` keeps 9 pt.
 
-### 14) Dynamic information flow 🔶 (14a ✅, 14b ✅; 14c playback, 14d activations)
+### 14) Dynamic information flow 🔶 (14a ✅, 14b ✅, 14c ✅; 14d activations)
 - **14a Execution order** ✅ (2026-10-17): `fig.animate()`: a timeline over the drawn graph
   (a node's step is one more than its latest input's, so parallel branches light together and
   a merge waits; buffers just before their reader; training arrows and state loops are no
@@ -438,8 +438,21 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   and dark). Also: matplotlib shapes added without recomputing the axis limits (a fifth
   faster, identical output), the GIF written without Pillow's frame optimiser (30× faster,
   15 % larger).
-- **14c Playback** (next): in Jupyter, a player with play/pause, a step slider and speed;
-  an animated SVG (SMIL/CSS) for web pages, sharp at any size.
+- **14c Playback** ✅ (2026-10-17): the animated SVG (`anim.save("x.svg")`, `anim.to_svg()`):
+  the renderer's parts became items, each with its look in a frame (pending, active, done; a
+  frame's badge per pass; a wire's label once its data arrived), so every item is drawn once
+  per look it takes and SMIL `<animate>` (discrete visibility, one shared clock) shows the
+  look of the moment; pulses are dots moving with `<animateMotion>` (keyPoints along the
+  wire, the tail following). Without SMIL the still figure shows. Tested by evaluating the
+  SMIL: in the middle of each step it shows exactly that step's still SVG, while data travels
+  the step before. AlexNet 101 kB (6 kB gzipped; the GIF 210 kB), ResNet-18 in 0.3 s (its
+  GIF 29 s). The player (`_repr_html_`, `anim.save("x.html")`): the animated SVG inline with
+  play/pause, step back/forward, a time slider, the step shown and the speed; its script
+  pauses the SVG's clock and drives it (`setCurrentTime`), so no widget library or kernel
+  is needed (JupyterLab, classic, VS Code, Colab, a saved page), and where scripts do not run
+  the SVG plays alone. The controls are tested in headless Chrome when installed (GitHub's
+  runners have it). Gallery animations as SVGs (compared like the still SVGs) and GIFs; the
+  README shows the animated SVG, light and dark.
 - **14d Real activations**: optionally show the example input's actual activations (feature
   maps, attention) beside the layers as they light up.
 
