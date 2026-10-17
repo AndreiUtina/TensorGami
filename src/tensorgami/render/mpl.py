@@ -142,6 +142,8 @@ class MatplotlibCanvas:
         return style
 
     # ------------------------------------------------------------------ primitives
+    # (add_artist, not add_patch: the limits are fixed, and recomputing them for every
+    # patch was a quarter of the rendering time)
 
     def rect(self, box: Box, paint: Paint, radius: float = 0.0) -> None:
         r = min(radius, box.w / 2, box.h / 2)
@@ -155,13 +157,13 @@ class MatplotlibCanvas:
             )
         else:
             patch = Rectangle((box.x, box.y), box.w, box.h, **self._style(paint))
-        self.ax.add_patch(patch)
+        self.ax.add_artist(patch)
 
     def circle(self, center: Point, radius: float, paint: Paint) -> None:
-        self.ax.add_patch(Circle((center.x, center.y), radius, **self._style(paint)))
+        self.ax.add_artist(Circle((center.x, center.y), radius, **self._style(paint)))
 
     def polygon(self, points: Sequence[Point], paint: Paint) -> None:
-        self.ax.add_patch(Polygon([(p.x, p.y) for p in points], closed=True, **self._style(paint)))
+        self.ax.add_artist(Polygon([(p.x, p.y) for p in points], closed=True, **self._style(paint)))
 
     def polyline(self, points: Sequence[Point], paint: Paint) -> None:
         if paint.stroke is None:

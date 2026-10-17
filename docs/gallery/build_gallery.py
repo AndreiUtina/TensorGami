@@ -1,12 +1,14 @@
 """The acceptance gallery (roadmap step 12): the reference models, AlexNet, ResNet and the composed
 figures (a cGAN, a VAE with its losses, pix2pix whole), drawn with ``tg.draw`` in every view
-that suits them, once per built-in style.
+that suits them, once per built-in style; and a few of them running, as GIFs (step 14).
 
 ``tests/test_gallery.py`` redraws every figure and checks it against the committed SVG (and
 against the layout invariants), so a change to the drawing shows up as a failing test. After
 an intended change, rebuild and review the figures::
 
-    uv run python docs/gallery/build_gallery.py
+    uv run python docs/gallery/build_gallery.py               # every style and the GIFs
+    uv run python docs/gallery/build_gallery.py origami       # one style
+    uv run python docs/gallery/build_gallery.py --animations  # only the GIFs
 """
 
 from __future__ import annotations
@@ -145,13 +147,32 @@ COMPOSED = {  # file name: (figure, tg.draw options besides the style)
 }
 
 
+#: figures also shown running (``fig.animate()``), saved in ``animations/``; the tests check
+#: that they animate, not their pixels (those depend on the platform's fonts)
+ANIMATED = [
+    "alexnet",
+    "alexnet-dark",
+    "transformer",
+    "convlstm-folded",
+    "lstm-unrolled",
+    "pix2pix-generator",
+]
+
+
+def figure(name: str, style: str = "default") -> tg.Figure:
+    """The gallery figure ``name`` (its file name without ``.svg``) in one style."""
+    if name in COMPOSED:
+        compose, options = COMPOSED[name]
+        return compose(style=style, **options)
+    model, options = FIGURES[name]
+    make, example = MODELS[model]
+    return tg.draw(make(), example(), style=style, **options)
+
+
 def figures(style: str = "default") -> Iterator[tuple[str, tg.Figure]]:
     """Every gallery figure in one style, by file name (without ``.svg``)."""
-    for name, (model, options) in FIGURES.items():
-        make, example = MODELS[model]
-        yield name, tg.draw(make(), example(), style=style, **options)
-    for name, (figure, options) in COMPOSED.items():
-        yield name, figure(style=style, **options)
+    for name in [*FIGURES, *COMPOSED]:
+        yield name, figure(name, style)
 
 
 def build(style: str = "default") -> list[Path]:
@@ -160,7 +181,19 @@ def build(style: str = "default") -> list[Path]:
     return [fig.save(out_dir / f"{name}.svg") for name, fig in figures(style)]
 
 
+def build_animations() -> list[Path]:
+    out_dir = HERE / "animations"
+    out_dir.mkdir(exist_ok=True)
+    return [figure(name).animate().save(out_dir / f"{name}.gif") for name in ANIMATED]
+
+
 if __name__ == "__main__":
-    for style in sys.argv[1:] or available_styles():
-        for p in build(style):
+    styles = [a for a in sys.argv[1:] if not a.startswith("--")]
+    animations = "--animations" in sys.argv or not sys.argv[1:]
+    if styles or not animations:
+        for style in styles or available_styles():
+            for p in build(style):
+                print(p)
+    if animations:
+        for p in build_animations():
             print(p)

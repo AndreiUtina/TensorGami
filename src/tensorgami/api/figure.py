@@ -137,13 +137,24 @@ class Figure:
         w, h = self.size
         return self.to_png(), {"width": round(w), "height": round(h)}
 
-    def animate(self, *, step: float = 0.6, hold: float = 1.5) -> Animation:
+    def animate(
+        self,
+        *,
+        step: float = 0.6,
+        hold: float = 1.5,
+        flow: bool = True,
+        travel: float = 0.4,
+        fps: float = 15,
+    ) -> Animation:
         """The figure lighting up as the model runs: layer after layer in the order data
         reaches them, ``step`` seconds each, the whole model at the end for ``hold`` seconds.
-        Save it with ``.save("model.gif")`` (or ``.mp4``) or ``.save_frames(folder)``."""
+        With ``flow``, the data travels between steps: a pulse along every wire for
+        ``travel`` seconds (``fps`` frames a second), the wire's shape appearing as it
+        arrives. Save it with ``.save("model.gif")`` (or ``.mp4``) or
+        ``.save_frames(folder)`` (one file per step)."""
         from tensorgami.api.animation import Animation
 
-        return Animation(self, step=step, hold=hold)
+        return Animation(self, step=step, hold=hold, flow=flow, travel=travel, fps=fps)
 
     def draw_on(self, ax: Axes) -> Axes:
         """Draw into an existing Axes (e.g. a panel of ``plt.subplots``); returns it."""

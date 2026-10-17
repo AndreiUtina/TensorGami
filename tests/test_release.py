@@ -107,7 +107,9 @@ def test_readme_figures_follow_the_viewers_theme():
     for picture in pictures:
         (dark,) = re.findall(r'media="\(prefers-color-scheme: dark\)" srcset="([^"]+)"', picture)
         (light,) = re.findall(r'<img [^>]*src="([^"]+)"', picture)
-        assert dark == light.replace(".svg", "-dark.svg")
+        stem, suffix = light.rsplit(".", 1)
+        assert dark == f"{stem}-dark.{suffix}"
+        assert (ROOT / dark).is_file() and (ROOT / light).is_file()
 
 
 def test_classifiers_match_the_python_versions_tested_in_ci():

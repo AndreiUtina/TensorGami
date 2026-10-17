@@ -126,6 +126,8 @@ class SceneRenderer:
         for group in groups:
             group_painter(group).paint_labels(canvas, group)
         for edge, path in routes:
+            if state is not None and emphasis.edge(edge) is Emphasis.PENDING:
+                continue  # its shape appears as the data arrives
             edge_painter(edge).paint_label(canvas, edge, path)
         for note in scene.notes:
             canvas.text(note.at, note.text, theme.font(note.role), note.anchor)

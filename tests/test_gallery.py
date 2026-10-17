@@ -13,6 +13,7 @@ pytest.importorskip("torch")
 from layout_checks import check_scene  # noqa: E402
 
 from tensorgami.style import available_styles  # noqa: E402
+from tensorgami.vocabulary import EdgeKind  # noqa: E402
 
 GALLERY = Path(__file__).parents[1] / "docs" / "gallery"
 
@@ -56,10 +57,22 @@ def test_the_gallery_page_shows_every_figure():
     assert shown == set(builder.FIGURES) | set(builder.COMPOSED), "add the new figures to README.md"
 
 
+def test_the_gallery_page_shows_every_animation():
+    page = (GALLERY / "README.md").read_text(encoding="utf-8")
+    for name in builder.ANIMATED:
+        assert (GALLERY / "animations" / f"{name}.gif").is_file(), "rebuild: --animations"
+        assert f"animations/{name}.gif" in page, "add the new animation to README.md"
+
+
 def test_every_gallery_figure_animates_and_ends_as_its_still():
-    """Step 14a: every view, composite and fitted figure lights up step by step, and the
-    last frame is the still figure."""
+    """Steps 14a, 14b: every view, composite and fitted figure lights up step by step, the
+    last step is the still figure, and every wire into a layer carries data at some point."""
     for name, fig in builder.figures("default"):
         anim = fig.animate()
-        assert len(anim) >= 2, name
-        assert anim.to_svg(len(anim) - 1) == fig.to_svg(), name
+        steps = anim.steps
+        assert len(steps) >= 2 and len(anim) > len(steps), name
+        assert anim.to_svg(len(steps) - 1) == fig.to_svg(), name
+        carried = {e for f in anim for e in f.pulses}
+        for i, e in enumerate(fig.scene.edges):
+            if isinstance(e.target, str) and not e.target.startswith("legend:"):
+                assert i in carried or e.kind is EdgeKind.TRAINING, (name, e)

@@ -97,12 +97,19 @@ tg.draw({"generator": G, "discriminator": D}, {"generator": (z, y), "discriminat
 - **Slides**: `fit="slide"` draws a figure for a 16:9 slide, with text sized for a projector
   and the layout chosen to make it as large as possible; saved at the slide's size.
 - **Animations**: `fig.animate()` lights the figure up as the model runs, layer after layer
-  in the order data reaches them; saved as a GIF, an MP4 or one image per step for slides.
+  in the order data reaches them, with the data travelling along the wires between them and
+  round the state loops of recurrent cells; saved as a GIF, an MP4 or one image per step for
+  slides.
 - **Papers**: `width="3.5in"` (or `"8.9cm"`, `"252pt"`) lays a figure out for a column or text
   width with its text at true size (9 pt), and saves it exactly that wide, so LaTeX includes
   it without scaling.
 - **Several models in one figure**: GANs, VAEs and other training set-ups, with links between
   the models, extra inputs, loss terms with dashed training arrows, and notes.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/gallery/animations/alexnet-dark.gif">
+  <img alt="AlexNet lighting up layer by layer as it runs, data travelling along its wires" src="docs/gallery/animations/alexnet.gif">
+</picture>
 
 Model families covered by the tests: CNN (AlexNet, ResNet), LSTM, ConvLSTM, cGAN, VAE,
 Transformer and pix2pix. The [acceptance gallery](docs/gallery/README.md)

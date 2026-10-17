@@ -65,6 +65,14 @@ one frame per step, each the still figure in a state (pending faded, active high
 as is), so the last frame is the still figure. Saved as GIF (Pillow), MP4 (ffmpeg, optional)
 or one file per step; shown inline in Jupyter as the GIF.
 
+*Data in motion (2026-10-17, step 14b):* between two steps, frames in which pulses travel along
+the wires into the next step (`fig.animate(flow=True, travel=0.4, fps=15)`), round the state
+loops of a recurrence at each new pass. An animation's frames are now `Frame(step, pulses,
+starts)`: the state of a step (`anim.steps`) and how far along each wire its pulse is, so
+`len(anim)` counts frames and `save_frames` still writes one file per step. The pulses are
+pasted onto each step's rendered image rather than rendered as scene items: a step is drawn
+once, whatever the number of frames.
+
 ## Alternatives considered
 
 - **A class-based API** (`tg.Drawer(model).set_level(2).render()`). It is more verbose for

@@ -412,7 +412,7 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   holding only an input or output pill joins its neighbour. AlexNet: 7 in wide at 9 pt; at
   3.5 in, `level="stages"` keeps 9 pt.
 
-### 14) Dynamic information flow 🔶 (14a ✅; 14b data in motion, 14c playback, 14d activations)
+### 14) Dynamic information flow 🔶 (14a ✅, 14b ✅; 14c playback, 14d activations)
 - **14a Execution order** ✅ (2026-10-17): `fig.animate()`: a timeline over the drawn graph
   (a node's step is one more than its latest input's, so parallel branches light together and
   a merge waits; buffers just before their reader; training arrows and state loops are no
@@ -422,10 +422,26 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   frame is the still figure (tested for every gallery figure). `anim.save("x.gif")` (Pillow,
   one palette for all frames), `.mp4` (ffmpeg, optional), `anim.save_frames(folder)` (PNG,
   PDF, SVG per step: slide builds), inline in Jupyter. AlexNet: 17 frames, 82 kB.
-- Animate how information flows through the architecture: layers light up in execution
-  order, tensor shapes evolve along the edges, recurrent steps unfold over time.
-- Outputs: GIF/MP4 for presentations (`matplotlib.animation`) and interactive playback in
-  Jupyter; optionally show real activations (feature maps) from the example input.
+- **14b Data in motion** ✅ (2026-10-17): between two steps, `travel` seconds (0.4) at `fps`
+  (15) of frames in which a pulse (a dot in the wire's colour, ringed in the background's,
+  with a fading tail) runs along every wire from what has run into what runs next; a wire
+  still to come hides its shape label, which appears when the data arrives. ×N blocks: a
+  recurrence folded over time (state loops in its frame) sends pulses round the loops into
+  passes 2…N, with the next input from outside; a stack of layers (no loops) takes each new
+  pass's input at its frame, the pulse starting where the wire enters it. The unrolled grid
+  plays as a wavefront. Each step is rendered once; travel frames paste the pulses onto it
+  (Pillow), so a GIF costs about as much as before: AlexNet 107 frames, 17 s, 205 kB, built
+  in 4 s. `flow=False` gives 14a's one frame per step; `anim.steps` holds the steps,
+  `anim[i]` the frames (`Frame(step, pulses, starts)`); `save_frames` stays one file per
+  step. Every wire into a layer of every gallery figure carries a pulse (tested). Six
+  animations in the gallery (`build_gallery.py --animations`), AlexNet in the README (light
+  and dark). Also: matplotlib shapes added without recomputing the axis limits (a fifth
+  faster, identical output), the GIF written without Pillow's frame optimiser (30× faster,
+  15 % larger).
+- **14c Playback** (next): in Jupyter, a player with play/pause, a step slider and speed;
+  an animated SVG (SMIL/CSS) for web pages, sharp at any size.
+- **14d Real activations**: optionally show the example input's actual activations (feature
+  maps, attention) beside the layers as they light up.
 
 ### 15) Packaging, docs & CI 🔶 (prepared 2026-10-12; the first release waits for the PyPI setup)
 - Decided with the user: a public package on PyPI as `pip install tensorgami` (the name is

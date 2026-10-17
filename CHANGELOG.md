@@ -30,6 +30,13 @@ versions).
   the whole model at the end. What has not run is faded, what runs is highlighted (a halo in
   its own colour, a bold outline). `anim.save("model.gif")` (or `.mp4` with ffmpeg),
   `anim.save_frames(folder)` (PNG, PDF or SVG per step, for slide builds); inline in Jupyter.
+- Data in motion: between two steps of an animation a pulse travels along every wire into the
+  next layer, and a wire's tensor shape appears once its data has arrived. A recurrent cell
+  folded over time sends its state round its loops into each new pass; a stack of layers
+  (×N) takes each new pass's input where its wire enters the frame. `fig.animate(flow=False)`
+  keeps one frame per step; `travel=` and `fps=` set how long the data travels and how
+  smoothly. `anim.steps` holds the state of each step, `anim[i]` the frames.
+- Animations in the gallery and the README.
 - A third style, `etching`: black ink on white paper, the operations told apart by engraved
   textures (diagonal, cross-hatch, dots, grid, zigzag…) in a strip at the start of each box and
   over a volume's face, instead of colour; wires told apart by line style; Helvetica, 0.75 pt
@@ -72,6 +79,9 @@ versions).
 - A row (or column) shorter than the longest is centred: the wire from the end of the row
   before comes back to the middle, and the white space is shared on both sides (AlexNet's
   classifier under its features).
+
+- PNG and PDF figures render about a fifth faster (matplotlib no longer recomputes its axis
+  limits for every shape); the output is unchanged.
 
 ### Fixed
 
