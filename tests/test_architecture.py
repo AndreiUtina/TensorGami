@@ -14,15 +14,26 @@ import pytest
 
 SRC = Path(__file__).parents[1] / "src" / "tensorgami"
 
-_PIPELINE = {"vocabulary", "style", "scene", "render", "ir", "importers", "transforms", "layout"}
+_PIPELINE = {
+    "vocabulary",
+    "activations",
+    "style",
+    "scene",
+    "render",
+    "ir",
+    "importers",
+    "transforms",
+    "layout",
+}
 
 ALLOWED: dict[str, set[str]] = {
     "vocabulary": set(),
+    "activations": set(),  # summaries of what a model produced: numpy only (step 14d)
     "style": {"vocabulary"},
     "scene": {"vocabulary", "style"},
-    "render": {"vocabulary", "style", "scene"},
-    "ir": {"vocabulary"},
-    "importers": {"vocabulary", "ir"},
+    "render": {"vocabulary", "activations", "style", "scene"},
+    "ir": {"vocabulary", "activations"},
+    "importers": {"vocabulary", "activations", "ir"},
     "transforms": {"vocabulary", "ir"},
     "layout": {"vocabulary", "ir", "scene", "style", "render"},
     "views": _PIPELINE,

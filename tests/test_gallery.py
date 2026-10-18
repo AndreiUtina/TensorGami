@@ -64,6 +64,19 @@ def test_the_gallery_page_shows_every_animation():
         assert f"animations/{name}.svg" in page, "add the new animation to README.md"
 
 
+def test_the_gallery_page_shows_the_activations():
+    """Step 14d: the animations with activations are built and shown (not compared byte for
+    byte: their feature maps are PNGs, whose bytes depend on the zlib build)."""
+    page = (GALLERY / "README.md").read_text(encoding="utf-8")
+    for name in builder.WITH_ACTIVATIONS:
+        for suffix in ("svg", "gif"):
+            assert (GALLERY / "animations" / f"{name}.{suffix}").is_file(), "--animations"
+        assert f"animations/{name}.svg" in page, "add the new animation to README.md"
+        fig = builder.with_activations(name)
+        boxes = {n.id for n in fig.scene.nodes if not n.id.startswith("legend:")}
+        assert boxes == set(fig.activations), name
+
+
 @pytest.mark.parametrize("name", builder.ANIMATED)
 def test_animated_svgs_match_the_committed_ones(name):
     """Step 14c: the animated SVGs, like the still ones, change only on purpose."""
