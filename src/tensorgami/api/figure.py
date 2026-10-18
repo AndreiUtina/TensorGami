@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 import io
+from collections.abc import Mapping
 from functools import cached_property
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from tensorgami.activations import Activation
 from tensorgami.api.fit import Fitted
 from tensorgami.ir import Graph
 from tensorgami.render.mpl import PX_PER_INCH, draw_scene, quiet_fonts, render_figure
@@ -43,11 +45,13 @@ class Figure:
         graph: Graph | None = None,
         *,
         fitted: Fitted | None = None,
+        activations: Mapping[str, tuple[Activation, ...]] | None = None,
     ) -> None:
         self._scene = scene
         self._style = style
         self._graph = graph
         self._fitted = fitted
+        self._activations = dict(activations or {})
 
     # ------------------------------------------------------------------ inspection
 
@@ -62,6 +66,13 @@ class Figure:
     @property
     def graph(self) -> Graph | None:
         return self._graph
+
+    @property
+    def activations(self) -> dict[str, tuple[Activation, ...]]:
+        """What each box produced on the example input, by node id (as in :attr:`scene`):
+        one summary per pass (several inside a block folded ×N). Empty unless drawn with
+        ``tg.draw(..., activations=True)``; ``fig.animate()`` then shows them."""
+        return dict(self._activations)
 
     @property
     def size(self) -> tuple[float, float]:
@@ -145,16 +156,21 @@ class Figure:
         flow: bool = True,
         travel: float = 0.4,
         fps: float = 15,
+        activations: bool | None = None,
     ) -> Animation:
         """The figure lighting up as the model runs: layer after layer in the order data
         reaches them, ``step`` seconds each, the whole model at the end for ``hold`` seconds.
         With ``flow``, the data travels between steps: a pulse along every wire for
         ``travel`` seconds (``fps`` frames a second), the wire's shape appearing as it
         arrives. Save it with ``.save("model.gif")`` (or ``.mp4``) or
-        ``.save_frames(folder)`` (one file per step)."""
+        ``.save_frames(folder)`` (one file per step). A figure drawn with
+        ``activations=True`` shows, under it, what each layer produces as it runs
+        (``activations=False``: not)."""
         from tensorgami.api.animation import Animation
 
-        return Animation(self, step=step, hold=hold, flow=flow, travel=travel, fps=fps)
+        return Animation(
+            self, step=step, hold=hold, flow=flow, travel=travel, fps=fps, activations=activations
+        )
 
     def draw_on(self, ax: Axes) -> Axes:
         """Draw into an existing Axes (e.g. a panel of ``plt.subplots``); returns it."""

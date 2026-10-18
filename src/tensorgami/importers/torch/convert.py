@@ -19,6 +19,8 @@ from typing import Any
 
 import torch
 
+from tensorgami.activations import Activation
+from tensorgami.importers.torch.capture import activation
 from tensorgami.importers.torch.catalog import (
     FUSED,
     SHAPE_ONLY,
@@ -30,6 +32,7 @@ from tensorgami.importers.torch.catalog import (
 from tensorgami.importers.torch.overrides import Overrides
 from tensorgami.importers.torch.recorder import OpRecord, Recorder
 from tensorgami.ir import Graph, GraphBuilder, ParamValue, Shape
+from tensorgami.ir.activations import ActivationStore
 from tensorgami.vocabulary import EdgeKind, OpCategory
 
 Port = tuple[str, int]  # (node id, output index)
@@ -56,8 +59,10 @@ def to_param(value: Any) -> ParamValue:
 
 
 class GraphConverter:
-    def __init__(self, overrides: Overrides) -> None:
+    def __init__(self, overrides: Overrides, *, activations: bool = False) -> None:
         self._overrides = overrides
+        self._capture = activations
+        self.activations: dict[str, Activation] = {}  # node id → its output's summary
 
     def convert(
         self,
@@ -88,13 +93,15 @@ class GraphConverter:
             )
         for label, tensor in inputs:
             node = self._b.input(shape_of(tensor), label=label)
+            self._summarize(node, tensor, image=True)
             self._produce(tensor, (node, 0))
         for record in recorder.ops:
             self._add_op(record)
         for label, tensor in outputs:
             port = self._resolve(tensor, group="")
             if port is not None:
-                self._b.output(port[0], port=port[1], label=label)
+                node = self._b.output(port[0], port=port[1], label=label)
+                self._summarize(node, tensor)
         return self._b.build(), self._report
 
     # ------------------------------------------------------------------ operations
@@ -120,6 +127,8 @@ class GraphConverter:
             outputs=[shape_of(t) for t in rec.outputs],
             module=rec.module,
         )
+        if self._capture and rec.summary is not None:
+            self.activations[node] = rec.summary
         for src, out_port in sources:
             noise = self._b.get(src).category is OpCategory.STOCHASTIC
             kind = EdgeKind.STOCHASTIC if noise else EdgeKind.DATA
@@ -180,8 +189,15 @@ class GraphConverter:
                 "constant", category=OpCategory.TENSOR, group=group, outputs=[shape_of(tensor)]
             )
             self._report.constants += 1
+        self._summarize(view, tensor)
         self._produce(tensor, (view, 0))
         return view, 0
+
+    def _summarize(self, node: str, tensor: torch.Tensor, *, image: bool = False) -> None:
+        if self._capture:
+            summary = activation(tensor, image=image)
+            if summary is not None:
+                self.activations[node] = summary
 
 
 def _storage_key(tensor: torch.Tensor) -> int | None:
@@ -191,3 +207,8 @@ def _storage_key(tensor: torch.Tensor) -> int | None:
     except (RuntimeError, NotImplementedError):
         return None
     return ptr or None
+
+
+def call_store(graph: Graph, converter: GraphConverter, recorder: Recorder) -> ActivationStore:
+    """What the model produced: every operation's output, and every module call's."""
+    return ActivationStore(graph, dict(converter.activations), dict(recorder.calls))

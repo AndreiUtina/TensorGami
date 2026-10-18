@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
+import base64
+import io
 from collections.abc import Sequence
 from xml.sax.saxutils import escape, quoteattr
+
+import numpy as np
 
 from tensorgami.render.canvas import Paint
 from tensorgami.render.text import (
@@ -107,6 +111,15 @@ class SvgCanvas:
                 body.append(f'<tspan{dy} font-size="{size}">{escape(run.text)}</tspan>')
         self._emit(f"<text {attrs}>{''.join(body)}</text>")
 
+    def image(self, box: Box, pixels: np.ndarray, *, smooth: bool = False) -> None:
+        data = base64.b64encode(png(pixels)).decode("ascii")
+        crisp = "" if smooth else ' style="image-rendering:pixelated"'
+        self._emit(
+            f'<image x="{_num(box.x)}" y="{_num(box.y)}" width="{_num(box.w)}" '
+            f'height="{_num(box.h)}" preserveAspectRatio="none"{crisp} '
+            f'href="data:image/png;base64,{data}"/>'
+        )
+
     def begin_group(self, css_class: str, data_id: str | None = None, attrs: str = "") -> None:
         """``<g class=…>``; ``attrs``: more attributes, as markup (an animation's)."""
         css = f" class={quoteattr(css_class)}" if css_class else ""
@@ -165,3 +178,20 @@ class SvgCanvas:
             if paint.dash:
                 out += f' stroke-dasharray="{" ".join(_num(d) for d in paint.dash)}"'
         return out
+
+
+def png(pixels: np.ndarray) -> bytes:
+    """An RGB raster as a PNG: with a palette when it has at most 256 colours (a feature map
+    in one hue), which keeps it small."""
+    from PIL import Image  # Pillow comes with matplotlib
+
+    h, w = pixels.shape[:2]
+    colours, index = np.unique(pixels.reshape(-1, 3), axis=0, return_inverse=True)
+    if len(colours) <= 256:
+        image = Image.fromarray(index.reshape(h, w).astype(np.uint8), mode="P")
+        image.putpalette(colours.astype(np.uint8).tobytes())
+    else:
+        image = Image.fromarray(np.ascontiguousarray(pixels, dtype=np.uint8), mode="RGB")
+    buffer = io.BytesIO()
+    image.save(buffer, format="PNG", optimize=True)
+    return buffer.getvalue()

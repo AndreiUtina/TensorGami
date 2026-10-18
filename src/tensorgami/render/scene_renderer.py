@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import dataclasses
-from collections.abc import Callable, Hashable, Mapping
+from collections.abc import Callable, Hashable, Mapping, Sequence
 from dataclasses import dataclass, field
 from enum import StrEnum
 from types import MappingProxyType
@@ -61,6 +61,9 @@ class Item:
     paint: Callable[[Canvas, Hashable], None]
 
 
+Layer = tuple[str, list[Item]]  # a CSS class, and the items painted in it
+
+
 class SceneRenderer:
     """Paints back to front: background, groups, edge lines, nodes, edge labels, notes.
 
@@ -73,8 +76,10 @@ class SceneRenderer:
         theme: Theme,
         painters: PainterRegistry | None = None,
         measurer: TextMeasurer | None = None,
+        overlays: Sequence[Layer] = (),
     ) -> None:
         self._theme = theme
+        self._overlays = list(overlays)  # layers painted over the figure (an animation's)
         self._painters = painters or default_painters()
         measurer = measurer or HeuristicTextMeasurer()
         self._measurer = measurer
@@ -127,6 +132,7 @@ class SceneRenderer:
             ("tg-edges", [self._edge(edge, path) for edge, path in routes]),
             ("tg-nodes", [self._node(n) for n in scene.nodes]),
             ("tg-labels", labels),
+            *self._overlays,
         ]
 
     # ------------------------------------------------------------------ items
@@ -282,14 +288,15 @@ def render_svg(
     *,
     inches: tuple[float, float] | None = None,
     state: FrameState | None = None,
+    overlays: Sequence[Layer] = (),
 ) -> str:
     """Render ``scene`` to an SVG document (the ``default`` style unless given); ``inches``:
     the printed size, when it is not the natural one (a slide, a paper's column); ``state``:
-    one frame of an animation."""
+    one frame of an animation; ``overlays``: layers painted over the figure."""
     if theme is None:
         from tensorgami.style import load_theme
 
         theme = load_theme()
     canvas = SvgCanvas(scene.width, scene.height, scene.title, scene.description, inches=inches)
-    SceneRenderer(theme).render(scene, canvas, state)
+    SceneRenderer(theme, overlays=overlays).render(scene, canvas, state)
     return canvas.to_svg()

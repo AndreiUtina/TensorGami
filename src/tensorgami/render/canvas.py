@@ -4,11 +4,14 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol
 
 from tensorgami.scene import Box, Point, TextAnchor
 from tensorgami.style.color import Color
 from tensorgami.style.glyphs import Font
+
+if TYPE_CHECKING:
+    import numpy as np
 
 
 @dataclass(frozen=True, slots=True)
@@ -49,6 +52,11 @@ class Canvas(Protocol):
     ) -> None:
         """One line whose visual centre line passes through ``at``; ``rotation`` turns it
         counter-clockwise about ``at`` (degrees; 90 reads bottom → top)."""
+        ...
+
+    def image(self, box: Box, pixels: np.ndarray, *, smooth: bool = False) -> None:
+        """An RGB raster (``h × w × 3``, uint8) stretched over ``box``; its pixels drawn as
+        squares unless ``smooth`` (a feature map shows its resolution)."""
         ...
 
     def begin_group(self, css_class: str, data_id: str | None = None) -> None: ...

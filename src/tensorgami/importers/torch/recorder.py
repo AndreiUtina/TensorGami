@@ -12,6 +12,8 @@ import torch
 from torch import nn
 from torch.overrides import TorchFunctionMode
 
+from tensorgami.activations import Activation
+from tensorgami.importers.torch.capture import activation
 from tensorgami.importers.torch.catalog import normalize_op_name
 from tensorgami.ir import ROOT, invocation_id
 
@@ -58,6 +60,7 @@ class OpRecord:
     scalars: dict[str, Any] = field(default_factory=dict)
     mro: tuple[str, ...] = ()
     module_obj: nn.Module | None = None
+    summary: Activation | None = None  # the first output as it was produced (``capture``)
 
 
 @dataclass
@@ -71,9 +74,11 @@ class _Frame:
 class Recorder:
     """Install with ``with recorder:``; run the model inside ``recorder.mode()``."""
 
-    def __init__(self, model: nn.Module, is_leaf: LeafPolicy) -> None:
+    def __init__(self, model: nn.Module, is_leaf: LeafPolicy, *, capture: bool = False) -> None:
         self.model = model
         self._is_leaf = is_leaf
+        self._capture = capture
+        self.calls: dict[str, Activation] = {}  # module call → its output's summary (capture)
         self._paths: dict[int, str] = {}
         for path, module in model.named_modules():
             self._paths.setdefault(id(module), path)
@@ -138,9 +143,15 @@ class Recorder:
 
     def _post(self, module: nn.Module, args: tuple, kwargs: dict, output: Any) -> None:
         frame = self._stack.pop()
+        if frame.kind == "group" and self._capture and output is not None:
+            first = next(iter_tensors(output), None)
+            summary = activation(first) if first is not None else None
+            if summary is not None:
+                self.calls[frame.group] = summary
         if frame.kind != "leaf" or output is None:  # output is None when forward raised
             return
         path = self._paths.get(id(module), "")
+        outputs = list(iter_tensors(output))
         self.ops.append(
             OpRecord(
                 op=type(module).__name__,
@@ -149,9 +160,10 @@ class Recorder:
                 module=path,
                 call_index=frame.call_index,
                 inputs=self._data_tensors((args, kwargs)),
-                outputs=list(iter_tensors(output)),
+                outputs=outputs,
                 mro=mro_names(module),
                 module_obj=module,
+                summary=self._summary(outputs),
             )
         )
 
@@ -181,8 +193,12 @@ class Recorder:
                 outputs=outputs,
                 weights=weights,
                 scalars=_scalars(args, kwargs),
+                summary=self._summary(outputs),
             )
         )
+
+    def _summary(self, outputs: list[torch.Tensor]) -> Activation | None:
+        return activation(outputs[0]) if self._capture and outputs else None
 
     def _data_tensors(self, obj: Any) -> list[torch.Tensor]:
         return [t for t in iter_tensors(obj) if id(t) not in self._weights]

@@ -14,11 +14,12 @@ from torch import nn
 
 from tensorgami.importers.base import ImporterError, UnclassifiedOpWarning
 from tensorgami.importers.torch.catalog import LEAF_MODULES
-from tensorgami.importers.torch.convert import ConversionReport, GraphConverter
+from tensorgami.importers.torch.convert import ConversionReport, GraphConverter, call_store
 from tensorgami.importers.torch.isolation import isolated, model_device
 from tensorgami.importers.torch.overrides import Overrides
 from tensorgami.importers.torch.recorder import Recorder, mro_names
 from tensorgami.ir import Graph
+from tensorgami.ir.activations import ActivationStore
 
 
 class TorchImporter:
@@ -39,6 +40,20 @@ class TorchImporter:
         self._leaf_types = tuple(leaf_types)
 
     def import_model(self, model: nn.Module, example_input: Any) -> Graph:
+        return self._run(model, example_input, activations=False)[0]
+
+    def import_with_activations(
+        self, model: nn.Module, example_input: Any
+    ) -> tuple[Graph, ActivationStore]:
+        """The graph, and what every operation and module call produced on the example
+        input (summaries: see :mod:`tensorgami.activations`)."""
+        graph, store = self._run(model, example_input, activations=True)
+        assert store is not None
+        return graph, store
+
+    def _run(
+        self, model: nn.Module, example_input: Any, *, activations: bool
+    ) -> tuple[Graph, ActivationStore | None]:
         if isinstance(model, type) and issubclass(model, nn.Module):
             raise ImporterError(
                 f"got the class {model.__name__}, not a model: create it first, "
@@ -48,14 +63,15 @@ class TorchImporter:
             raise ImporterError(f"expected a torch.nn.Module, got {type(model).__name__}")
         device = model_device(model)
         example_input = _to_device(example_input, device)
-        recorder = Recorder(model, self._is_leaf)
+        recorder = Recorder(model, self._is_leaf, capture=activations)
         try:
             with isolated(model), recorder, recorder.mode():
                 output = _call(model, example_input)
         except Exception as exc:  # noqa: BLE001 - re-raised with an explanation
             raise ImporterError(_explain(model, example_input, exc)) from exc
 
-        graph, report = GraphConverter(self._overrides).convert(
+        converter = GraphConverter(self._overrides, activations=activations)
+        graph, report = converter.convert(
             recorder,
             list(_labelled(example_input, "input")),
             list(_labelled(output, "output")),
@@ -64,7 +80,7 @@ class TorchImporter:
             metadata={"framework": "torch", "torch_version": torch.__version__},
         )
         _warn(report)
-        return graph
+        return graph, call_store(graph, converter, recorder) if activations else None
 
     def _is_leaf(self, module: nn.Module, path: str) -> bool:
         names = mro_names(module)

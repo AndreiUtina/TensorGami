@@ -15,13 +15,15 @@ from contextlib import contextmanager
 from functools import lru_cache
 
 import matplotlib as mpl
+import numpy as np
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure as MplFigure
+from matplotlib.image import AxesImage
 from matplotlib.lines import Line2D
 from matplotlib.patches import Circle, FancyBboxPatch, Polygon, Rectangle
 
 from tensorgami.render.canvas import Paint
-from tensorgami.render.scene_renderer import FrameState, SceneRenderer
+from tensorgami.render.scene_renderer import FrameState, Layer, SceneRenderer
 from tensorgami.render.text import BASELINE_SHIFT, Script, display_text, parse_markup
 from tensorgami.scene import Box, Point, Scene, TextAnchor
 from tensorgami.style import Theme
@@ -159,6 +161,15 @@ class MatplotlibCanvas:
             patch = Rectangle((box.x, box.y), box.w, box.h, **self._style(paint))
         self.ax.add_artist(patch)
 
+    def image(self, box: Box, pixels: np.ndarray, *, smooth: bool = False) -> None:
+        image = AxesImage(
+            self.ax, interpolation="antialiased" if smooth else "nearest", origin="upper"
+        )
+        image.set_data(pixels)
+        image.set_extent((box.x, box.right, box.bottom, box.y))  # rows top → bottom
+        image.set_zorder(self._z_next())
+        self.ax.add_image(image)
+
     def circle(self, center: Point, radius: float, paint: Paint) -> None:
         self.ax.add_artist(Circle((center.x, center.y), radius, **self._style(paint)))
 
@@ -228,6 +239,7 @@ def render_figure(
     dpi: float = PX_PER_INCH,
     width_in: float | None = None,
     state: FrameState | None = None,
+    overlays: Sequence[Layer] = (),
 ) -> MplFigure:
     """A standalone matplotlib Figure (not registered with pyplot, so notebooks do not display
     it twice): at the scene's natural size, or ``width_in`` inches wide with text and lines
@@ -238,7 +250,7 @@ def render_figure(
     ax = figure.add_axes((0.0, 0.0, 1.0, 1.0))
     with mpl.rc_context(RC), quiet_fonts():
         canvas = MatplotlibCanvas(ax, scene.width, scene.height, scale=width / natural)
-        SceneRenderer(theme).render(scene, canvas, state)
+        SceneRenderer(theme, overlays=overlays).render(scene, canvas, state)
     return figure
 
 

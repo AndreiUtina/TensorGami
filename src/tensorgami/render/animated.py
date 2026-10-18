@@ -15,7 +15,7 @@ from collections.abc import Hashable, Sequence
 from dataclasses import dataclass
 
 from tensorgami.render.edges import EdgeRouter
-from tensorgami.render.scene_renderer import FrameState, Item, SceneRenderer
+from tensorgami.render.scene_renderer import FrameState, Item, Layer, SceneRenderer
 from tensorgami.render.svg import SvgCanvas, _num
 from tensorgami.scene import Point, Scene
 from tensorgami.style.theme import Theme
@@ -47,6 +47,7 @@ def render_animated_svg(
     pulses: Sequence[Pulse] = (),
     *,
     inches: tuple[float, float] | None = None,
+    overlays: Sequence[Layer] = (),
 ) -> str:
     """``scene`` as an animated SVG: each frame's state for its duration (seconds), the pulses
     on top, looping. Without animation (or at the end of each loop) it is the last frame."""
@@ -55,7 +56,7 @@ def render_animated_svg(
         raise ValueError("an animation needs at least one frame that lasts")
     starts = [sum(d for _, d in frames[:i]) for i in range(len(frames))]
     clock = _Clock(total, starts)
-    renderer = SceneRenderer(theme)
+    renderer = SceneRenderer(theme, overlays=overlays)
     states = [state for state, _ in frames]
     emphases = [renderer.emphases(scene, state) for state in states]
     canvas = SvgCanvas(scene.width, scene.height, scene.title, scene.description, inches=inches)
