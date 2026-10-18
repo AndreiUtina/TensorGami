@@ -66,6 +66,7 @@ tg.draw(model, x, palette="colorblind")            # or "tab10", "vivid", "mono"
 tg.draw(model, x, fit="slide")                     # a 16:9 slide: larger text, best layout
 tg.draw(model, x, width="3.5in")                   # a paper's column, at true text size
 tg.draw(model, x).animate().save("model.svg")      # lights up as the model runs (.gif, .mp4)
+tg.draw(model, x, activations=True).animate()      # … with what each layer produces, below it
 tg.draw(model, x, direction="TB", legend=False)    # top → bottom, no legend
 tg.draw(model, x, wrap_width=1600)                 # fold into rows beyond 1600 px (None: never)
 tg.draw(model, x, direction="TB", wrap_height=900) # top → bottom: columns beyond 900 px
@@ -100,7 +101,10 @@ tg.draw({"generator": G, "discriminator": D}, {"generator": (z, y), "discriminat
   in the order data reaches them, with the data travelling along the wires between them and
   round the state loops of recurrent cells. In Jupyter it plays in a player (play/pause, step
   by step, a time slider, the speed); saved as an animated SVG (sharp at any size), a GIF, an
-  MP4, a web page with the player, or one image per step for slides.
+  MP4, a web page with the player, or one image per step for slides. With
+  `activations=True` it also shows, under the figure, what each layer produces on your input:
+  the most active feature maps, sequences as heatmaps, the output's values
+  ([gallery](docs/gallery/README.md)).
 - **Papers**: `width="3.5in"` (or `"8.9cm"`, `"252pt"`) lays a figure out for a column or text
   width with its text at true size (9 pt), and saves it exactly that wide, so LaTeX includes
   it without scaling.

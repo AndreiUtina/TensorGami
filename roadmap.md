@@ -412,7 +412,7 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   holding only an input or output pill joins its neighbour. AlexNet: 7 in wide at 9 pt; at
   3.5 in, `level="stages"` keeps 9 pt.
 
-### 14) Dynamic information flow 🔶 (14a ✅, 14b ✅, 14c ✅; 14d activations)
+### 14) Dynamic information flow ✅ (14a, 14b, 14c, 14d: 2026-10-17)
 - **14a Execution order** ✅ (2026-10-17): `fig.animate()`: a timeline over the drawn graph
   (a node's step is one more than its latest input's, so parallel branches light together and
   a merge waits; buffers just before their reader; training arrows and state loops are no
@@ -453,8 +453,26 @@ fig.save("convlstm.png", dpi=300)              # only if you decide to keep it
   the SVG plays alone. The controls are tested in headless Chrome when installed (GitHub's
   runners have it). Gallery animations as SVGs (compared like the still SVGs) and GIFs; the
   README shows the animated SVG, light and dark.
-- **14d Real activations**: optionally show the example input's actual activations (feature
-  maps, attention) beside the layers as they light up.
+- **14d Real activations** ✅ (2026-10-17): `tg.draw(model, x, activations=True)`. Capture:
+  the recorder summarises every operation's first output and every module call's the moment
+  it returns (an in-place `ReLU`/`+=` later would change it), with torch functions hidden
+  from the trace (the graph is identical with and without capture, tested); a summary
+  (`Activation`: shape, range, mean, share of zeros, a numpy preview) instead of the tensor:
+  feature maps keep their 8 most active channels at ≤ 32 px, an input picture ≤ 64 px, a
+  sequence ≤ 32 × 64, a vector ≤ 256 values. Matching boxes to tensors without touching the
+  transforms (`activations.resolve`): a box keeping a traced id shows the last same-shaped
+  operation folded into it (Conv + ReLU: after the ReLU); `<module>` boxes their call's
+  output; inside a block folded ×N, pass k the k-th copy (`layers.k`, or the `#k` call),
+  matched by position; unrolled x_t pills the slice feeding that step's cell call; several
+  models by name. Not covered: `nn.LSTM`/`GRU` unrolled (all steps inside one fused call);
+  attention weights (an attention box shows its output, not where it attends).
+  Display: the animation gets a panel under the figure (an overlay of the renderer's items,
+  so GIF, MP4, still and animated SVG, player and per-step files all show it), a card per
+  running layer in its colour (name, shape, picture in a ramp from the background to the
+  layer's colour, range, zeros), the outputs at the end; a new canvas primitive `image`
+  (SVG: palette PNG; matplotlib: `AxesImage`). `fig.activations` holds the summaries.
+  `examples/images.py` draws a test picture in numpy (no download); gallery: AlexNet and the
+  folded ConvLSTM with their activations.
 
 ### 15) Packaging, docs & CI 🔶 (prepared 2026-10-12; the first release waits for the PyPI setup)
 - Decided with the user: a public package on PyPI as `pip install tensorgami` (the name is
