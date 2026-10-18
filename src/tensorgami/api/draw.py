@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import difflib
+import warnings
 from collections.abc import Mapping, Sequence
 from dataclasses import fields
 from pathlib import Path
@@ -12,6 +13,7 @@ from tensorgami.api.annotations import Annotation, Input, Loss, Note
 from tensorgami.api.figure import Figure
 from tensorgami.api.fit import check_fit, document, fit_to_page
 from tensorgami.ir import Graph
+from tensorgami.ir.activations import ActivationStore, resolve
 from tensorgami.layout import LayoutOptions
 from tensorgami.style import DEFAULT_STYLE, Theme, load_style
 from tensorgami.transforms import Level
@@ -35,6 +37,7 @@ _PARAMETERS = (
     "links",
     "annotations",
     "direction",
+    "activations",
     *LAYOUT_OPTIONS,
 )
 _RENAMED = {"theme": "style"}  # the name sketched in ADR-0007, before ADR-0008
@@ -56,6 +59,7 @@ def draw(
     links: Sequence[tuple[str, ...]] = (),
     annotations: Sequence[Annotation] = (),
     direction: str | None = None,
+    activations: bool = False,
     **layout_options: Any,
 ) -> Figure:
     """Draw ``model`` as it runs on ``example_input``.
@@ -109,6 +113,10 @@ def draw(
             (``"discriminator.image"``; the name alone is the model's output).
         direction: ``"LR"`` (left → right) or ``"TB"`` (top → bottom); by default the
             style's choice, else ``"LR"``.
+        activations: keep what every layer produces on the example input (a summary: value
+            range, share of zeros, the most active feature maps), for ``fig.animate()`` to
+            show under the figure as each layer runs; ``fig.activations`` holds them. The
+            figure itself is unchanged. Needs real tensors (not the meta device).
         **layout_options: further :class:`~tensorgami.layout.LayoutOptions`, e.g.
             ``legend=False``, ``rank_gap=64``, ``wrap_width`` (left → right: wrap into rows
             beyond it; ``None``: one row) or ``wrap_height`` (top → bottom: columns).
@@ -139,26 +147,46 @@ def draw(
     level = Level.parse(level)
     chosen = get_view(view)
 
-    graph = _annotate(_capture(model, example_input, overrides), links, annotations)
+    traced, stores = _capture(model, example_input, overrides, activations)
+    graph = _annotate(traced, links, annotations)
+    fitted = None
     if page is not None:
         shown, scene, theme, fitted = fit_to_page(
             page, graph, theme, chosen, level=level, options=options, fixed=given
         )
-        return Figure(scene, theme, shown, fitted=fitted)
-    shown, scene = chosen.draw(graph, theme, level=level, options=options)
-    return Figure(scene, theme, shown)
+    else:
+        shown, scene = chosen.draw(graph, theme, level=level, options=options)
+    found = resolve(stores, shown) if activations else None
+    if activations and not found:
+        warnings.warn(
+            "activations=True: no values to show (a model on the meta device has none)",
+            stacklevel=2,
+        )
+    return Figure(scene, theme, shown, fitted=fitted, activations=found)
 
 
-def _capture(model, example_input: Any, overrides: Mapping | None) -> Graph:
-    from tensorgami.importers.torch import trace  # torch is imported only to draw a model
+def _capture(
+    model, example_input: Any, overrides: Mapping | None, activations: bool = False
+) -> tuple[Graph, dict[str, ActivationStore]]:
+    """The traced graph (several models composed into one), and, with ``activations``, what
+    each model produced, by model name (``""`` for one model)."""
+    from tensorgami.importers.torch import TorchImporter  # torch is imported only to draw
+
+    def run(module, example: Any, own: Mapping | None) -> tuple[Graph, ActivationStore | None]:
+        importer = TorchImporter(overrides=own)
+        if activations:
+            return importer.import_with_activations(module, example)
+        return importer.import_model(module, example), None
 
     if not isinstance(model, Mapping):
-        return trace(model, example_input, overrides=overrides)
-    graphs = {
-        name: trace(module, example_input[name], overrides=_own(name, model, overrides))
+        graph, store = run(model, example_input, overrides)
+        return graph, {"": store} if store is not None else {}
+    runs = {
+        name: run(module, example_input[name], _own(name, model, overrides))
         for name, module in model.items()
     }
-    return compose(graphs)
+    stores = {name: store for name, (_, store) in runs.items() if store is not None}
+    return compose({name: graph for name, (graph, _) in runs.items()}), stores
 
 
 def _own(name: str, models: Mapping, overrides: Mapping | None) -> dict | None:
