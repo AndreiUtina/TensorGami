@@ -5,8 +5,8 @@ type: software
 authors:
   - family-names: "Utina"
     given-names: "Andrei"
-version: "0.1.0"
-date-released: "2026-10-13"
+version: "0.2.0"
+date-released: "2026-10-18"
 license: MIT
 repository-code: "https://github.com/AndreiUtina/TensorGami"
 keywords:

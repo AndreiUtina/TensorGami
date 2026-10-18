@@ -7,6 +7,13 @@ versions).
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-10-18
+
+Figures that move and figures for print: animations of the model running (data travelling
+along the wires, the real activations of each layer, a player in Jupyter, animated SVG), a
+third style (`etching`), dark and greyscale variants, four palettes, and figures fitted to a
+slide or to a paper's column.
+
 ### Added
 
 - Style variants: `tg.draw(model, x, variant="dark")` for slides with a dark background and
@@ -14,11 +21,9 @@ versions).
   `load_style("origami", "dark")`); several apply in order. The dark board is GitHub's dark
   page colour, so dark figures blend into a dark-mode README.
 - The README's figures follow the reader's GitHub theme (light or dark versions).
-
 - `examples/classics.ipynb`: the ten most-cited deep-learning papers with an architecture
   figure, each model rebuilt as its paper describes it (`examples/classics.py`) and drawn
   next to a link to the paper's figure, with what is the same and what differs.
-
 - Slides: `tg.draw(model, x, fit="slide")` makes a figure for a 16:9 slide (or
   `"slide-4:3"`): larger text and lines, the row length whose text is largest once the figure
   fills the slide, centred on the slide's proportions and saved at 13.33 × 7.5 in
@@ -92,7 +97,6 @@ versions).
 - A row (or column) shorter than the longest is centred: the wire from the end of the row
   before comes back to the middle, and the white space is shared on both sides (AlexNet's
   classifier under its features).
-
 - PNG and PDF figures render about a fifth faster (matplotlib no longer recomputes its axis
   limits for every shape); the output is unchanged.
 
