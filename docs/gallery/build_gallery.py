@@ -23,6 +23,7 @@ sys.path[:0] = [str(ROOT / "tests"), str(ROOT / "examples")]  # reference models
 
 import torch  # noqa: E402
 from alexnet import AlexNet  # noqa: E402
+from images import sample_image  # noqa: E402
 from models import REFERENCE  # noqa: E402
 from models.pix2pix import ConditionalDiscriminator  # noqa: E402
 from resnet import resnet18  # noqa: E402
@@ -182,12 +183,28 @@ def build(style: str = "default") -> list[Path]:
     return [fig.save(out_dir / f"{name}.svg") for name, fig in figures(style)]
 
 
+#: animations showing what each layer produces (step 14d), as animated SVGs and GIFs; not
+#: compared byte for byte (the feature maps are PNGs, whose bytes depend on the zlib build)
+WITH_ACTIVATIONS = ["alexnet-activations", "convlstm-folded-activations"]
+
+
+def with_activations(name: str) -> tg.Figure:
+    torch.manual_seed(0)  # the same untrained weights every time
+    if name == "alexnet-activations":  # a picture, so that the feature maps show something
+        return tg.draw(AlexNet(), sample_image(), activations=True)
+    make, example = MODELS["convlstm"]
+    return tg.draw(make(), example(), view="block", activations=True)
+
+
 def build_animations() -> list[Path]:
     out_dir = HERE / "animations"
     out_dir.mkdir(exist_ok=True)
     paths = []
     for name in ANIMATED:
         anim = figure(name).animate()
+        paths += [anim.save(out_dir / f"{name}.svg"), anim.save(out_dir / f"{name}.gif")]
+    for name in WITH_ACTIVATIONS:
+        anim = with_activations(name).animate()
         paths += [anim.save(out_dir / f"{name}.svg"), anim.save(out_dir / f"{name}.gif")]
     return paths
 

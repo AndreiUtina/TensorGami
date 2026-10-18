@@ -80,6 +80,14 @@ it animates along a path (`<animateMotion>`), plays inside `<img>` (READMEs), an
 scriptable (`pauseAnimations`, `setCurrentTime`), which the player's controls use. No
 ipywidgets: the player works without a kernel, in every notebook front end and in a page.
 
+*Activations (2026-10-17, step 14d):* `tg.draw(..., activations=True)` captures summaries of
+every output during the one run the figure needs anyway (no second forward pass), and
+`fig.activations` exposes them by box. They are shown by the animation, not the still
+figure: a figure for a paper stays an architecture diagram, while the animation, which
+already walks through the layers, has the time to show each one's output. Summaries rather
+than tensors keep memory small for large models; `fig.animate(activations=False)` leaves
+them out.
+
 ## Alternatives considered
 
 - **A class-based API** (`tg.Drawer(model).set_level(2).render()`). It is more verbose for

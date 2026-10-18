@@ -246,6 +246,25 @@ The U-Net generator of pix2pix, skips and all, and AlexNet on a dark background:
 
 ![AlexNet, dark, running](animations/alexnet-dark.svg)
 
+## Activations
+
+`tg.draw(model, x, activations=True)` keeps what every layer produces on the example input,
+and the animation shows it under the figure as each layer runs: a card in the layer's colour
+with its output shape, a picture of the values and their range. A feature map shows its 8
+most active channels, an input picture itself, a sequence a heatmap (positions × features),
+a vector its values as cells; once the model has run, the cards show its output. The figure
+itself does not change.
+
+AlexNet, untrained, on a picture drawn in numpy ([`examples/images.py`](../../examples/images.py)):
+the first convolution already finds the sun, the stripes and the checks; deeper layers see
+coarser blobs.
+
+![AlexNet, running, with its activations](animations/alexnet-activations.svg)
+
+A block folded ×N shows each pass's own values: the ConvLSTM's cells, step after step.
+
+![ConvLSTM, folded, with its activations](animations/convlstm-folded-activations.svg)
+
 ## Etching style
 
 `style="etching"`: black ink on white, the operations told apart by engraved textures instead

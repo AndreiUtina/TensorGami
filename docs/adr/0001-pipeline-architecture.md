@@ -32,11 +32,12 @@ Package layout (existing packages marked ✓):
 | Package | Responsibility | May import |
 |---|---|---|
 | `vocabulary` ✓ | `OpCategory`, `EdgeKind` | — |
+| `activations` ✓ | summaries of what a model produced (numpy; step 14d) | — |
 | `style` ✓ | colours, themes, validation | vocabulary |
 | `scene` ✓ | positioned diagram items | vocabulary, style |
-| `render` ✓ | `Canvas` protocol, SVG/matplotlib canvases, painters | vocabulary, style, scene |
-| `ir` | graph model | vocabulary |
-| `importers` | framework → IR (`importers.torch`) | vocabulary, ir |
+| `render` ✓ | `Canvas` protocol, SVG/matplotlib canvases, painters | vocabulary, activations, style, scene |
+| `ir` | graph model (and which box shows which activation) | vocabulary, activations |
+| `importers` | framework → IR (`importers.torch`) | vocabulary, activations, ir |
 | `transforms` | levels of detail, folding, repeats | vocabulary, ir |
 | `layout` | IR → Scene | vocabulary, ir, scene, style, render.text |
 | `views` | strategies combining the above | all of the above except `api` |
