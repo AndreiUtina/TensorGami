@@ -42,6 +42,7 @@ from tensorgami.render.animated import (
 from tensorgami.render.edges import EdgeRouter
 from tensorgami.render.mpl import quiet_fonts, render_figure
 from tensorgami.render.painters import default_painters
+from tensorgami.render.panel import ActivationPanel
 from tensorgami.render.scene_renderer import FrameState, render_svg
 from tensorgami.scene import Box, Point, Scene
 from tensorgami.vocabulary import EdgeKind
@@ -146,14 +147,31 @@ class Animation:
         flow: bool = True,
         travel: float = 0.4,
         fps: float = 15,
+        activations: bool | None = None,
     ) -> None:
         if figure.graph is None:
             raise ValueError("an animation follows the model's graph: draw it with tg.draw")
+        if activations and not figure.activations:
+            raise ValueError(
+                "activations=True shows what each layer produced: draw the figure with "
+                "tg.draw(model, x, activations=True)"
+            )
         if min(step, hold, travel, fps) <= 0:
             raise ValueError("step, hold, travel and fps must be greater than 0")
         if fps > 50:
             raise ValueError(f"fps: at most 50 (browsers slow faster GIFs down), got {fps}")
         self._figure = figure
+        self._scene, self._overlays = figure.scene, ()  # the figure, and what is drawn over it
+        if figure.activations and activations is not False:
+            graph = figure.graph
+            panel = ActivationPanel(
+                figure.scene,
+                figure.style,
+                figure.activations,
+                passes=_folded(graph),
+                outputs=[n.id for n in graph.nodes if n.is_output],
+            )
+            self._scene, self._overlays = panel.scene, (panel.layer(),)
         self._images: dict[tuple[int, float], Image] = {}
         self._paths: dict[int, list[Point]] = {}
         timed = timeline(figure.graph, figure.scene)
@@ -270,11 +288,32 @@ class Animation:
 
     # ------------------------------------------------------------------ frames
 
-    def _render(self, step: int, dpi: float) -> bytes:
+    @property
+    def scene(self) -> Scene:
+        """What is drawn: the figure, with room under it for the activations if shown."""
+        return self._scene
+
+    @property
+    def _inches(self) -> tuple[float, float] | None:
+        """The printed size of a fitted figure (a slide, a column), the panel included."""
+        if self._figure.fitted is None:
+            return None
+        width = self._figure.inches[0]
+        return width, width * self._scene.height / self._scene.width
+
+    def _mpl(self, step: int, dpi: float = 96):
         fig = self._figure
-        figure = render_figure(
-            fig.scene, fig.style, dpi=dpi, width_in=fig.inches[0], state=self._steps[step]
+        return render_figure(
+            self._scene,
+            fig.style,
+            dpi=dpi,
+            width_in=fig.inches[0],
+            state=self._steps[step],
+            overlays=self._overlays,
         )
+
+    def _render(self, step: int, dpi: float) -> bytes:
+        figure = self._mpl(step, dpi)
         buffer = io.BytesIO()
         with quiet_fonts():
             figure.savefig(buffer, format="png", dpi=dpi)
@@ -306,12 +345,14 @@ class Animation:
         """The animation as an animated SVG: looping, sharp at any size, playing in browsers
         (a viewer that does not animate shows the still figure); or, with ``step``, that step
         (see :attr:`steps`) as a still SVG."""
-        fig = self._figure
-        inches = fig.inches if fig.fitted is not None else None
+        style, inches, overlays = self._figure.style, self._inches, self._overlays
         if step is not None:
-            return render_svg(fig.scene, fig.style, inches=inches, state=self._steps[step])
+            state = self._steps[step]
+            return render_svg(self._scene, style, inches=inches, state=state, overlays=overlays)
         frames, pulses, _ = self._timed()
-        return render_animated_svg(fig.scene, fig.style, frames, pulses, inches=inches)
+        return render_animated_svg(
+            self._scene, style, frames, pulses, inches=inches, overlays=overlays
+        )
 
     def to_html(self) -> str:
         """The player: the animated SVG with play/pause, step back and forward, a time slider
@@ -344,14 +385,14 @@ class Animation:
     def _path(self, edge: int) -> list[Point]:
         if edge not in self._paths:
             fig = self._figure
-            router = EdgeRouter(fig.scene, fig.style, default_painters())
-            self._paths[edge] = router.route(fig.scene.edges[edge])
+            router = EdgeRouter(self._scene, fig.style, default_painters())
+            self._paths[edge] = router.route(self._scene.edges[edge])
         return self._paths[edge]
 
     def _pulse(self, image: Image, edge: int, along: float, start: float = 0.0) -> None:
         """A dot ``along`` the way down the wire, in the wire's colour, ringed in the
         background's and trailing a short fading tail (a comet: the motion reads in a still)."""
-        scene, style = self._figure.scene, self._figure.style
+        scene, style = self._scene, self._figure.style
         path = self._path(edge)
         color = style.edge_style(scene.edges[edge].kind).color.hex
         radius = PULSE_RADIUS * (LOOP_PULSE if scene.edges[edge].delay else 1.0)
@@ -367,7 +408,7 @@ class Animation:
         self._paste(image, _head(color, ring, radius * scale), path, head)
 
     def _paste(self, image: Image, sprite: Image, path: list[Point], distance: float) -> None:
-        scene = self._figure.scene
+        scene = self._scene
         point = _point_at(path, distance)
         x = round(point.x * image.width / scene.width - sprite.width / 2)
         y = round(point.y * image.height / scene.height - sprite.height / 2)
@@ -407,7 +448,6 @@ class Animation:
         folder = Path(folder)
         folder.mkdir(parents=True, exist_ok=True)
         width = len(str(len(self._steps)))
-        fig = self._figure
         paths = []
         for i in range(len(self._steps)):
             path = folder / f"step-{i + 1:0{width}d}.{format}"
@@ -416,9 +456,7 @@ class Animation:
             elif format == "png":
                 path.write_bytes(self._render(i, dpi))
             else:
-                figure = render_figure(
-                    fig.scene, fig.style, width_in=fig.inches[0], state=self._steps[i]
-                )
+                figure = self._mpl(i)
                 with quiet_fonts():
                     figure.savefig(path, format="pdf")
             paths.append(path)
@@ -428,11 +466,18 @@ class Animation:
         from PIL import Image
 
         frames = [self._image(i, dpi) for i in range(len(self))]
-        # one palette for every frame (from the first, middle and last), so colours never flicker
+        # one palette for every frame, so colours never flicker: sampled from every step (each
+        # may bring colours of its own, an activation's ramp), each at most 480 px wide
+        steps = [frames[i] for i, f in enumerate(self._frames) if not f.pulses]
         w, h = frames[0].size
-        sample = Image.new("RGB", (w * 3, h))
-        for k, i in enumerate((0, len(frames) // 2, len(frames) - 1)):
-            sample.paste(frames[i], (k * w, 0))
+        scale = min(1.0, 480 / w)
+        small = (max(1, round(w * scale)), max(1, round(h * scale)))
+        columns = math.ceil(math.sqrt(len(steps)))
+        rows = math.ceil(len(steps) / columns)
+        sample = Image.new("RGB", (small[0] * columns, small[1] * rows), frames[0].getpixel((0, 0)))
+        for k, step in enumerate(steps):
+            tile = step.resize(small, Image.Resampling.NEAREST)
+            sample.paste(tile, ((k % columns) * small[0], (k // columns) * small[1]))
         palette = sample.quantize(colors=256)
         indexed = [f.quantize(palette=palette, dither=Image.Dither.NONE) for f in frames]
         buffer = io.BytesIO()
@@ -540,3 +585,15 @@ def _head(color: str, ring: str, radius: float) -> Image:
 
     rgb = ImageColor.getrgb(color)[:3]
     return _disc((*rgb, 255), radius * (1 + PULSE_RING), (*ImageColor.getrgb(ring)[:3], 255))
+
+
+def _folded(graph: Graph) -> dict[str, str]:
+    """Each node inside a block folded ×N → that block (the outermost): its badge, during an
+    animation, says which pass runs."""
+    out = {}
+    for node in graph.nodes:
+        chain = [graph.group(node.group), *graph.ancestors(node.group)]
+        folded = [g for g in chain if g.count > 1]
+        if folded:
+            out[node.id] = folded[-1].id
+    return out
