@@ -43,6 +43,13 @@ versions).
   does not animate shows the still figure); `anim.save("model.html")` a page with the player.
   `anim.to_svg()` returns the animated SVG, `anim.to_svg(step)` one step as a still.
 - Animations in the gallery (animated SVGs, and GIFs) and the README.
+- Real activations: `tg.draw(model, x, activations=True)` keeps what every layer produces on
+  the example input, and `fig.animate()` shows it under the figure as each layer runs: a card
+  in the layer's colour with its output shape, its 8 most active feature maps (an input
+  picture as it is, a sequence as a heatmap, a vector's values), their range and share of
+  zeros; the model's outputs at the end. Inside a block folded ×N each pass shows its own
+  values. `fig.activations` holds the summaries; the still figure is unchanged.
+  `examples/images.py` draws a test picture with numpy.
 - A third style, `etching`: black ink on white paper, the operations told apart by engraved
   textures (diagonal, cross-hatch, dots, grid, zigzag…) in a strip at the start of each box and
   over a volume's face, instead of colour; wires told apart by line style; Helvetica, 0.75 pt

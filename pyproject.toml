@@ -26,7 +26,9 @@ classifiers = [
 ]
 requires-python = ">=3.11"
 dependencies = [
-    "matplotlib>=3.7",  # figures, PNG, Jupyter display (ADR-0005); the only runtime dependency
+    # figures, PNG, Jupyter display (ADR-0005); the only runtime dependency. It brings numpy
+    # and Pillow, which Tensorgami also uses (activations, GIFs).
+    "matplotlib>=3.7",
 ]
 
 [project.optional-dependencies]
